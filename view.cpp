@@ -22,17 +22,17 @@ void View::draw() {
 }
 
 void View::setLocation(double x, double y, double w, double h, double weight) {
-	xPos = x;
-	yPos = y;
-	width = w;
-	height = h;
+	_x = x;
+	_y = y;
+	_width = w;
+	_height = h;
 	this->weight = weight;
-	if (width <= 0) {
+	if (_width <= 0) {
 		widthFlags = w;
 	} else {
 		widthFlags = 1;
 	}
-	if (height <= 0) {
+	if (_height <= 0) {
 		heightFlags = h;
 	} else {
 		heightFlags = 1;
@@ -40,8 +40,8 @@ void View::setLocation(double x, double y, double w, double h, double weight) {
 }
 
 bool View::isPointerInside(double x, double y) {
-	if (x >= xPos and y >= yPos) {
-		if (x <= xPos + width and y <= yPos + height) {
+	if (x >= _x and y >= _y) {
+		if (x <= _x + _width and y <= _y + _height) {
 			return true;
 		}
 	}
@@ -50,7 +50,7 @@ bool View::isPointerInside(double x, double y) {
 
 bool View::isPointerInsideLocal(double x, double y) {
 	if (x >= 0 and y >= 0) {
-		if (x <= width and y <= height) {
+		if (x <= _width and y <= _height) {
 			return true;
 		}
 	}

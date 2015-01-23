@@ -17,27 +17,45 @@ KnobView::KnobView() {
 KnobView::~KnobView() {
 }
 
+bool KnobView::onPointerDown(pointerId id, double x, double y) {
+	onPointerMove(id, x, y, 1);
+	return true;
+}
+
+bool KnobView::onPointerUp(pointerId id, double x, double y) {
+	return true;
+}
+
+bool KnobView::onPointerMove(pointerId id, double x, double y,
+		pointerState state) {
+	if (state) {
+		double v = atan2(x - _width / 2, -y + _height / 2) / pi2 + .5;
+		value(v);
+		return true;
+	}
+	return false;
+}
+
 void KnobView::draw() {
-	auto middleX = width / 2.;
-	auto middleY = height / 2.;
+	auto middleX = _width / 2.;
+	auto middleY = _height / 2.;
 
 	double radius;
-	if (width > height){
-		radius = height;
+	if (_width > _height){
+		radius = _height;
 	}
 	else{
-		radius = width;
+		radius = _width;
 	}
 	radius *= (.8 / 2);
-	drawElipse(vec(xPos + middleX - radius, yPos + middleY - radius), 0, radius * 2, radius * 2, DRAW_STYLE_LINES);
+	drawElipse(vec(_x + middleX - radius, _y + middleY - radius), 0, radius * 2, radius * 2, DRAW_STYLE_LINES);
 
-	const double v = (value - min) / (max - min);
+	const double v = (_value - _min) / (_max - _min);
 
 	auto smallR = radius *.1;
 	auto a = v * pi2;
-	drawElipse(vec(xPos + middleX - radius * sin(a) - smallR, yPos + middleY - radius * cos(a) - smallR),
+	drawElipse(vec(_x + middleX - radius * sin(a) - smallR, _y + middleY + radius * cos(a) - smallR),
 			0, smallR * 2, smallR * 2, DRAW_STYLE_FILLED);
 }
-
 
 }

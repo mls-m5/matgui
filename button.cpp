@@ -19,7 +19,7 @@ Button::~Button() {
 
 
 void Button::draw() {
-	drawSquare(vec(xPos, yPos, 0), 0, width, height, highlight? DRAW_STYLE_FILLED : DRAW_STYLE_LINES);
+	drawSquare(vec(_x, _y, 0), 0, _width, _height, highlight? DRAW_STYLE_FILLED : DRAW_STYLE_LINES);
 }
 
 void Button::onPointerEnter(pointerId id, double x, double y,

@@ -1,7 +1,7 @@
 COMPILER=g++
 RUNSTRING=./${TARGET}
 
-GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o
+GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o progressview.o
 BACKENDOBJECTS=draw.o shaderprogram.o matgui.o window.o application.o
 PROGOBJECS=main.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}

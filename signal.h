@@ -35,6 +35,8 @@ public:;
 		_functionPointer = f;
 	}
 
+	virtual ~ClassConnection() {}
+
 	void call(_argument arg) override {
 		(*_objectPointer.*_functionPointer)(arg);
 	}
@@ -62,6 +64,8 @@ public:;
 		_functionPointer = f;
 	}
 
+	virtual ~VoidClassConnection() {}
+
 	//This function does not use the argument
 	void call(_argument arg) override {
 		(*_objectPointer.*_functionPointer)();
@@ -83,6 +87,8 @@ public:;
 	FunctionConnection(_functionType f) {
 		_functionPointer = f;
 	}
+
+	virtual ~FunctionConnection() {}
 
 	void call(_argument arg) override {
 		_functionPointer(arg);
@@ -143,6 +149,8 @@ struct TypeIsVoid< void >
 template <typename _argument = void*>
 class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argument>>> {
 public:
+	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
+
 	void emit(_argument arg = 0) {
 		if (!this->empty()) { //Dont bother to broadcast if nobody listen
 			if (_onlySaveLast) { //Use this with objects emitting very many signals
@@ -240,7 +248,7 @@ public:
 
 protected:
 	std::mutex _mutex;
-	std::queue<_argument> _queue; //A queue with a list as underlying container to be able to remove objects
+	std::queue<_argument> _queue;
 	bool _onlySaveLast = false;
 };
 

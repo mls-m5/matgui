@@ -14,13 +14,16 @@ namespace MatGui {
 
 class ControllerView: public View {
 public:
+	typedef double _valueType;
+
 	ControllerView():
 		elementId(-1),
 		controllerId(-1),
-		value(0),
-		min(0),
-		max(1),
-		step(0){}
+		_value(0),
+		_min(0),
+		_max(1),
+		_step(0),
+		changed(true){}
 
 
 	ControllerView(int element, int controller):
@@ -29,25 +32,40 @@ public:
 		controllerId = controller;
 	}
 
-	void setValue(double v){
-		value = v;
-	}
-	void setController(int element, int controller){
-		elementId = element;
-		controllerId = controller;
-	}
-	void setLinear(double min, double max, double step){
-		this->min = min;
-		this->max = max;
-		this->step = step;
-	}
-	void operator=(ControllerView view){
-		value = view.value;
+	void value(_valueType v){
+		if (v != _value) {
+			_value = v;
+			changed.emit(v);
+		}
 	}
 
+	void setValue(_valueType v) {
+		value(v);
+	}
+
+	_valueType value() {
+		return _value;
+	}
+
+	void setLinear(_valueType min, _valueType max, _valueType step){
+		this->_min = min;
+		this->_max = max;
+		this->_step = step;
+	}
+
+	void operator=(ControllerView view){
+		value(view.value());
+	}
+
+	void operator=(_valueType v) {
+		value(v);
+	}
+
+	Signal<_valueType> changed;
+
 protected:
-	double value;
-	double min, max, step;
+	_valueType _value;
+	_valueType _min, _max, _step;
 	int elementId, controllerId;
 };
 

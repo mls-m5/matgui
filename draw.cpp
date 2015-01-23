@@ -33,7 +33,11 @@ inline void identityMatrix(GLfloat *matrix){
 void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double scaleY){
 	identityMatrix(transformMatrix);
 
-	auto s = sin(a), c = cos(a);
+	double s = 0, c = 1;
+	if (a) {
+		s = sin(a);
+		c = cos(a);
+	}
 
 	transformMatrix[0] = c * scaleX / screenWidth * 2;
 	transformMatrix[1] = s * scaleX / screenWidth * 2;

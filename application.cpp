@@ -80,28 +80,30 @@ bool Application::handleEvents() {
 			return true;
 		}
 
-		switch (event.type) {
-		case SDL_MOUSEMOTION:
-		{
-			auto &e = event.motion;
-			window->onPointerMove(0, (double)e.x, (double)e.y, 1);
-		}
-		break;
-		case SDL_MOUSEBUTTONDOWN:
-		{
-			auto &e = event.motion;
-			window->onPointerDown(0, (double)e.x, (double)e.y);
-		}
-		break;
-
-		case SDL_MOUSEBUTTONUP:
-		{
-			auto &e = event.motion;
-			window->onPointerUp(0, (double)e.x, (double)e.y);
-		}
-		break;
-		default:
+		if (window) {
+			switch (event.type) {
+			case SDL_MOUSEMOTION:
+			{
+				auto &e = event.motion;
+				window->onPointerMove(0, (double)e.x, (double)e.y, e.state);
+			}
 			break;
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				auto &e = event.motion;
+				window->onPointerDown(0, (double)e.x, (double)e.y);
+			}
+			break;
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				auto &e = event.motion;
+				window->onPointerUp(0, (double)e.x, (double)e.y);
+			}
+			break;
+			default:
+				break;
+			}
 		}
 	}
 	return false;

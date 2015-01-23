@@ -76,8 +76,8 @@ public:
 	Signal <pointerArgument> pointerEnter;
 	Signal <pointerArgument> pointerLeave;
 
-	double xPos, yPos;
-	double width, height;
+	double _x, _y;
+	double _width, _height;
 	int widthFlags, heightFlags;
 	double weight = 0;
 };

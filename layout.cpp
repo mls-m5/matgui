@@ -62,8 +62,8 @@ void Layout::setOrientation(int orientation) {
 }
 
 void Layout::calculateWeights() {
-	auto restWidth = width;
-	auto restHeight = height;
+	auto restWidth = _width;
+	auto restHeight = _height;
 	double totalXWeight = 0;
 	double totalYWeight = 0;
 	for (auto it : children) {
@@ -71,13 +71,13 @@ void Layout::calculateWeights() {
 			totalXWeight += it->weight;
 		}
 		else{
-			restWidth -= it->width;
+			restWidth -= it->_width;
 		}
 		if (it->heightFlags == VIEW_WEIGHTED) {
 			totalYWeight += it->weight;
 		}
 		else{
-			restHeight -= it->height;
+			restHeight -= it->_height;
 		}
 	}
 	auto paddingCorrection = margin * (children.size() + 1);
@@ -86,19 +86,19 @@ void Layout::calculateWeights() {
 	for (auto it : children) {
 		if (orientation == LAYOUT_HORIZONTAL){
 			if (it->widthFlags == VIEW_WEIGHTED) {
-				it->width = restWidth * it->weight / totalXWeight;
+				it->_width = restWidth * it->weight / totalXWeight;
 			}
 		}
 		else{
-			it->width = width - margin * 2;
+			it->_width = _width - margin * 2;
 		}
 		if (orientation == LAYOUT_VERTICAL){
 			if (it->heightFlags == VIEW_WEIGHTED) {
-				it->height = restHeight * it->weight / totalYWeight;
+				it->_height = restHeight * it->weight / totalYWeight;
 			}
 		}
 		else{
-			it->height = height - margin * 2;
+			it->_height = _height - margin * 2;
 		}
 	}
 }
@@ -108,7 +108,7 @@ void Layout::refresh() {
 	for (auto it: children){
 		switch(it->widthFlags){
 		case VIEW_MATCH_PARENT:
-			it->width = width;
+			it->_width = _width;
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -121,7 +121,7 @@ void Layout::refresh() {
 		}
 		switch(it->heightFlags){
 		case VIEW_MATCH_PARENT:
-			it->height = height;
+			it->_height = _height;
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -207,12 +207,12 @@ void Layout::replaceChild(int index, View* view) {
 }
 
 bool Layout::onPointerDown(pointerId id, double x, double y) {
-	auto wx = x + xPos;
-	auto wy = y + yPos;
+	auto wx = x + _x;
+	auto wy = y + _y;
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerDown(id, x - it->xPos, y - it->yPos)){
+			if (it->onPointerDown(id, x - it->_x, y - it->_y)){
 				return true;
 			}
 		}
@@ -221,12 +221,12 @@ bool Layout::onPointerDown(pointerId id, double x, double y) {
 }
 
 bool Layout::onPointerUp(pointerId id, double x, double y) {
-	auto wx = x + xPos;
-	auto wy = y + yPos;
+	auto wx = x + _x;
+	auto wy = y + _y;
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerUp(id, x - it->xPos, y - it->yPos)){
+			if (it->onPointerUp(id, x - it->_x, y - it->_y)){
 				return true;
 			}
 		}
@@ -236,27 +236,27 @@ bool Layout::onPointerUp(pointerId id, double x, double y) {
 
 bool Layout::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
-	auto wx = x + xPos;
-	auto wy = y + yPos;
+	auto wx = x + _x;
+	auto wy = y + _y;
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
 			if (it != pointerFocusedChild) {
 				if (pointerFocusedChild) {
 					pointerFocusedChild->onPointerLeave(id,
-							x - pointerFocusedChild->xPos, y-pointerFocusedChild->yPos, state);
+							x - pointerFocusedChild->_x, y-pointerFocusedChild->_y, state);
 				}
 				pointerFocusedChild = it;
-				it->onPointerEnter(id, x - it->xPos, y - it->yPos, state);
+				it->onPointerEnter(id, x - it->_x, y - it->_y, state);
 			}
-			if (it->onPointerMove(id, x - it->xPos, y - it->yPos, state)){
+			if (it->onPointerMove(id, x - it->_x, y - it->_y, state)){
 				return true;
 			}
 		}
 	}
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->xPos, y - pointerFocusedChild->yPos, state);
+				x - pointerFocusedChild->_x, y - pointerFocusedChild->_y, state);
 		pointerFocusedChild = nullptr;
 	}
 	return false;
@@ -271,7 +271,7 @@ void Layout::onPointerLeave(pointerId id, double x, double y,
 		pointerState state) {
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->xPos, y - pointerFocusedChild->yPos, state);
+				x - pointerFocusedChild->_x, y - pointerFocusedChild->_y, state);
 		pointerFocusedChild = nullptr;
 	}
 	View::onPointerEnter(id, x, y, state);
