@@ -11,7 +11,6 @@
 #include "button.h"
 #include "draw.h"
 #include "knobview.h"
-#include "linearlayout.h"
 
 using namespace MatGui;
 using namespace std;

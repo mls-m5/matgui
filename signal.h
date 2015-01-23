@@ -143,10 +143,19 @@ struct TypeIsVoid< void >
 template <typename _argument = void*>
 class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argument>>> {
 public:
-
 	void emit(_argument arg = 0) {
 		if (!this->empty()) { //Dont bother to broadcast if nobody listen
-			_queue.push(arg);
+			if (_onlySaveLast) { //Use this with objects emitting very many signals
+				if (_queue.empty()) {
+					_queue.push(arg);
+				}
+				else {
+					_queue.front() = arg;
+				}
+			}
+			else {
+				_queue.push(arg);
+			}
 		}
 	}
 
@@ -221,9 +230,18 @@ public:
 	};
 
 
+	void onlySaveLast(bool value) {
+		_onlySaveLast = value;
+	}
 
+	bool onlySaveLast() {
+		return _onlySaveLast;
+	}
+
+protected:
 	std::mutex _mutex;
 	std::queue<_argument> _queue; //A queue with a list as underlying container to be able to remove objects
+	bool _onlySaveLast = false;
 };
 
 
