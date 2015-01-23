@@ -1,0 +1,9 @@
+attribute vec4 vPosition;
+uniform vec4 uColor;
+uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
+varying vec4 fColor;
+
+void main() {
+	gl_Position = mvp_matrix * vPosition;
+	fColor = uColor;
+}

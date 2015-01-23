@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 #include <iostream>
+
+#include "linearlayout.h"
 using namespace std;
 
 
@@ -51,6 +53,8 @@ public:
     SDL_GLContext maincontext; /* Our opengl context handle */
     KnobView knob;
     Button button;
+    Button button2;
+    LinearLayout layout;
 
     bool running = false;
 
@@ -86,25 +90,29 @@ public:
         // This makes our buffer swap syncronized with the monitor's vertical refresh
         SDL_GL_SetSwapInterval(1);
 
-
-        knob.setLocation(1,1, 100, 100, 1);
-        button.setLocation(2,2, 100, 100, 1);
+        layout.setLocation(0,0, 200,200);
+        layout.addChild(&knob);
+        layout.addChild(&button);
+        layout.addChild(&button2);
 
         button.clicked.connect(this, &Program::onClicked);
+        button.pointerMoved.connect(this, &Program::onClicked); //just tetsing
+        button.pointerMoved.disconnect(this);
 
     }
 
+    //callback function for the button
     void onClicked(View::pointerArgument event) {
     	cout << "hej " << event.x << endl;
-
-//    	button.setLocation(event.x, event.y, 100, 100);
     }
 
     //Rendering function
     void render(){
 //    	drawSquare(vec(1, 1, 1), 0, 100,100, DRAW_STYLE_FILLED);
-    	knob.draw();
-    	button.draw();
+    	layout.draw();
+//    	knob.draw();
+//    	button.draw();
+    	button2.draw();
     }
 
     void mainLoop() {
@@ -139,20 +147,20 @@ public:
     		case SDL_MOUSEMOTION:
     		{
     			auto &e = event.motion;
-    			button.onPointerMove(0, (double)e.x, (double)e.y, 1);
+    			layout.onPointerMove(0, (double)e.x, (double)e.y, 1);
     		}
     		break;
     		case SDL_MOUSEBUTTONDOWN:
     		{
     			auto &e = event.motion;
-    			button.onPointerDown(0, (double)e.x, (double)e.y);
+    			layout.onPointerDown(0, (double)e.x, (double)e.y);
     		}
     		break;
 
     		case SDL_MOUSEBUTTONUP:
     		{
     			auto &e = event.motion;
-    			button.onPointerUp(0, (double)e.x, (double)e.y);
+    			layout.onPointerUp(0, (double)e.x, (double)e.y);
     		}
     		break;
     		default:

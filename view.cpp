@@ -38,8 +38,17 @@ void View::setLocation(double x, double y, double w, double h, double weight) {
 }
 
 bool View::isPointerInside(double x, double y) {
-	if (x >= xPos && y >= yPos) {
-		if (x <= xPos + width && y <= yPos + height) {
+	if (x >= xPos and y >= yPos) {
+		if (x <= xPos + width and y <= yPos + height) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool View::isPointerInsideLocal(double x, double y) {
+	if (x >= 0 and y >= 0) {
+		if (x <= width and y <= height) {
 			return true;
 		}
 	}

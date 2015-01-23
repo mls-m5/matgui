@@ -1,7 +1,7 @@
 COMPILER=g++
 RUNSTRING=./${TARGET}
 
-OBJECTS=main.o draw.o shaderprogram.o view.o knobview.o button.o signal.o
+OBJECTS=main.o draw.o shaderprogram.o view.o knobview.o button.o signal.o linearlayout.o layout.o
 LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL
 FLAGS=-g -std=c++11 -Ofast `sdl2-config --cflags`
 

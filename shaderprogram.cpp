@@ -6,9 +6,11 @@
  */
 
 #include "shaderprogram.h"
+#include <fstream>
+#include <iostream>
 
 
-
+using std::cout; using std::endl;
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -76,18 +78,20 @@ GLuint createProgram(std::string pVertexSource, std::string pFragmentSource) {
     return program;
 }
 
-ShaderProgram::ShaderProgram():
-		gProgram(0){
+ShaderProgram::ShaderProgram(){
 
 }
 
 void ShaderProgram::initProgram(std::string vertexCode, std::string fragmentCode) {
-	gProgram = createProgram(vertexCode, fragmentCode);
+	if (_program) {
+		glDeleteProgram(_program);
+	}
+	_program = createProgram(vertexCode, fragmentCode);
 }
 
 GLint ShaderProgram::getUniform(char const* name) {
 	GLint ret;
-    ret = glGetUniformLocation(gProgram, name);
+    ret = glGetUniformLocation(_program, name);
 
     checkGlError(name);
     return ret;
@@ -95,7 +99,7 @@ GLint ShaderProgram::getUniform(char const* name) {
 
 GLint ShaderProgram::getAttribute(char const* name) {
 	GLint ret;
-	ret = glGetAttribLocation(gProgram, name);
+	ret = glGetAttribLocation(_program, name);
 
 	checkGlError(name);
 
@@ -107,8 +111,8 @@ ShaderProgram::ShaderProgram(std::string vertexCode, std::string fragmentCode) {
 }
 
 ShaderProgram::~ShaderProgram() {
-	if (gProgram){
-		glDeleteProgram(gProgram);
+	if (_program){
+		glDeleteProgram(_program);
 	}
 }
 
@@ -131,5 +135,22 @@ void StandardShaderProgram::disable() {
 }
 
 void ShaderProgram::useProgram() {
-	glUseProgram(gProgram);
+	glUseProgram(_program);
 }
+
+void ShaderProgram::loadShaderFromFile(std::string vertexFile,	std::string fragmentFile) {
+	std::ifstream vfile(vertexFile);
+	if (!vfile) {
+		cout << "could not open vertex shader file " << vertexFile << endl;
+	}
+	std::string code((std::istreambuf_iterator<char>(vfile)),
+	                 std::istreambuf_iterator<char>());
+	std::ifstream ffile(fragmentFile);
+	if (!ffile) {
+		cout << "could not open fragment shader file " << fragmentFile << endl;
+	}
+	std::string fcode((std::istreambuf_iterator<char>(ffile)),
+	                 std::istreambuf_iterator<char>());
+	initProgram(code, fcode);
+}
+

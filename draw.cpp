@@ -10,12 +10,6 @@ static struct {
 	GLuint mvpMatrix;
 } program1;
 
-static struct {
-	GLuint x;
-	GLuint y;
-	GLuint mvpMatrix;
-} program2;
-
 
 static GLfloat transformMatrix[16];
 static double screenWidth, screenHeight;
@@ -24,22 +18,6 @@ ShaderProgram *squareShaderProgram = 0;
 struct colorDataStruct{
 	GLfloat r, g, b, a;
 };
-
-static const char gVertexShader[] =
-    "attribute vec4 vPosition;\n"
-    "uniform vec4 uColor;\n"
-    "uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix\n"
-    "varying vec4 fColor;"
-    "void main() {\n"
-    "  gl_Position = mvp_matrix * vPosition;\n"
-    "  fColor = uColor;\n"
-    "}\n";
-
-static const char gFragmentShader[] =
-    "varying vec4 fColor;\n"
-    "void main() {\n"
-    "  gl_FragColor = fColor; \n"
-    "}\n";
 
 inline void identityMatrix(GLfloat *matrix){
 	for (int i = 0; i < 16; ++i){
@@ -75,7 +53,7 @@ void resetTransform(unsigned int pointer){
 //Square
 static const GLfloat gSquareVertices[] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f };
 static const GLfloat gSquareColors[] = {
-		.8, .8, 1., 1,
+		.8, .8, 1., .5,
 };
 
 void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
@@ -94,7 +72,20 @@ void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 
 
 
-static std::vector <GLfloat> elipseVertices;
+static class ElipseVertices: public std::vector <GLfloat> {
+public:
+	ElipseVertices() {
+
+		int count = 20;
+		resize(count * 2);
+		for (int i = 0; i < count; ++i){
+			auto a = (double) i / count * pi2;
+			at(i * 2) = .5 + sin(a) / 2;
+			at(i * 2 + 1) = .5 + cos(a) / 2;
+		}
+
+	}
+} elipseVertices;
 
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 	squareShaderProgram->useProgram();
@@ -122,7 +113,9 @@ bool initDrawModule(double width, double height) {
 	if (squareShaderProgram){
 		delete squareShaderProgram;
 	}
-    squareShaderProgram = new ShaderProgram(gVertexShader, gFragmentShader);
+//    squareShaderProgram = new ShaderProgram(gVertexShader, gFragmentShader);
+	squareShaderProgram = new ShaderProgram;
+	squareShaderProgram->loadShaderFromFile("shaders/shader.vsl", "shaders/shader.fsl");
 
     if (!squareShaderProgram->getProgram()) {
         debug_print("Could not create program.");
@@ -135,14 +128,6 @@ bool initDrawModule(double width, double height) {
 	program1.vertices = squareShaderProgram->getAttribute("vPosition");
 	program1.color = squareShaderProgram->getUniform("uColor");
 	program1.mvpMatrix = squareShaderProgram->getUniform("mvp_matrix");
-
-	int count = 20;
-	elipseVertices.resize(count * 2);
-	for (int i = 0; i < count; ++i){
-		auto a = (double) i / count * pi2;
-		elipseVertices[i * 2] = .5 + sin(a) / 2;
-		elipseVertices[i * 2 + 1] = .5 + cos(a) / 2;
-	}
 
 
 	setDimensions(width, height);

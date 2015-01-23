@@ -8,9 +8,6 @@
 #pragma once
 #include "view.h"
 
-//void recieveEvent(int) {
-//
-//}
 
 #include <iostream>
 
@@ -19,11 +16,11 @@ public:
 	Button();
 	virtual ~Button();
 
-	virtual void onPointerMove(pointerId id, double x, double y,
-			pointerState state) override;
-
-
 	void draw() override;
+
+
+	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state);
+	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state);
 
 	protected:
 

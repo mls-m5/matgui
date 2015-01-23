@@ -13,54 +13,6 @@
 typedef int pointerId;
 typedef int pointerState;
 
-struct ViewEvent{
-	enum EventType {
-		KeyDown,
-		KeyUp,
-		PointerDown,
-		PointerUp,
-		PointerMove
-	};
-//
-//	//buttonPressed is only used if type is PointerMove
-//	void setPointerEvent(int pointerId, double x, double y, EventType type, bool buttonPressed = 0){
-//		pointer.id = pointerId;
-//		pointer.x = x;
-//		pointer.y = y;
-//		this->type = type;
-//		switch (type){
-//		case PointerDown:
-//			pointer.pressed = true;
-//			break;
-//		case PointerUp:
-//			pointer.pressed = false;
-//			break;
-//		case PointerMove:
-//			pointer.pressed = buttonPressed;
-//		}
-//	}
-//
-//	void setKeyEvent(int keySym, EventType type){
-//		key.sym = keySym;
-//		this->type = type;
-//	}
-//
-//	EventType type;
-//	union{
-//		struct {
-//			int sym;
-//		} key;
-//
-//		struct {
-//			double x;
-//			double y;
-//			int id;
-//			bool pressed;
-//
-//		} pointer;
-//	};
-};
-
 enum widthFlags {
 	VIEW_MATCH_PARENT = -1,
 	VIEW_WRAP_CONTENT = -2,
@@ -77,24 +29,33 @@ public:
 	virtual void refresh() {};
 	virtual void setLocation(double x, double y, double w, double h,
 			double weight = 1);
-	virtual bool handleEvent(const ViewEvent &event) { return false; }
 	virtual bool isPointerInside(double x, double y);
+	virtual bool isPointerInsideLocal(double localx, double localy);
 
 
-	//Callback functions
+	//Callback functions return true to capture the mouse focus
 	virtual bool onPointerDown(pointerId id, double x, double y) {
 		pointerDown.emit({id, x, y, 1});
 		return true;
 	}
 	virtual bool onPointerUp(pointerId id, double x, double y) {
 		pointerUp.emit({id, x, y, 0});
-		if (isPointerInside(x, y)) {
+		if (isPointerInsideLocal(x, y)) {
 			clicked.emit({id, x, y, 1});
 		}
 		return true;
 	}
-	virtual void onPointerMove(pointerId id, double x, double y, pointerState state) {
+	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) {
 		pointerMoved.emit({id, x, y, state});
+		return true;
+	}
+
+	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state) {
+
+	}
+
+	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state) {
+
 	}
 
 	struct pointerArgument {

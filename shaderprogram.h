@@ -26,24 +26,22 @@
 class ShaderProgram {
 public:
 	ShaderProgram(ShaderProgram &s){
-		this->gProgram = s.gProgram;
+		this->_program = s._program;
 	}
 	ShaderProgram();
 	ShaderProgram(std::string vertexCode, std::string fragmentCode);
 	void initProgram(std::string vertexCode, std::string fragmentCode);
-	void loadVertexShader(char *code);
-	void loadFragmentShader(char *code);
-	void linkProgram();
+	void loadShaderFromFile(std::string vertexFile, std::string fragmentFile);
 
 	void useProgram();
 
-	GLuint getProgram() { return gProgram; };
+	GLuint getProgram() { return _program; };
 	GLint getUniform( char const* name );
 	GLint getAttribute( char const* name );
 	virtual ~ShaderProgram();
 
 private:
-	GLuint gProgram;
+	GLuint _program = 0;
 };
 
 
