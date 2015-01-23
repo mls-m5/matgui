@@ -27,6 +27,8 @@ public:
 	virtual bool onPointerDown(pointerId id, double x, double y) override;
 	virtual bool onPointerUp(pointerId id, double x, double y) override;
 	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
+	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state) override;
+	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state) override;
 
 	virtual void refresh();
 	virtual void setLocation(double x, double y, double w, double h, double weight = 0);

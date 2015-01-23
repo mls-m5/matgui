@@ -262,5 +262,20 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 	return false;
 }
 
+void Layout::onPointerEnter(pointerId id, double x, double y,
+		pointerState state) {
+	View::onPointerEnter(id, x, y, state);
+}
+
+void Layout::onPointerLeave(pointerId id, double x, double y,
+		pointerState state) {
+	if (pointerFocusedChild) {
+		pointerFocusedChild->onPointerLeave(id,
+				x - pointerFocusedChild->xPos, y - pointerFocusedChild->yPos, state);
+		pointerFocusedChild = nullptr;
+	}
+	View::onPointerEnter(id, x, y, state);
+}
 
 } //Namespace MatGui
+
