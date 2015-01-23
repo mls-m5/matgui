@@ -7,13 +7,16 @@
 
 #pragma once
 #include "view.h"
+#include "font.h"
+#include <memory>
+#include <string>
 
 
 namespace MatGui {
 
 class Button : public View{
 public:
-	Button();
+	Button(std::string label = "");
 	virtual ~Button();
 
 	void draw() override;
@@ -25,6 +28,9 @@ public:
 	protected:
 
 	bool highlight = false;
+
+	std::shared_ptr<Font> font;
+	std::string label;
 };
 
 }

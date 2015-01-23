@@ -8,14 +8,24 @@ namespace MatGui {
 
 static struct {
 	GLint color;
-	GLuint vertices;
-	GLuint mvpMatrix;
+	GLint vertices;
+	GLint mvpMatrix;
 } program1;
+
+
+static struct {
+	GLint color;
+	GLint vertices;
+	GLint mvpMatrix;
+	GLint texture;
+} textureProgram;
 
 
 static GLfloat transformMatrix[16];
 static double screenWidth, screenHeight;
 ShaderProgram *squareShaderProgram = 0;
+
+ShaderProgram *textureShaderProgram = 0;
 
 struct colorDataStruct{
 	GLfloat r, g, b, a;
@@ -60,7 +70,9 @@ void resetTransform(unsigned int pointer){
 static const GLfloat gSquareVertices[] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f };
 static const GLfloat gSquareColors[] = {
 		.8, .8, 1., .5,
+//		0,.5,.5,0
 };
+
 
 void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 	squareShaderProgram->useProgram();
@@ -74,6 +86,26 @@ void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
     glDrawArrays((drawStyle == DRAW_STYLE_LINES)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, 4);
 
     glDisableVertexAttribArray(program1.vertices);
+}
+
+//static const GLfloat texturecoordinates[] = {0,0, 0,1, 1,0, 1,1};
+void drawTexture(vec p, double a, double sx, double sy, int textureId) {
+	textureShaderProgram->useProgram();
+
+	modelTransform(textureProgram.mvpMatrix, p, a / 180., sx, sy);
+    glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    glEnableVertexAttribArray(textureProgram.vertices);
+
+    glUniform4fv(textureProgram.color, 1, gSquareColors);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glUniform1i(textureProgram.texture, 0); //GL_TEXTURE0 equals 0
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+
+    glDisableVertexAttribArray(textureProgram.vertices);
 }
 
 
@@ -135,6 +167,15 @@ bool initDrawModule(double width, double height) {
 	program1.color = squareShaderProgram->getUniform("uColor");
 	program1.mvpMatrix = squareShaderProgram->getUniform("mvp_matrix");
 
+
+
+	textureShaderProgram = new ShaderProgram;
+	textureShaderProgram->loadShaderFromFile("shaders/fontshader.vsl", "shaders/fontshader.fsl");
+
+	textureProgram.vertices = textureShaderProgram->getAttribute("vPosition");
+	textureProgram.color = textureShaderProgram->getUniform("uColor");
+	textureProgram.mvpMatrix = textureShaderProgram->getUniform("mvp_matrix");
+	textureProgram.texture = textureShaderProgram->getUniform("texture1");
 
 	setDimensions(width, height);
 	return false;

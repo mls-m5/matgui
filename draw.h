@@ -29,6 +29,7 @@ void resetTransform(unsigned int poniter);
 void setCam(vec p, double a);
 void drawSquare(vec p, double a, double scaleX, double scaleY, DrawStyle);
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle drawStyle);
+void drawTexture(vec p, double a, double sx, double sy, int textureId);
 void setDimensions(double width, double height);
 
 }

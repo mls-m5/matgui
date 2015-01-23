@@ -10,6 +10,7 @@
 #include "window.h"
 #include "button.h"
 #include "draw.h"
+#include "imageview.h"
 #include "knobview.h"
 #include "progressview.h"
 
@@ -23,7 +24,7 @@ void callback(View::pointerArgument arg) {
 
 
 void knobCallback(double value) {
-	cout << "changed... " << value << endl;
+//	cout << "changed... " << value << endl;
 	progressView->value(value);
 }
 
@@ -33,8 +34,8 @@ int main(int argc, char *argv[])
 
 	Window window("matgui-demo"); //create the window
 
-	Button button;
-	Button button2;
+	Button button("knapp 1");
+	Button button2("stäng");
 	KnobView knob;
 	ProgressView progress;
 
@@ -47,8 +48,8 @@ int main(int argc, char *argv[])
 
 	LinearLayout layout2;
 	layout2.setOrientation(LAYOUT_HORIZONTAL);
-	layout2.addChild(new Button); //memory leak
-	layout2.addChild(new Button);
+	layout2.addChild(new Button("knapp")); //notice memory leak
+	layout2.addChild(new ImageView("gfx/test.png"));
 
 	window.addChild(&layout2);
 

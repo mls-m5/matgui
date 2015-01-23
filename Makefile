@@ -1,12 +1,12 @@
 COMPILER=g++
 RUNSTRING=./${TARGET}
 
-GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o progressview.o
-BACKENDOBJECTS=draw.o shaderprogram.o matgui.o window.o application.o
+GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o progressview.o imageview.o
+BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o
 PROGOBJECS=main.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
-LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL
 FLAGS=-g -std=c++11 -Ofast `sdl2-config --cflags`
+LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 
 TARGET=project
 
@@ -18,7 +18,7 @@ all: .depend matgui.a matgui-sdl.a ${TARGET}
 	cat ./.dependtmp | sed 's/h$$/h \n\t \$(CXX) -c $(FLAGS) $$< -o $$@/' > ./.depend
 	rm ./.dependtmp
 
-${TARGET}: ${OBJECTS} #cleancpp
+${TARGET}: ${OBJECTS} matgui-sdl.a #cleancpp
 	${COMPILER} ${FLAGS} -o ${TARGET} ${PROGOBJECS} matgui-sdl.a ${LIBS}
 	
 matgui.a: ${GUIOBJECTS} #without sdl-dependencies
