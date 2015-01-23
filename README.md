@@ -22,10 +22,15 @@ class Program {
 	Program() {
 		layout.add(&button);
 		button.connect(this, Program::click);
+		button.connect(this, Program::clickNoArgs);
 	}
 	
 	void click(View::pointerArgument arg){
 		cout << "click at " << arg.x << ", " << arg.y << endl;
+	}
+	
+	void clickedNoArguments() {
+		cout << "clicked.. this function does not have any arguments" << endl;
 	}
 	
 	

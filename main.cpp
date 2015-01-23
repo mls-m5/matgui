@@ -96,6 +96,9 @@ public:
         layout.addChild(&button2);
 
         button.clicked.connect(this, &Program::onClicked);
+        button.clicked.connect(this, &Program::onClickedVoid);
+        button2.clicked.connect(this, &Program::quitProgram);
+
         button.pointerMoved.connect(this, &Program::onClicked); //just tetsing
         button.pointerMoved.disconnect(this);
 
@@ -104,6 +107,15 @@ public:
     //callback function for the button
     void onClicked(View::pointerArgument event) {
     	cout << "hej " << event.x << endl;
+    }
+
+    void onClickedVoid(void) {
+    	cout << "hej void " << endl;
+    }
+
+    void quitProgram() {
+    	cout << "exiting" << endl;
+    	running = false;
     }
 
     //Rendering function

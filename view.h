@@ -51,11 +51,11 @@ public:
 	}
 
 	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state) {
-
+		pointerEnter.emit({id, x, y, state});
 	}
 
 	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state) {
-
+		pointerLeave.emit({id, x, y, state});
 	}
 
 	struct pointerArgument {
@@ -65,10 +65,13 @@ public:
 	};
 
 	//Signals
-	Signal <void, pointerArgument> clicked;
-	Signal <void, pointerArgument> pointerMoved;
-	Signal <void, pointerArgument> pointerDown;
-	Signal <void, pointerArgument> pointerUp;
+	Signal <pointerArgument> clicked;
+	Signal <pointerArgument> pointerMoved;
+	Signal <pointerArgument> pointerDown;
+	Signal <pointerArgument> pointerUp;
+
+	Signal <pointerArgument> pointerEnter;
+	Signal <pointerArgument> pointerLeave;
 
 	double xPos, yPos;
 	double width, height;
