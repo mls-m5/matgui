@@ -2,7 +2,7 @@ COMPILER=g++
 RUNSTRING=./${TARGET}
 
 GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o
-BACKENDOBJECTS=draw.o shaderprogram.o
+BACKENDOBJECTS=draw.o shaderprogram.o matgui.o window.o application.o
 PROGOBJECS=main.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
 LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL
@@ -19,13 +19,13 @@ all: .depend matgui.a matgui-sdl.a ${TARGET}
 	rm ./.dependtmp
 
 ${TARGET}: ${OBJECTS} #cleancpp
-	${COMPILER} ${FLAGS} -o ${TARGET} ${PROGOBJECS} matgui.a matgui-sdl.a ${LIBS}
+	${COMPILER} ${FLAGS} -o ${TARGET} ${PROGOBJECS} matgui-sdl.a ${LIBS}
 	
-matgui.a: ${GUIOBJECTS}
+matgui.a: ${GUIOBJECTS} #without sdl-dependencies
 	ar rvs matgui.a ${GUIOBJECTS}
 	
-matgui-sdl.a: ${BACKENDOBJECTS}
-	ar rvs matgui-sdl.a ${BACKENDOBJECTS}
+matgui-sdl.a: ${BACKENDOBJECTS} ${GUIOBJECTS}
+	ar rvs matgui-sdl.a ${BACKENDOBJECTS} ${GUIOBJECTS}
 
 include .depend
 

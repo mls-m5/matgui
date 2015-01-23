@@ -14,41 +14,43 @@ example usage:
 
 
 ```
-class Program {
-	
-	LinearLayout layout;
+#include <iostream>
+
+#include "application.h"
+#include "window.h"
+#include "button.h"
+#include <GL/gl.h>
+#include "draw.h"
+#include "knobview.h"
+#include "linearlayout.h"
+
+using namespace MatGui;
+using namespace std;
+
+void callback(View::pointerArgument arg) {
+	cout << "callback... x = " << arg.x << endl;
+}
+
+int main(int argc, char *argv[])
+{
+	Application app(argc, argv); //Initialize stuff
+
+	Window window("matgui-demo"); //create the window
+
 	Button button;
-	
-	Program() {
-		layout.add(&button);
-		button.connect(this, Program::click);
-		button.connect(this, Program::clickNoArgs);
-	}
-	
-	void click(View::pointerArgument arg){
-		cout << "click at " << arg.x << ", " << arg.y << endl;
-	}
-	
-	void clickedNoArguments() {
-		cout << "clicked.. this function does not have any arguments" << endl;
-	}
-	
-	
-	
-	//render function
-	draw() {
-		layout.draw(); //draws all children
-	}
-	
-	//handle events
-	void backendEventCallbackExampleFromSDL() {
-		//...
-		button.onMouseDown(0, x, y);
-		//...
-		
-		MatSig::flushSignals();
-	}
-	
+	Button button2;
+	KnobView knob;
+
+	window.addChild(&button);
+	window.addChild(&knob);
+	window.addChild(&button2);
+
+	button.clicked.connect(callback); //callback to a function
+	button2.clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+
+	app.mainLoop();
+
+    return 0;
 }
 ```
 

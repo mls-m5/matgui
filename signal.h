@@ -88,6 +88,10 @@ public:;
 		_functionPointer(arg);
 	}
 
+	bool isObject(void *o) override {
+		return (o == (void *) _functionPointer);
+	}
+
 	_functionType _functionPointer;
 };
 
