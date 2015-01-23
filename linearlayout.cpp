@@ -7,6 +7,8 @@
 
 #include "linearlayout.h"
 
+namespace MatGui {
+
 LinearLayout::LinearLayout()
 {
 }
@@ -35,3 +37,5 @@ void LinearLayout::refresh() {
 
 //	Gui::postRedraw();
 }
+
+} //namespace MatGui

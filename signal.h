@@ -14,13 +14,12 @@
 #include <mutex>
 #include <memory>
 
+namespace MatSig {
 
 template <class _returnType, class _argument>
 class ConnectionBase {
 public:
-	virtual ~ConnectionBase() {
-
-	}
+	virtual ~ConnectionBase() {}
 
 	virtual void call(_argument arg) = 0;
 	virtual bool isObject(void *o) = 0;
@@ -137,7 +136,7 @@ struct TypeIsVoid< void >
 };
 
 
-template <typename _argument>
+template <typename _argument = void*>
 class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argument>>> {
 public:
 
@@ -224,3 +223,8 @@ public:
 };
 
 
+inline void flushSignals() {
+	SignalBase::flushAll();
+}
+
+} //namespace MatSig

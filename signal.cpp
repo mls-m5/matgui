@@ -8,5 +8,8 @@
 
 #include "signal.h"
 
+namespace MatSig {
+
 std::list<SignalBase*> SignalBase::_signals;
 
+}

@@ -9,6 +9,8 @@
 
 #include "layout.h"
 
+namespace MatGui {
+
 class LinearLayout: public Layout {
 public:
 	LinearLayout();
@@ -16,4 +18,6 @@ public:
 
 	virtual void refresh();
 };
+
+} //namespace MatGui
 

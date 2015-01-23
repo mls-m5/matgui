@@ -7,6 +7,8 @@
 
 #include "view.h"
 
+namespace MatGui {
+
 View::View():
 weight(1)
 {
@@ -54,3 +56,5 @@ bool View::isPointerInsideLocal(double x, double y) {
 	}
 	return false;
 }
+
+} //namespace MatGui

@@ -45,6 +45,8 @@ class Program {
 		//...
 		button.onMouseDown(0, x, y);
 		//...
+		
+		MatSig::flushSignals();
 	}
 	
 }

@@ -9,12 +9,15 @@
 
 #include "controllerview.h"
 
+namespace MatGui {
+
 class KnobView: public ControllerView {
 public:
 	KnobView();
 	virtual ~KnobView();
 
 	void draw();
-//	bool handleEvent(const ViewEvent& event);
 };
 
+
+}

@@ -10,6 +10,8 @@
 
 #include "view.h"
 
+namespace MatGui {
+
 class ControllerView: public View {
 public:
 	ControllerView():
@@ -50,3 +52,4 @@ protected:
 };
 
 
+} //namespace Matgui

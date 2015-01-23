@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-#include "linearlayout.h"
 using namespace std;
 
 
@@ -15,6 +14,8 @@ using namespace std;
 #include <GL/gl.h>
 #include "draw.h"
 #include "knobview.h"
+#include "linearlayout.h"
+using namespace MatGui;
 
 #include <SDL2/SDL.h>
 #define PROGRAM_NAME "sdl-gui"
@@ -131,7 +132,6 @@ public:
     	running = true;
         while (running) {
         	// Clear our buffer with a red background
-//        	glClearColor ( 0.1 * i, 0.0, 0.0, 1.0 );
         	glClear ( GL_COLOR_BUFFER_BIT );
         	render();
         	//Swap our back buffer to the front
@@ -144,7 +144,7 @@ public:
         		break;
         	}
 
-        	SignalBase::flushAll();
+        	MatSig::flushSignals();
         }
     }
 

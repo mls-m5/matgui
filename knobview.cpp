@@ -9,6 +9,8 @@
 #include "draw.h"
 #include "math.h"
 
+namespace MatGui {
+
 KnobView::KnobView() {
 }
 
@@ -37,16 +39,5 @@ void KnobView::draw() {
 			0, smallR * 2, smallR * 2, DRAW_STYLE_FILLED);
 }
 
-//bool KnobView::handleEvent(const ViewEvent& event) {
-//	switch(event.type){
-//	case ViewEvent::PointerDown:
-//	case ViewEvent::PointerMove:
-//		if (event.pointer.pressed){
-//			double v = atan2(event.pointer.x - width / 2, event.pointer.y - height / 2) / pi2 + .5;
-////			Element::setController(elementId, controllerId, v);
-//		return true;
-//	}
-//	}
-//
-//	return false;
-//}
+
+}

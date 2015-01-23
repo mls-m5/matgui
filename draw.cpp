@@ -4,6 +4,8 @@
 
 #include "shaderprogram.h"
 
+namespace MatGui {
+
 static struct {
 	GLint color;
 	GLuint vertices;
@@ -137,3 +139,5 @@ bool initDrawModule(double width, double height) {
 void QuitDrawModule() {
 	delete squareShaderProgram;
 }
+
+} //Namespace Matgui

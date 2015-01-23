@@ -5,10 +5,10 @@
  *      Author: mattias
  */
 
-#ifndef DRAW_H_
-#define DRAW_H_
 
+#pragma once
 
+namespace MatGui {
 
 struct vec {
 	vec(double x, double y, double z): x(x), y(y), z(z) {}
@@ -31,4 +31,5 @@ void drawSquare(vec p, double a, double scaleX, double scaleY, DrawStyle);
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle drawStyle);
 void setDimensions(double width, double height);
 
-#endif /* DRAW_H_ */
+}
+

@@ -10,18 +10,21 @@
 #include "common.h"
 #include "signal.h"
 
-typedef int pointerId;
-typedef int pointerState;
+namespace MatGui {
 
-enum widthFlags {
-	VIEW_MATCH_PARENT = -1,
-	VIEW_WRAP_CONTENT = -2,
-	VIEW_WEIGHTED = 0,
-	VIEW_FIXED = 1
-};
-
+using MatSig::Signal;
 class View {
 public:
+	enum widthFlags {
+		VIEW_MATCH_PARENT = -1,
+		VIEW_WRAP_CONTENT = -2,
+		VIEW_WEIGHTED = 0,
+		VIEW_FIXED = 1
+	};
+
+	typedef int pointerId;
+	typedef int pointerState;
+
 	View();
 	virtual ~View();
 
@@ -78,3 +81,5 @@ public:
 	int widthFlags, heightFlags;
 	double weight = 0;
 };
+
+} //namespace MatGui

@@ -10,6 +10,8 @@
 #include <iostream>
 using std::cout; using std::endl;
 
+namespace MatGui {
+
 Layout::Layout():
 orientation(LAYOUT_VERTICAL),
 margin(4){
@@ -259,3 +261,6 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 	}
 	return false;
 }
+
+
+} //Namespace MatGui

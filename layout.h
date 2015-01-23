@@ -10,6 +10,8 @@
 #include <list>
 #include "view.h"
 
+namespace MatGui {
+
 enum LayoutOrientation {
 	LAYOUT_HORIZONTAL,
 	LAYOUT_VERTICAL
@@ -54,3 +56,6 @@ protected:
 	int orientation;
 	double margin;
 };
+
+
+} //namespace MatGui

@@ -9,8 +9,8 @@
 #include "button.h"
 #include "draw.h"
 
-#include <iostream>
-using namespace std;
+namespace MatGui {
+
 Button::Button() {
 }
 
@@ -30,4 +30,6 @@ void Button::onPointerEnter(pointerId id, double x, double y,
 void Button::onPointerLeave(pointerId id, double x, double y,
 		pointerState state) {
 	highlight = false;
+}
+
 }

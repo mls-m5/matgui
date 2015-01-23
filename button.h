@@ -9,7 +9,7 @@
 #include "view.h"
 
 
-#include <iostream>
+namespace MatGui {
 
 class Button : public View{
 public:
@@ -26,3 +26,5 @@ public:
 
 	bool highlight = false;
 };
+
+}
