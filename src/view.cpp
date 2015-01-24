@@ -57,4 +57,52 @@ bool View::isPointerInsideLocal(double x, double y) {
 	return false;
 }
 
+bool View::onPointerDown(pointerId id, double x, double y) {
+	pointerDown.emit( { id, x, y, 1 });
+	return true;
+}
+
+bool View::onPointerUp(pointerId id, double x, double y) {
+	pointerUp.emit( { id, x, y, 0 });
+	if (isPointerInsideLocal(x, y)) {
+		clicked.emit( { id, x, y, 1 });
+	}
+	return true;
+}
+
+bool View::onPointerMove(pointerId id, double x, double y,
+		pointerState state) {
+	pointerMoved.emit( { id, x, y, state });
+	return true;
+}
+
+void View::onPointerEnter(pointerId id, double x, double y,
+		pointerState state) {
+	pointerEnter.emit( { id, x, y, state });
+}
+
+void View::onPointerLeave(pointerId id, double x, double y,
+		pointerState state) {
+	pointerLeave.emit( { id, x, y, state });
+}
+
+bool View::onKeyDown(KeySym sym, KeyScanCode scancode, int repeat) {
+	//If there is no listener the key go to another view
+	if (keyDown) {
+		keyDown.emit( { sym, scancode, repeat });
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool View::onKeyUp(KeySym sym, KeyScanCode scancode, int repeat) {
+	if (keyUp) {
+		keyUp.emit( { sym, scancode, repeat });
+		return true;
+	} else {
+		return false;
+	}
+}
+
 } //namespace MatGui

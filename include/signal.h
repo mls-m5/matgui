@@ -151,6 +151,7 @@ class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argume
 public:
 	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
 
+	//Put a call on the queue
 	void emit(_argument arg = 0) {
 		if (!this->empty()) { //Dont bother to broadcast if nobody listen
 			if (_onlySaveLast) { //Use this with objects emitting very many signals
@@ -170,14 +171,27 @@ public:
 	//Call all connected functions
 	void flush() override{
 		while (!_queue.empty()) {
-			_argument arg = _queue.front();
+			for (auto connection: *this) {
+				connection->call(_queue.front());
+			}
 			_queue.pop();
+		}
+	}
+
+	//Call without putting on the queue
+	//Remember that this messes with threading
+	void directCall(_argument arg = 0) {
+		if (!this->empty()) {
 			for (auto connection: *this) {
 				connection->call(arg);
 			}
 		}
 	}
 
+	//this operator is used to check if it is any use to emit a signal
+	operator bool() {
+		return !this->empty();
+	}
 
 	//Connect to a class function
 	//Usage:
@@ -229,13 +243,6 @@ public:
 		}
 		_mutex.unlock();
 	}
-
-
-	struct Apa {
-		int bepa() {
-			return 0;
-		}
-	};
 
 
 	void onlySaveLast(bool value) {

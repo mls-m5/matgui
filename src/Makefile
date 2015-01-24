@@ -1,5 +1,4 @@
 COMPILER=g++
-RUNSTRING=./${TARGET}
 
 GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o progressview.o imageview.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o
@@ -25,10 +24,6 @@ ${TARGET}: ${OBJECTS} matgui-sdl.a #cleancpp
 	ar rvs ../matgui-sdl.a ${BACKENDOBJECTS} ${GUIOBJECTS}
 
 include .depend
-
-#För att kunna köra filen direkt
-run: ${TARGET}
-	${RUNSTRING}
 
 clean:
 	rm *.a

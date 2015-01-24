@@ -18,14 +18,17 @@ using namespace MatGui;
 using namespace std;
 
 ProgressView *progressView;
-void callback(View::pointerArgument arg) {
+void callback(View::PointerArgument arg) {
 	cout << "callback... x = " << arg.x << endl;
 }
 
 
 void knobCallback(double value) {
-//	cout << "changed... " << value << endl;
 	progressView->value(value);
+}
+
+void keyDownCallback(View::KeyArgument arg) {
+	cout << "keypress " << (char)arg.symbol << endl;
 }
 
 int main(int argc, char *argv[])
@@ -56,6 +59,7 @@ int main(int argc, char *argv[])
 	button->clicked.connect(callback); //callback to a function
 	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
 	knob->changed.connect(knobCallback);
+	window->keyDown.connect(keyDownCallback);
 
 	knob->value(.3);
 

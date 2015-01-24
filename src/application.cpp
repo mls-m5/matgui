@@ -42,13 +42,16 @@ Application::Application(int argc, char** argv) {
 void Application::mainLoop() {
 	running = true;
 	while (running) { //todo: fix not constant updates
-		// Clear our buffer with a red background
+		//Handle gives the developer the possibility to do things each frame
+		if (frame) {
+			frame.directCall();
+		}
+
 		glClear ( GL_COLOR_BUFFER_BIT );
-//		render();
-		//Swap our back buffer to the front
 
 		for (auto it: windows) {
 			it->draw();
+			//Swap our back buffer to the front
 			SDL_GL_SwapWindow(it->windowData->window);
 		}
 		// Wait
@@ -99,6 +102,16 @@ bool Application::handleEvents() {
 			{
 				auto &e = event.motion;
 				window->onPointerUp(0, (double)e.x, (double)e.y);
+			}
+			break;
+			case SDL_KEYDOWN:
+			{
+				window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.repeat);
+			}
+			break;
+			case SDL_KEYUP:
+			{
+
 			}
 			break;
 			default:

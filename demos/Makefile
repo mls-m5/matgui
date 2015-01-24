@@ -1,13 +1,15 @@
-COMPILER=g++
+CXX=g++
 RUNSTRING=./${TARGET}
 
-OBJECTS=simple.o
+OBJECTS=simple.o game.o
 LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include"
+DEMOS=simple game
 
 TARGET=simple
+LINKFLAGS=${FLAGS} ../matgui-sdl.a ${LIBS} 
 
-all: ${TARGET}
+all: ${DEMOS}
 
 #Calculating dependincies
 .depend: $(wildcard ./*.cpp ./*.h) Makefile
@@ -15,8 +17,11 @@ all: ${TARGET}
 	cat ./.dependtmp | sed 's/h$$/h \n\t \$(CXX) -c $$(CFLAGS) $$< -o $$@/' > ./.depend
 	rm ./.dependtmp
 
-${TARGET}: ${OBJECTS} ../matgui-sdl.a
-	${COMPILER} ${FLAGS} -o ${TARGET} ${OBJECTS} ../matgui-sdl.a ${LIBS}
+${TARGET}: simple.o ../matgui-sdl.a
+	${CXX} -o ${TARGET} simple.o ${LINKFLAGS}
+	
+game: game.o
+	${CXX} -o game game.o ${LINKFLAGS}
 	
 include .depend
 
@@ -25,8 +30,8 @@ run: ${TARGET}
 	${RUNSTRING}
 
 clean:
-	rm *.a
 	rm *.o
+	rm ${DEMOS}
 	rm .depend
 
 rebuild: clean ${TARGET}

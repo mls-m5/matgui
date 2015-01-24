@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "signal.h"
+
 namespace MatGui {
 
 class Application {
@@ -22,6 +24,8 @@ public:
 	void quit();
 
 	bool running = false;
+
+	MatSig::Signal<> frame;
 
 protected:
 

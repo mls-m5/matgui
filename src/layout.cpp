@@ -20,7 +20,7 @@ margin(4){
 
 Layout::~Layout() {
 	for (auto it: children) {
-		if (it->_owned) {
+		if (it->owned()) {
 			delete it;
 		}
 	}
@@ -78,17 +78,17 @@ void Layout::calculateWeights() {
 	double totalXWeight = 0;
 	double totalYWeight = 0;
 	for (auto it : children) {
-		if (it->_widthFlags == VIEW_WEIGHTED) {
-			totalXWeight += it->_weight;
+		if (it->widthFlags() == VIEW_WEIGHTED) {
+			totalXWeight += it->weight();
 		}
 		else{
-			restWidth -= it->_width;
+			restWidth -= it->width();
 		}
-		if (it->_heightFlags == VIEW_WEIGHTED) {
-			totalYWeight += it->_weight;
+		if (it->heightFlags() == VIEW_WEIGHTED) {
+			totalYWeight += it->weight();
 		}
 		else{
-			restHeight -= it->_height;
+			restHeight -= it->height();
 		}
 	}
 	auto paddingCorrection = margin * (children.size() + 1);
@@ -96,20 +96,20 @@ void Layout::calculateWeights() {
 	restWidth -= paddingCorrection;
 	for (auto it : children) {
 		if (orientation == LAYOUT_HORIZONTAL){
-			if (it->_widthFlags == VIEW_WEIGHTED) {
-				it->_width = restWidth * it->_weight / totalXWeight;
+			if (it->widthFlags() == VIEW_WEIGHTED) {
+				it->width(restWidth * it->weight() / totalXWeight);
 			}
 		}
 		else{
-			it->_width = _width - margin * 2;
+			it->width(_width - margin * 2);
 		}
 		if (orientation == LAYOUT_VERTICAL){
-			if (it->_heightFlags == VIEW_WEIGHTED) {
-				it->_height = restHeight * it->_weight / totalYWeight;
+			if (it->heightFlags() == VIEW_WEIGHTED) {
+				it->height(restHeight * it->weight() / totalYWeight);
 			}
 		}
 		else{
-			it->_height = _height - margin * 2;
+			it->height(_height - margin * 2);
 		}
 	}
 }
@@ -117,9 +117,9 @@ void Layout::calculateWeights() {
 void Layout::refresh() {
 	bool weighted = false;
 	for (auto it: children){
-		switch(it->_widthFlags){
+		switch(it->widthFlags()){
 		case VIEW_MATCH_PARENT:
-			it->_width = _width;
+			it->width(_width);
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -130,9 +130,9 @@ void Layout::refresh() {
 		case 1:
 			break;
 		}
-		switch(it->_heightFlags){
+		switch(it->heightFlags()){
 		case VIEW_MATCH_PARENT:
-			it->_height = _height;
+			it->height(_height);
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -223,7 +223,7 @@ bool Layout::onPointerDown(pointerId id, double x, double y) {
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerDown(id, x - it->_x, y - it->_y)){
+			if (it->onPointerDown(id, x - it->x(), y - it->y())){
 				return true;
 			}
 		}
@@ -237,7 +237,7 @@ bool Layout::onPointerUp(pointerId id, double x, double y) {
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerUp(id, x - it->_x, y - it->_y)){
+			if (it->onPointerUp(id, x - it->x(), y - it->y())){
 				return true;
 			}
 		}
@@ -255,19 +255,19 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 			if (it != pointerFocusedChild) {
 				if (pointerFocusedChild) {
 					pointerFocusedChild->onPointerLeave(id,
-							x - pointerFocusedChild->_x, y-pointerFocusedChild->_y, state);
+							x - pointerFocusedChild->x(), y-pointerFocusedChild->y(), state);
 				}
 				pointerFocusedChild = it;
-				it->onPointerEnter(id, x - it->_x, y - it->_y, state);
+				it->onPointerEnter(id, x - it->x(), y - it->y(), state);
 			}
-			if (it->onPointerMove(id, x - it->_x, y - it->_y, state)){
+			if (it->onPointerMove(id, x - it->x(), y - it->y(), state)){
 				return true;
 			}
 		}
 	}
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->_x, y - pointerFocusedChild->_y, state);
+				x - pointerFocusedChild->x(), y - pointerFocusedChild->y(), state);
 		pointerFocusedChild = nullptr;
 	}
 	return false;
@@ -282,7 +282,7 @@ void Layout::onPointerLeave(pointerId id, double x, double y,
 		pointerState state) {
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->_x, y - pointerFocusedChild->_y, state);
+				x - pointerFocusedChild->x(), y - pointerFocusedChild->y(), state);
 		pointerFocusedChild = nullptr;
 	}
 	View::onPointerEnter(id, x, y, state);

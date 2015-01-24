@@ -79,7 +79,7 @@ static const GLfloat gSquareColors[] = {
 void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 	squareShaderProgram->useProgram();
 
-	modelTransform(program1.mvpMatrix, p, a / 180., sx, sy);
+	modelTransform(program1.mvpMatrix, p, a, sx, sy);
     glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
     glEnableVertexAttribArray(program1.vertices);
 
@@ -94,7 +94,7 @@ void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 void drawTexture(vec p, double a, double sx, double sy, int textureId) {
 	textureShaderProgram->useProgram();
 
-	modelTransform(textureProgram.mvpMatrix, p, a / 180., sx, sy);
+	modelTransform(textureProgram.mvpMatrix, p, a, sx, sy);
     glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
     glEnableVertexAttribArray(textureProgram.vertices);
 

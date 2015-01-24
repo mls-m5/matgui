@@ -10,6 +10,11 @@
 #include "common.h"
 #include "signal.h"
 
+//standard getters and setters
+#define member_set(type, m) void m (type value) { _ ## m = value; }
+#define member_get(type, m) type m () { return _ ## m; }
+#define member_property(type, m) member_get(type, m) member_set(type, m)
+
 namespace MatGui {
 
 using MatSig::Signal;
@@ -34,49 +39,58 @@ public:
 			double weight = 1);
 	virtual bool isPointerInside(double x, double y);
 	virtual bool isPointerInsideLocal(double localx, double localy);
-	virtual void owned(bool owned) { _owned = owned; }
 
 
 	//Callback functions return true to capture the mouse focus
-	virtual bool onPointerDown(pointerId id, double x, double y) {
-		pointerDown.emit({id, x, y, 1});
-		return true;
-	}
-	virtual bool onPointerUp(pointerId id, double x, double y) {
-		pointerUp.emit({id, x, y, 0});
-		if (isPointerInsideLocal(x, y)) {
-			clicked.emit({id, x, y, 1});
-		}
-		return true;
-	}
-	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) {
-		pointerMoved.emit({id, x, y, state});
-		return true;
-	}
+	virtual bool onPointerDown(pointerId id, double x, double y);
+	virtual bool onPointerUp(pointerId id, double x, double y);
+	virtual bool onPointerMove(pointerId id, double x, double y,
+			pointerState state);
+	virtual void onPointerEnter(pointerId id, double x, double y,
+			pointerState state);
+	virtual void onPointerLeave(pointerId id, double x, double y,
+			pointerState state);
 
-	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state) {
-		pointerEnter.emit({id, x, y, state});
-	}
+	typedef unsigned KeySym;
+	typedef unsigned KeyScanCode;
 
-	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state) {
-		pointerLeave.emit({id, x, y, state});
-	}
+	virtual bool onKeyDown(KeySym sym, KeyScanCode scancode, int repeat);
+	virtual bool onKeyUp(KeySym sym, KeyScanCode scancode, int repeat);
 
-	struct pointerArgument {
+	struct PointerArgument {
 		pointerId id;
 		double x, y;
 		pointerState state;
 	};
 
+	struct KeyArgument {
+		KeySym symbol;
+		KeyScanCode scanCode;
+		int repeats; //0 if first repeat
+	};
+
 	//Signals
-	Signal <pointerArgument> clicked;
-	Signal <pointerArgument> pointerMoved;
-	Signal <pointerArgument> pointerDown;
-	Signal <pointerArgument> pointerUp;
+	Signal <PointerArgument> clicked;
+	Signal <PointerArgument> pointerMoved;
+	Signal <PointerArgument> pointerDown;
+	Signal <PointerArgument> pointerUp;
 
-	Signal <pointerArgument> pointerEnter;
-	Signal <pointerArgument> pointerLeave;
+	Signal <PointerArgument> pointerEnter;
+	Signal <PointerArgument> pointerLeave;
 
+	Signal <KeyArgument> keyDown;
+	Signal <KeyArgument> keyUp;
+
+	member_property(double, x);
+	member_property(double, y);
+	member_property(double, width);
+	member_property(double, height);
+	member_property(double, weight);
+	member_property(bool, owned);
+	member_property(int, widthFlags);
+	member_property(int, heightFlags);
+
+protected:
 	double _x, _y;
 	double _width, _height;
 	int _widthFlags, _heightFlags;

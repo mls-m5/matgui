@@ -21,16 +21,23 @@ public:
 
 	void draw() override;
 
-
 	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state);
 	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state);
+
+	void label(const std::string value) {
+		_label = value;
+	}
+
+	const std::string &label() {
+		return _label;
+	}
 
 	protected:
 
 	bool highlight = false;
 
-	std::shared_ptr<Font> font;
-	std::string label;
+	std::shared_ptr<Font> _font;
+	std::string _label;
 };
 
 }
