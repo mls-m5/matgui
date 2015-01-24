@@ -37,6 +37,7 @@ public:
 	virtual void addChild(View *view);
 	virtual void addChildAfter(View *view, View* after);
 	virtual void removeChild(View *view);
+	virtual void deleteChild(View *view);
 	virtual void clear(){
 		children.clear();
 	}

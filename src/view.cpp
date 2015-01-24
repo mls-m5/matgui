@@ -10,7 +10,7 @@
 namespace MatGui {
 
 View::View():
-weight(1)
+_weight(1)
 {
 	setLocation(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
 }
@@ -26,16 +26,16 @@ void View::setLocation(double x, double y, double w, double h, double weight) {
 	_y = y;
 	_width = w;
 	_height = h;
-	this->weight = weight;
+	this->_weight = weight;
 	if (_width <= 0) {
-		widthFlags = w;
+		_widthFlags = w;
 	} else {
-		widthFlags = 1;
+		_widthFlags = 1;
 	}
 	if (_height <= 0) {
-		heightFlags = h;
+		_heightFlags = h;
 	} else {
-		heightFlags = 1;
+		_heightFlags = 1;
 	}
 }
 

@@ -19,7 +19,6 @@ example usage:
 #include "application.h"
 #include "window.h"
 #include "button.h"
-#include <GL/gl.h>
 #include "draw.h"
 #include "knobview.h"
 #include "linearlayout.h"
@@ -35,20 +34,22 @@ int main(int argc, char *argv[])
 {
 	Application app(argc, argv); //Initialize stuff
 
-	Window window("matgui-demo"); //create the window
+	auto window = new Window("matgui-demo"); //create the window
 
-	Button button;
-	Button button2;
-	KnobView knob;
+	auto button = new Button("button");
+	auto button2 = new Button;
+	auto knob = new KnobView;
 
-	window.addChild(&button);
-	window.addChild(&knob);
-	window.addChild(&button2);
+	window.addChild(button);
+	window.addChild(knob);
+	window.addChild(button2);
 
-	button.clicked.connect(callback); //callback to a function
-	button2.clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+	button->clicked.connect(callback); //callback to a function
+	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
 
 	app.mainLoop();
+	
+	//All views are automatically deleted when the containers are deleted
 
     return 0;
 }

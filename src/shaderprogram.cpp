@@ -135,7 +135,9 @@ void StandardShaderProgram::disable() {
 }
 
 void ShaderProgram::useProgram() {
-	glUseProgram(_program);
+	if (_program) {
+		glUseProgram(_program);
+	}
 }
 
 void ShaderProgram::loadShaderFromFile(std::string vertexFile,	std::string fragmentFile) {

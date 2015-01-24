@@ -27,7 +27,6 @@ struct FontData {
 
 static std::list<fontDescriptionStruct> loadedFonts;
 static bool isInitialized = false;
-static ShaderProgram shaderProgram;
 
 
 void RenderText(const TTF_Font *Font, const GLubyte& R, const GLubyte& G, const GLubyte& B,
@@ -76,7 +75,6 @@ Font::Font(const std::string filename, int size) {
 	else {
 		if (!isInitialized) {
 			TTF_Init();
-			shaderProgram.loadShaderFromFile("shaders/fontshader.vsl", "shaders/fontshader.fsl");
 			isInitialized = true;
 		}
 		data->font = TTF_OpenFont(filename.c_str(), size);
@@ -91,7 +89,6 @@ Font::~Font() {
 }
 
 void Font::draw(double x, double y, const std::string& text) {
-	shaderProgram.useProgram();
 	RenderText(data->font, 255, 255, 255, x, y, 0, text);
 }
 

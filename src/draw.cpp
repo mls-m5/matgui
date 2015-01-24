@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "shaderprogram.h"
+#include "shaders/textureshader.h"
+#include "shaders/plainshader.h"
 
 namespace MatGui {
 
@@ -151,9 +153,7 @@ bool initDrawModule(double width, double height) {
 	if (squareShaderProgram){
 		delete squareShaderProgram;
 	}
-//    squareShaderProgram = new ShaderProgram(gVertexShader, gFragmentShader);
-	squareShaderProgram = new ShaderProgram;
-	squareShaderProgram->loadShaderFromFile("shaders/shader.vsl", "shaders/shader.fsl");
+	squareShaderProgram = new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode);
 
     if (!squareShaderProgram->getProgram()) {
         debug_print("Could not create program.");
@@ -169,8 +169,7 @@ bool initDrawModule(double width, double height) {
 
 
 
-	textureShaderProgram = new ShaderProgram;
-	textureShaderProgram->loadShaderFromFile("shaders/fontshader.vsl", "shaders/fontshader.fsl");
+	textureShaderProgram = new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode);
 
 	textureProgram.vertices = textureShaderProgram->getAttribute("vPosition");
 	textureProgram.color = textureShaderProgram->getUniform("uColor");

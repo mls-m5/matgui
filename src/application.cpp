@@ -112,7 +112,8 @@ bool Application::handleEvents() {
 Application::~Application() {
     QuitDrawModule();
 
-    for (auto it: windows) {
+    auto tmpWindowList = windows; //windows will start removing themselves from list
+    for (auto it: tmpWindowList) {
     	delete it;
     }
     windows.clear();
@@ -126,6 +127,10 @@ void Application::quit() {
 
 void Application::addWindow(class Window* window) {
 	windows.push_back(window);
+}
+
+void Application::removeWindow(class Window* window) {
+	windows.remove(window);
 }
 
 }  // namespace MatGui

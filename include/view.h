@@ -34,6 +34,7 @@ public:
 			double weight = 1);
 	virtual bool isPointerInside(double x, double y);
 	virtual bool isPointerInsideLocal(double localx, double localy);
+	virtual void owned(bool owned) { _owned = owned; }
 
 
 	//Callback functions return true to capture the mouse focus
@@ -78,8 +79,9 @@ public:
 
 	double _x, _y;
 	double _width, _height;
-	int widthFlags, heightFlags;
-	double weight = 0;
+	int _widthFlags, _heightFlags;
+	double _weight = 0;
+	bool _owned = true; //Id the widget should be deleted by its parent
 };
 
 } //namespace MatGui

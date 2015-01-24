@@ -26,6 +26,7 @@ public:
 protected:
 
 	static void addWindow(class Window*);
+	static void removeWindow(class Window*);
 
 	friend class Window;
 };

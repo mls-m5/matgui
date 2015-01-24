@@ -19,6 +19,12 @@ margin(4){
 }
 
 Layout::~Layout() {
+	for (auto it: children) {
+		if (it->_owned) {
+			delete it;
+		}
+	}
+	children.clear();
 }
 
 void Layout::draw() {
@@ -36,6 +42,11 @@ void Layout::addChildAfter(View* view, View* after) {
 		}
 	}
 	children.push_back(view);
+}
+
+void Layout::deleteChild(View* view) {
+	removeChild(view);
+	delete view;
 }
 
 void Layout::refreshChildren() {
@@ -67,14 +78,14 @@ void Layout::calculateWeights() {
 	double totalXWeight = 0;
 	double totalYWeight = 0;
 	for (auto it : children) {
-		if (it->widthFlags == VIEW_WEIGHTED) {
-			totalXWeight += it->weight;
+		if (it->_widthFlags == VIEW_WEIGHTED) {
+			totalXWeight += it->_weight;
 		}
 		else{
 			restWidth -= it->_width;
 		}
-		if (it->heightFlags == VIEW_WEIGHTED) {
-			totalYWeight += it->weight;
+		if (it->_heightFlags == VIEW_WEIGHTED) {
+			totalYWeight += it->_weight;
 		}
 		else{
 			restHeight -= it->_height;
@@ -85,16 +96,16 @@ void Layout::calculateWeights() {
 	restWidth -= paddingCorrection;
 	for (auto it : children) {
 		if (orientation == LAYOUT_HORIZONTAL){
-			if (it->widthFlags == VIEW_WEIGHTED) {
-				it->_width = restWidth * it->weight / totalXWeight;
+			if (it->_widthFlags == VIEW_WEIGHTED) {
+				it->_width = restWidth * it->_weight / totalXWeight;
 			}
 		}
 		else{
 			it->_width = _width - margin * 2;
 		}
 		if (orientation == LAYOUT_VERTICAL){
-			if (it->heightFlags == VIEW_WEIGHTED) {
-				it->_height = restHeight * it->weight / totalYWeight;
+			if (it->_heightFlags == VIEW_WEIGHTED) {
+				it->_height = restHeight * it->_weight / totalYWeight;
 			}
 		}
 		else{
@@ -106,7 +117,7 @@ void Layout::calculateWeights() {
 void Layout::refresh() {
 	bool weighted = false;
 	for (auto it: children){
-		switch(it->widthFlags){
+		switch(it->_widthFlags){
 		case VIEW_MATCH_PARENT:
 			it->_width = _width;
 			break;
@@ -119,7 +130,7 @@ void Layout::refresh() {
 		case 1:
 			break;
 		}
-		switch(it->heightFlags){
+		switch(it->_heightFlags){
 		case VIEW_MATCH_PARENT:
 			it->_height = _height;
 			break;
