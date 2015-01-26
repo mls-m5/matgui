@@ -17,7 +17,7 @@ ImageView::~ImageView() {
 }
 
 void ImageView::draw() {
-	drawTexture({_x, _y}, 0, _width, _height, _texture);
+	drawTextureRect({_x, _y}, 0, _width, _height, _texture);
 }
 
 void ImageView::loadImage(std::string filename) {

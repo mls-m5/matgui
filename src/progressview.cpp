@@ -17,8 +17,8 @@ ProgressView::~ProgressView() {
 }
 
 void ProgressView::draw() {
-	drawSquare({_x, _y}, 0, _width, _height, DRAW_STYLE_LINES);
-	drawSquare({_x, _y}, 0, _width * (double)(_value - _min) / (_max - _min), _height, DRAW_STYLE_FILLED);
+	drawRect({_x, _y}, 0, _width, _height, DrawStyle::Lines);
+	drawRect({_x, _y}, 0, _width * (double)(_value - _min) / (_max - _min), _height, DrawStyle::Filled);
 }
 
 } /* namespace MatGui */

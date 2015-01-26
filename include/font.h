@@ -16,7 +16,7 @@ public:
 	Font(const std::string, int size);
 	virtual ~Font();
 
-	void draw(double x, double y, const std::string &text);
+	void draw(double x, double y, const std::string &text, bool centered);
 
 	class FontData* data;
 };

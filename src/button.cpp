@@ -21,9 +21,9 @@ Button::~Button() {
 
 
 void Button::draw() {
-	drawSquare(vec(_x, _y, 0), 0, _width, _height, highlight? DRAW_STYLE_FILLED : DRAW_STYLE_LINES);
+	drawRect(_x, _y, 0, _width, _height, highlight? DrawStyle::Filled : DrawStyle::Lines);
 	if (_font and !_label.empty()) {
-		_font->draw(_x, _y, _label);
+		_font->draw(_x + _width / 2., _y + _height / 2., _label, true);
 	}
 }
 

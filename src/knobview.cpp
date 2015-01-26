@@ -48,14 +48,14 @@ void KnobView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	drawElipse(vec(_x + middleX - radius, _y + middleY - radius), 0, radius * 2, radius * 2, DRAW_STYLE_LINES);
+	drawElipse(vec(_x + middleX - radius, _y + middleY - radius), 0, radius * 2, radius * 2, DrawStyle::Lines);
 
 	const double v = (_value - _min) / (_max - _min);
 
 	auto smallR = radius *.1;
 	auto a = v * pi2;
 	drawElipse(vec(_x + middleX - radius * sin(a) - smallR, _y + middleY + radius * cos(a) - smallR),
-			0, smallR * 2, smallR * 2, DRAW_STYLE_FILLED);
+			0, smallR * 2, smallR * 2, DrawStyle::Filled);
 }
 
 }

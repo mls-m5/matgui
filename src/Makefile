@@ -3,10 +3,10 @@ COMPILER=g++
 GUIOBJECTS=view.o knobview.o button.o signal.o linearlayout.o layout.o progressview.o imageview.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
-#LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
+#LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include"
 
-all: .depend ../matgui.a ../matgui-sdl.a
+all: .depend ../matgui-sdl.a
 
 #Calculating dependincies
 .depend: $(wildcard ./*.cpp ./*.h) Makefile

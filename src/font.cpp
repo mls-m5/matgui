@@ -30,7 +30,7 @@ static bool isInitialized = false;
 
 
 void RenderText(const TTF_Font *Font, const GLubyte& R, const GLubyte& G, const GLubyte& B,
-                const double& X, const double& Y, const double& Z,  const std::string& Text)
+                const double& X, const double& Y, const double& Z,  const std::string& Text, bool centered)
 {
 	if (!Font) return;
 	glEnable(GL_BLEND);
@@ -50,7 +50,7 @@ void RenderText(const TTF_Font *Font, const GLubyte& R, const GLubyte& G, const 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, GL_BGRA,
 	             GL_UNSIGNED_BYTE, Message->pixels);
 
-	drawTexture({X, Y}, 0, Message->w, Message->h, Texture);
+	drawTextureRect({X, Y}, 0, Message->w, Message->h, Texture, centered ? DrawStyle::CenterOrigo : DrawStyle::OrigoTopLeft);
 
 	/*Clean up.*/
 	glDeleteTextures(1, &Texture);
@@ -88,8 +88,8 @@ Font::~Font() {
 	delete data;
 }
 
-void Font::draw(double x, double y, const std::string& text) {
-	RenderText(data->font, 255, 255, 255, x, y, 0, text);
+void Font::draw(double x, double y, const std::string& text, bool centered) {
+	RenderText(data->font, 255, 255, 255, x, y, 0, text, centered);
 }
 
 } /* namespace MatGui */

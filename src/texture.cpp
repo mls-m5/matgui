@@ -93,7 +93,7 @@ void Texture::load(const std::string filename) {
 }
 
 void Texture::render() {
-	drawTexture({0,0}, 30, 100, 100, _textureId);
+	drawTextureRect({0,0}, 30, 100, 100, _textureId);
 }
 
 } /* namespace MatGui */

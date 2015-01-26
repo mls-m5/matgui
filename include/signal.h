@@ -16,6 +16,9 @@
 
 namespace MatSig {
 
+
+//Base class for signal connection
+//It is automatically created by the signals connect function
 template <class _returnType, class _argument>
 class ConnectionBase {
 public:
@@ -24,6 +27,8 @@ public:
 	virtual void call(_argument arg) = 0;
 	virtual bool isObject(void *o) = 0;
 };
+
+
 
 template <class _classType, class _returnType, class _argument>
 class ClassConnection : public ConnectionBase<_returnType, _argument> {
@@ -54,6 +59,7 @@ public:;
 
 //This connection enables connection to a void function even if the signal
 //has arguments
+//It is created automatically by the signals connect function
 template <class _classType, class _returnType, class _argument>
 class VoidClassConnection : public ConnectionBase<_returnType, _argument> {
 public:;
@@ -79,6 +85,8 @@ public:;
 	_functionType _functionPointer;
 };
 
+
+//Specialized class for callback to functions without object
 template <class _returnType, class _argument>
 class FunctionConnection : public ConnectionBase<_returnType, _argument> {
 public:;

@@ -2,7 +2,7 @@ CXX=g++
 RUNSTRING=./${TARGET}
 
 OBJECTS=simple.o game.o
-LIBS= -lpthread -lsndfile `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
+LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include"
 DEMOS=simple game
 
@@ -20,7 +20,7 @@ all: ${DEMOS}
 ${TARGET}: simple.o ../matgui-sdl.a
 	${CXX} -o ${TARGET} simple.o ${LINKFLAGS}
 	
-game: game.o
+game: game.o ../matgui-sdl.a
 	${CXX} -o game game.o ${LINKFLAGS}
 	
 include .depend

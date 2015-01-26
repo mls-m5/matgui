@@ -18,6 +18,7 @@ static struct {
 static struct {
 	GLint color;
 	GLint vertices;
+	GLint texcoords;
 	GLint mvpMatrix;
 	GLint texture;
 } textureProgram;
@@ -70,13 +71,14 @@ void resetTransform(unsigned int pointer){
 
 //Square
 static const GLfloat gSquareVertices[] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f };
+static const GLfloat gSquareVerticesCenteredAtOrigo[] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
 static const GLfloat gSquareColors[] = {
 		.8, .8, 1., .5,
 //		0,.5,.5,0
 };
 
 
-void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
+void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareShaderProgram->useProgram();
 
 	modelTransform(program1.mvpMatrix, p, a, sx, sy);
@@ -85,18 +87,28 @@ void drawSquare(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 
     glUniform4fv(program1.color, 1, gSquareColors);
 
-    glDrawArrays((drawStyle == DRAW_STYLE_LINES)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, 4);
+    glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, 4);
 
     glDisableVertexAttribArray(program1.vertices);
 }
 
 //static const GLfloat texturecoordinates[] = {0,0, 0,1, 1,0, 1,1};
-void drawTexture(vec p, double a, double sx, double sy, int textureId) {
+void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
 	textureShaderProgram->useProgram();
 
 	modelTransform(textureProgram.mvpMatrix, p, a, sx, sy);
     glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    if (style & DrawStyle::CenterOrigo) {
+    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVerticesCenteredAtOrigo);
+    }
+    else {
+    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    }
     glEnableVertexAttribArray(textureProgram.vertices);
+
+
+    glVertexAttribPointer(textureProgram.texcoords, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices); //Set the texture coordinates
+    glEnableVertexAttribArray(textureProgram.texcoords);
 
     glUniform4fv(textureProgram.color, 1, gSquareColors);
 
@@ -127,7 +139,7 @@ public:
 	}
 } elipseVertices;
 
-void drawElipse(vec p, double a, double sx, double sy, DrawStyle drawStyle){
+void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareShaderProgram->useProgram();
 
 	modelTransform(program1.mvpMatrix, p, a / 180., sx, sy);
@@ -136,7 +148,7 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle drawStyle){
 
     glUniform4fv(program1.color, 1, gSquareColors);
 
-    glDrawArrays((drawStyle == DRAW_STYLE_LINES)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
+    glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
 
     glDisableVertexAttribArray(program1.vertices);
 }
@@ -172,6 +184,7 @@ bool initDrawModule(double width, double height) {
 	textureShaderProgram = new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode);
 
 	textureProgram.vertices = textureShaderProgram->getAttribute("vPosition");
+	textureProgram.texcoords = textureShaderProgram->getAttribute("vtex");
 	textureProgram.color = textureShaderProgram->getUniform("uColor");
 	textureProgram.mvpMatrix = textureShaderProgram->getUniform("mvp_matrix");
 	textureProgram.texture = textureShaderProgram->getUniform("texture1");
