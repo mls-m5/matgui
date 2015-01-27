@@ -34,6 +34,8 @@ Application::Application(int argc, char** argv) {
 //    Turn on double buffering with a 24bit Z buffer.
 //    You may need to change this to 16 or 32 for your system
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+//    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); //todo: consider using this when doing pure gui implementations to be able to update just parts of the screen
+
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 
@@ -41,10 +43,14 @@ Application::Application(int argc, char** argv) {
 
 void Application::mainLoop() {
 	running = true;
+	auto oldTime = SDL_GetTicks();
 	while (running) { //todo: fix not constant updates
 		//Handle gives the developer the possibility to do things each frame
-		if (frame) {
-			frame.directCall();
+		auto newTime = SDL_GetTicks();
+		auto passedTime = (double) (newTime - oldTime) / 1000.;
+		oldTime = newTime;
+		if (frameUpdate) {
+			frameUpdate.directCall(passedTime);
 		}
 
 		glClear ( GL_COLOR_BUFFER_BIT );
@@ -54,9 +60,6 @@ void Application::mainLoop() {
 			//Swap our back buffer to the front
 			SDL_GL_SwapWindow(it->windowData->window);
 		}
-		// Wait
-		//        	SDL_Delay(200);
-
 
 		if (handleEvents()) {
 			break;

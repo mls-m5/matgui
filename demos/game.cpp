@@ -28,8 +28,8 @@ public:
 		drawTextureRect({_x + _width / 2, _y + _height / 2.}, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
 	}
 
-	void frameCallback(){
-		_angle += _rotation;
+	void frameCallback(double t){
+		_angle += _rotation * t;
 	}
 
 	void buttonClicked() {
@@ -37,7 +37,7 @@ public:
 	}
 
 	double _angle = 0;
-	double _rotation = .1;
+	double _rotation = 1;
 	Texture texture;
 };
 
@@ -52,7 +52,7 @@ int main(int argc, char**argv) {
 	window->addChild(button);
 	window->addChild(game);
 
-	app.frame.connect(game, &Game::frameCallback);
+	app.frameUpdate.connect(game, &Game::frameCallback);
 	button->clicked.connect(game, &Game::buttonClicked);
 
 	app.mainLoop();

@@ -25,7 +25,9 @@ public:
 
 	bool running = false;
 
-	MatSig::Signal<> frame;
+	//Signal called when the main loop take a step
+	//the argument is the time since the last time the signal was called
+	MatSig::Signal<double> frameUpdate;
 
 protected:
 
