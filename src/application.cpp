@@ -114,7 +114,7 @@ bool Application::handleEvents() {
 			break;
 			case SDL_KEYUP:
 			{
-
+				window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.repeat);
 			}
 			break;
 			default:
