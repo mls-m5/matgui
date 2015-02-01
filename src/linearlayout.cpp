@@ -24,6 +24,7 @@ void LinearLayout::refresh() {
 			it->x(tX);
 			tX += it->width() + margin;
 			it->y( _y + margin);
+			it->refresh();
 		}
 	}
 	else{
@@ -32,6 +33,7 @@ void LinearLayout::refresh() {
 			it->y(tY);
 			tY += it->height() + margin;
 			it->x(_x + margin);
+			it->refresh();
 		}
 	}
 

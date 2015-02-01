@@ -21,11 +21,16 @@ public:
 
 	Game() {
 		texture.load("gfx/test.png");
+		clicked.connect(this, &Game::viewClicked);
+	}
+
+	~Game() {
+		clicked.disconnect(this);
 	}
 
 	void draw() override {
 		drawRect({_x + _width / 2., _y + _height / 2.}, _angle, 20, 20, DrawStyle::Filled);
-		drawTextureRect({_x + _width / 2, _y + _height / 2.}, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
+		drawTextureRect(_x + _textureX, _y + _textureY, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
 	}
 
 	void frameCallback(double t){
@@ -36,6 +41,19 @@ public:
 		_rotation = -_rotation;
 	}
 
+	void viewClicked(View::PointerArgument arg) {
+		_textureX = arg.x;
+		_textureY = arg.y;
+	}
+
+
+	//Called from layout
+	void refresh() override {
+		_textureX = _width / 2;
+		_textureY = _height / 2;
+	}
+
+	double _textureX = 0, _textureY = 0;
 	double _angle = 0;
 	double _rotation = 1;
 	Texture texture;
