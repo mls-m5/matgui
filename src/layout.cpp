@@ -223,7 +223,7 @@ bool Layout::onPointerDown(pointerId id, double x, double y) {
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerDown(id, x - it->x(), y - it->y())){
+			if (it->onPointerDown(id, wx - it->x(), wy - it->y())){
 				return true;
 			}
 		}
@@ -237,7 +237,7 @@ bool Layout::onPointerUp(pointerId id, double x, double y) {
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerUp(id, x - it->x(), y - it->y())){
+			if (it->onPointerUp(id, wx - it->x(), wy - it->y())){
 				return true;
 			}
 		}
@@ -255,19 +255,19 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 			if (it != pointerFocusedChild) {
 				if (pointerFocusedChild) {
 					pointerFocusedChild->onPointerLeave(id,
-							x - pointerFocusedChild->x(), y-pointerFocusedChild->y(), state);
+							wx - pointerFocusedChild->x(), wy-pointerFocusedChild->y(), state);
 				}
 				pointerFocusedChild = it;
-				it->onPointerEnter(id, x - it->x(), y - it->y(), state);
+				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
 			}
-			if (it->onPointerMove(id, x - it->x(), y - it->y(), state)){
+			if (it->onPointerMove(id, wx - it->x(), wy - it->y(), state)){
 				return true;
 			}
 		}
 	}
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->x(), y - pointerFocusedChild->y(), state);
+				wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
 		pointerFocusedChild = nullptr;
 	}
 	return false;
@@ -280,12 +280,14 @@ void Layout::onPointerEnter(pointerId id, double x, double y,
 
 void Layout::onPointerLeave(pointerId id, double x, double y,
 		pointerState state) {
+	auto wx = x + _x;
+	auto wy = y + _y;
 	if (pointerFocusedChild) {
 		pointerFocusedChild->onPointerLeave(id,
-				x - pointerFocusedChild->x(), y - pointerFocusedChild->y(), state);
+				wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
 		pointerFocusedChild = nullptr;
 	}
-	View::onPointerEnter(id, x, y, state);
+	View::onPointerEnter(id, wx, wy, state);
 }
 
 } //Namespace MatGui
