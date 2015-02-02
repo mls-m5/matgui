@@ -41,6 +41,8 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t);
 //A texture with origo in the top left corner
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t = 0);
 
+void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
+
 //Alternative syntax for functions (probably future syntax)
 inline void drawElipse(double x, double y, double a, double sx, double sy, DrawStyle_t drawStyle) {
 	drawElipse({x, y}, a, sx, sy, drawStyle);

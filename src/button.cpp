@@ -13,7 +13,7 @@ namespace MatGui {
 
 Button::Button(std::string label):
 	_label(label){
-	_font = std::shared_ptr<Font>(new Font("font/Ubuntu-R.ttf", 30));
+	_font = std::shared_ptr<Font>(new Font(30));
 }
 
 Button::~Button() {
@@ -21,20 +21,10 @@ Button::~Button() {
 
 
 void Button::draw() {
-	drawRect(_x, _y, 0, _width, _height, highlight? DrawStyle::Filled : DrawStyle::Lines);
+	drawRect(_x, _y, 0, _width, _height, _highlight? DrawStyle::Filled : DrawStyle::Lines);
 	if (_font and !_label.empty()) {
 		_font->draw(_x + _width / 2., _y + _height / 2., _label, true);
 	}
-}
-
-void Button::onPointerEnter(pointerId id, double x, double y,
-		pointerState state) {
-	highlight = true;
-}
-
-void Button::onPointerLeave(pointerId id, double x, double y,
-		pointerState state) {
-	highlight = false;
 }
 
 }

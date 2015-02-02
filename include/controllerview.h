@@ -23,7 +23,9 @@ public:
 		_min(0),
 		_max(1),
 		_step(0),
-		changed(true){}
+		changed(true){
+		changed.onlySaveLast(true);
+	}
 
 
 	ControllerView(int element, int controller):
@@ -32,10 +34,19 @@ public:
 		controllerId = controller;
 	}
 
+	//Set the controler with a value from 0 to 1
+	void amount(_valueType v) {
+		auto newValue = _min + v * (_max - _min);
+		if (_step) {
+			newValue = roundDown(newValue, _step);
+		}
+		value(newValue);
+	}
+
 	void value(_valueType v){
 		if (v != _value) {
 			_value = v;
-			changed.emit(v);
+//			changed.emit(v); //Is emitted by key handling event, to avoid round calling
 		}
 	}
 

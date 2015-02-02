@@ -27,6 +27,7 @@ struct FontData {
 
 static std::list<fontDescriptionStruct> loadedFonts;
 static bool isInitialized = false;
+static std::string defaultFontPath = "font/Ubuntu-R.ttf";
 
 
 void RenderText(const TTF_Font *Font, const GLubyte& R, const GLubyte& G, const GLubyte& B,
@@ -84,12 +85,21 @@ Font::Font(const std::string filename, int size) {
 	}
 }
 
+
+Font::Font(int size) :Font(defaultFontPath, size) {
+}
+
+
 Font::~Font() {
 	delete data;
 }
 
 void Font::draw(double x, double y, const std::string& text, bool centered) {
 	RenderText(data->font, 255, 255, 255, x, y, 0, text, centered);
+}
+
+void Font::setDefaultFontPath(std::string path) {
+	defaultFontPath = path;
 }
 
 } /* namespace MatGui */

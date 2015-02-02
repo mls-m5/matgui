@@ -78,11 +78,13 @@ bool View::onPointerMove(pointerId id, double x, double y,
 
 void View::onPointerEnter(pointerId id, double x, double y,
 		pointerState state) {
+	_highlight = true;
 	pointerEnter.emit( { id, x, y, state });
 }
 
 void View::onPointerLeave(pointerId id, double x, double y,
 		pointerState state) {
+	_highlight = false;
 	pointerLeave.emit( { id, x, y, state });
 }
 

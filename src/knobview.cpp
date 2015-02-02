@@ -30,7 +30,8 @@ bool KnobView::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
 	if (state) {
 		double v = atan2(x - _width / 2, -y + _height / 2) / pi2 + .5;
-		value(v);
+		amount(v);
+		changed.emit(_value);
 		return true;
 	}
 	return false;
@@ -48,7 +49,7 @@ void KnobView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	drawElipse(vec(_x + middleX - radius, _y + middleY - radius), 0, radius * 2, radius * 2, DrawStyle::Lines);
+	drawElipse(vec(_x + middleX - radius, _y + middleY - radius), 0, radius * 2, radius * 2, _highlight? DrawStyle::Filled : DrawStyle::Lines);
 
 	const double v = (_value - _min) / (_max - _min);
 

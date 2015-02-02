@@ -3,7 +3,7 @@ RUNSTRING=./${TARGET}
 
 OBJECTS=simple.o game.o
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include"
+CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include" -I
 DEMOS=simple game
 
 TARGET=simple
@@ -23,7 +23,7 @@ ${TARGET}: simple.o ../matgui-sdl.a
 game: game.o ../matgui-sdl.a
 	${CXX} -o game game.o ${LINKFLAGS}
 	
-include .depend
+#include .depend
 
 #För att kunna köra filen direkt
 run: ${TARGET}

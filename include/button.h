@@ -21,9 +21,6 @@ public:
 
 	void draw() override;
 
-	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state);
-	virtual void onPointerLeave(pointerId id, double x, double y, pointerState state);
-
 	void label(const std::string value) {
 		_label = value;
 	}
@@ -32,9 +29,12 @@ public:
 		return _label;
 	}
 
+	void font(std::shared_ptr<Font> font) {
+		_font = font;
+	}
+
 	protected:
 
-	bool highlight = false;
 
 	std::shared_ptr<Font> _font;
 	std::string _label;

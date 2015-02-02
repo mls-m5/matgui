@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "common.h"
+#include "matgui-common.h"
 #include "signal.h"
 
 //standard getters and setters
@@ -89,6 +89,7 @@ public:
 	member_property(bool, owned);
 	member_property(int, widthFlags);
 	member_property(int, heightFlags);
+	member_property(std::string, name);
 
 protected:
 	double _x, _y;
@@ -96,6 +97,8 @@ protected:
 	int _widthFlags, _heightFlags;
 	double _weight = 0;
 	bool _owned = true; //Id the widget should be deleted by its parent
+	bool _highlight = false;
+	std::string _name;
 };
 
 } //namespace MatGui

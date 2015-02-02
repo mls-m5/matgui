@@ -5,6 +5,7 @@
 #include "shaderprogram.h"
 #include "shaders/textureshader.h"
 #include "shaders/plainshader.h"
+#include "shaders/graphshader.h"
 
 namespace MatGui {
 
@@ -23,12 +24,20 @@ static struct {
 	GLint texture;
 } textureProgram;
 
+static struct {
+	GLuint x;
+	GLuint y;
+	GLuint mvpMatrix;
+} graphProgram;
+
 
 static GLfloat transformMatrix[16];
 static double screenWidth, screenHeight;
-ShaderProgram *squareShaderProgram = 0;
+static ShaderProgram *squareShaderProgram = 0;
 
-ShaderProgram *textureShaderProgram = 0;
+static ShaderProgram *textureShaderProgram = 0;
+
+static ShaderProgram *graphShaderProgram = 0;
 
 struct colorDataStruct{
 	GLfloat r, g, b, a;
@@ -82,7 +91,13 @@ void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareShaderProgram->useProgram();
 
 	modelTransform(program1.mvpMatrix, p, a, sx, sy);
-    glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+
+    if (drawStyle & DrawStyle::CenterOrigo) {
+    	glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVerticesCenteredAtOrigo);
+    }
+    else {
+    	glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    }
     glEnableVertexAttribArray(program1.vertices);
 
     glUniform4fv(program1.color, 1, gSquareColors);
@@ -155,6 +170,34 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 
 
 
+static std::vector <float> tmpFloat;
+
+void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size){
+	glLineWidth(2);
+	graphShaderProgram->useProgram();
+
+	if (tmpFloat.size() < size){
+		tmpFloat.resize(size);
+		for (int i = 0; i < size; ++i){
+			tmpFloat[i] = i;
+		}
+	}
+
+	modelTransform(graphProgram.mvpMatrix, {x, y}, a, sx, sy);
+
+	glEnableVertexAttribArray(graphProgram.x);
+    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0, &tmpFloat[0]);
+	glEnableVertexAttribArray(graphProgram.y);
+    glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
+
+    glDrawArrays(GL_LINE_STRIP, 0, size);
+
+    glDisableVertexAttribArray(graphProgram.x);
+    glDisableVertexAttribArray(graphProgram.y);
+
+    glLineWidth(1);
+}
+
 
 void setDimensions(double width, double height){
 	screenWidth = width;
@@ -188,6 +231,12 @@ bool initDrawModule(double width, double height) {
 	textureProgram.color = textureShaderProgram->getUniform("uColor");
 	textureProgram.mvpMatrix = textureShaderProgram->getUniform("mvp_matrix");
 	textureProgram.texture = textureShaderProgram->getUniform("texture1");
+
+
+	graphShaderProgram = new ShaderProgram(GraphShader::vertexCode, GraphShader::fragmentCode);
+	graphProgram.x = graphShaderProgram->getAttribute("vX");
+	graphProgram.y = graphShaderProgram->getAttribute("vY");
+	graphProgram.mvpMatrix = graphShaderProgram->getUniform("mvp_matrix");
 
 	setDimensions(width, height);
 	return false;

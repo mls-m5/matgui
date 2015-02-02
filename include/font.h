@@ -14,9 +14,12 @@ namespace MatGui {
 class Font {
 public:
 	Font(const std::string, int size);
+	Font(int size);
 	virtual ~Font();
 
 	void draw(double x, double y, const std::string &text, bool centered);
+
+	static void setDefaultFontPath(std::string path);
 
 	class FontData* data;
 };

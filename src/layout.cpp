@@ -266,15 +266,33 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 		}
 	}
 	if (pointerFocusedChild) {
-		pointerFocusedChild->onPointerLeave(id,
-				wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
-		pointerFocusedChild = nullptr;
+		if (not pointerFocusedChild->isPointerInside(wx, wy)) {
+			pointerFocusedChild->onPointerLeave(id,
+					wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
+			pointerFocusedChild = nullptr;
+		}
 	}
 	return false;
 }
 
 void Layout::onPointerEnter(pointerId id, double x, double y,
 		pointerState state) {
+	auto wx = x + _x;
+	auto wy = y + _y;
+
+	for (auto it: children){
+		if (it->isPointerInside(wx, wy)){
+			if (it != pointerFocusedChild) {
+				if (pointerFocusedChild) {
+					pointerFocusedChild->onPointerLeave(id,
+							wx - pointerFocusedChild->x(), wy-pointerFocusedChild->y(), state);
+				}
+				pointerFocusedChild = it;
+				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
+				return;
+			}
+		}
+	}
 	View::onPointerEnter(id, x, y, state);
 }
 
@@ -288,6 +306,24 @@ void Layout::onPointerLeave(pointerId id, double x, double y,
 		pointerFocusedChild = nullptr;
 	}
 	View::onPointerEnter(id, wx, wy, state);
+}
+
+View* Layout::getChild(std::string name) {
+	for (auto it: children) {
+		if (not it->name().empty() and it->name() == name) {
+			return it;
+		}
+	}
+	//If none is found iterate through all children
+	for (auto it: children) {
+		if (auto child = dynamic_cast<Layout*>(it)){
+			auto res = child->getChild(name);
+			if (res) {
+				return res;
+			}
+		}
+	}
+	return nullptr;
 }
 
 } //Namespace MatGui

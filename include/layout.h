@@ -42,6 +42,7 @@ public:
 		children.clear();
 	}
 	virtual View *getChild(int index);
+	virtual View *getChild(std::string name);
 	virtual void replaceChild(int index, View *view);
 	void setPadding(double p){
 		margin = p;

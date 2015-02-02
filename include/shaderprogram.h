@@ -10,7 +10,7 @@
 
 #define GL_GLEXT_PROTOTYPES 1
 #define GL3_PROTOTYPES 1
-#include "common.h"
+#include "matgui-common.h"
 
 #ifdef __ANDROID__
 #include <GLES2/gl2.h>

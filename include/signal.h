@@ -110,17 +110,6 @@ public:;
 };
 
 
-
-template <class _classType, class _function, class _returnType, class _argument>
-class Connection: public ConnectionBase<_returnType, _argument> {
-public:
-	void call(_argument arg) override {
-		std::shared_ptr<_function> functionPoter;
-	}
-};
-
-
-
 //A base class made just to be able to add all signals to a collection to be called at once
 class SignalBase {
 public:
@@ -141,6 +130,39 @@ public:
 	static std::list<SignalBase*> _signals;
 };
 
+
+
+
+
+
+//Specialized class for callback to static function with signal as reference
+template <class _returnType, class _argument>
+class FunctionConnectionWithReference : public ConnectionBase<_returnType, _argument> {
+public:;
+	typedef _returnType (*_functionType )(SignalBase*, _argument);
+
+	FunctionConnectionWithReference(SignalBase* signal, _functionType f) {
+		_functionPointer = f;
+		_signal = signal;
+	}
+
+	virtual ~FunctionConnectionWithReference() {}
+
+	void call(_argument arg) override {
+		_functionPointer(_signal, arg);
+	}
+
+	bool isObject(void *o) override {
+		return (o == (void *) _functionPointer);
+	}
+
+	_functionType _functionPointer;
+	SignalBase *_signal;
+};
+
+
+
+
 template< class T >
 struct TypeIsVoid
 {
@@ -157,6 +179,7 @@ struct TypeIsVoid< void >
 template <typename _argument = void*>
 class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argument>>> {
 public:
+	typedef std::lock_guard<std::mutex> LockGuard;
 	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
 
 	//Put a call on the queue
@@ -179,10 +202,13 @@ public:
 	//Call all connected functions
 	void flush() override{
 		while (!_queue.empty()) {
-			for (auto connection: *this) {
-				connection->call(_queue.front());
-			}
+			//removes element from que so that a new element can be added directly
+			//in case it is a sigle element list
+			auto arg = _queue.front();
 			_queue.pop();
+			for (auto connection: *this) {
+				connection->call(arg);
+			}
 		}
 	}
 
@@ -206,10 +232,9 @@ public:
 	//signalname.connect(this, &NameOfClass::nameOfMemberFunction)
 	template <class _classType>
 	void connect(_classType *c, void (_classType::*f)(_argument)) {
-		_mutex.lock();
+		LockGuard guard(_mutex);
 		std::shared_ptr<ConnectionBase<void, _argument>> connection(new ClassConnection<_classType, void, _argument> (c, f));
 		this->push_back(connection);
-		_mutex.unlock();
 	}
 
 
@@ -218,21 +243,31 @@ public:
 	//signalname.connect(this, &NameOfClass::nameOfMemberFunctionWithNoArguments)
 	template <class _classType>
 	void connect(_classType *c, void (_classType::*f)(void)) {
-		_mutex.lock();
+		LockGuard guard(_mutex);
 		std::shared_ptr<ConnectionBase<void, _argument>> connection(new VoidClassConnection<_classType, void, _argument> (c, f));
 		this->push_back(connection);
-		_mutex.unlock();
 	}
 
 
-	//Connect to a class function
+	//Connect to a static function
 	//Usage:
 	//signalname.connect(nameOfFunction)
 	void connect(void (*f)( _argument)) {
-		_mutex.lock();
-		std::shared_ptr<ConnectionBase<void, _argument>> connection(new FunctionConnection<void, _argument> (f));
+		LockGuard guard(_mutex);
+		std::shared_ptr<ConnectionBase<void, _argument>> connection(
+				new FunctionConnection<void, _argument> (f));
 		this->push_back(connection);
-		_mutex.unlock();
+	}
+
+
+	//Connect to a static function that sends a reference to the emitting signal
+	//Usage:
+	//signalname.connect(nameOfFunction)
+	void connect(void (*f)(SignalBase*, _argument)) {
+		LockGuard guard(_mutex);
+		std::shared_ptr<ConnectionBase<void, _argument>> connection(
+				new FunctionConnectionWithReference<void, _argument> (this, f));
+		this->push_back(connection);
 	}
 
 
@@ -240,7 +275,7 @@ public:
 	//Remove connection to object to avoid segmentation fault
 	template <class _objectType>
 	void disconnect(_objectType *o) {
-		_mutex.lock();
+		LockGuard guard(_mutex);
 		for (auto it = this->begin(); it != this->end();) {
 			if ((*it)->isObject((void *)o)) {
 				it = this->erase(it);
@@ -249,7 +284,6 @@ public:
 				++it;
 			}
 		}
-		_mutex.unlock();
 	}
 
 

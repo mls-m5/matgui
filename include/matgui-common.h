@@ -22,15 +22,21 @@
 
 #endif //android-check
 
+namespace MatGui {
 
-extern int SampleRate;
-extern int BufferSize;
-
-#ifndef PI_DEFINITION
-#define PI_DEFINITION
 constexpr double pi = 3.1415926535897932384626433832795028841971693;
 constexpr double pi2 = pi * 2;
 constexpr float pif = pi;
 constexpr float pi2f = pi2;
-#endif //PI_DEFINITION
+
+
+inline double roundDown(double value, double factor = 1.){
+	return factor * (double)((int)(value / factor));
+}
+
+inline double roundMiddle(double value, double factor = 1.){
+	return factor * (double)((int)(value / factor + .5));
+}
+
+} //namespace MatGui
 
