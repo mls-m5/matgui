@@ -21,6 +21,7 @@ margin(4){
 Layout::~Layout() {
 	for (auto it: children) {
 		if (it->owned()) {
+			it->parent(nullptr);
 			delete it;
 		}
 	}
@@ -31,17 +32,6 @@ void Layout::draw() {
 	for (auto it: children){
 		it->draw();
 	}
-}
-
-void Layout::addChildAfter(View* view, View* after) {
-	for (auto it = children.begin(); it != children.end(); ++it){
-		if (*it == after){
-			++it;
-			children.insert(it, view);
-			return;
-		}
-	}
-	children.push_back(view);
 }
 
 void Layout::deleteChild(View* view) {
@@ -57,10 +47,24 @@ void Layout::refreshChildren() {
 
 void Layout::addChild(View* view) {
 	children.push_back(view);
+	view->parent(this);
 
 	refresh();
 
 	refreshChildren();
+}
+
+
+void Layout::addChildAfter(View* view, View* after) {
+	view->parent(this);
+	for (auto it = children.begin(); it != children.end(); ++it){
+		if (*it == after){
+			++it;
+			children.insert(it, view);
+			return;
+		}
+	}
+	children.push_back(view);
 }
 
 void Layout::setOrientation(int orientation) {
@@ -158,34 +162,15 @@ void Layout::setLocation(double x, double y, double w, double h, double weight) 
 	refreshChildren();
 }
 
-//bool Layout::handleEvent(const ViewEvent& event) {
-//	switch (event.type){
-//	case ViewEvent::PointerDown:
-//	case ViewEvent::PointerUp:
-//	case ViewEvent::PointerMove:
-//	{
-//		auto x = event.pointer.x + xPos;
-//		auto y = event.pointer.y + yPos;
-//		ViewEvent e = event;
-//		for (auto it: children){
-//			if (it->isPointerInside(x, y)){
-//				e.pointer.x = x - it->xPos;
-//				e.pointer.y = y - it->yPos;
-//
-//				if (it->handleEvent(e)){
-//					return true;
-//				}
-//			}
-//		}
-//		break;
-//	}
-//	} //switch end
-//
-//	return true;
-//}
-
 void Layout::removeChild(View* view) {
+	if (view == nullptr) {
+		return;
+	}
+
 	children.remove(view);
+	if (view->parent() == this) {
+		view->parent(nullptr);
+	}
 
 	refresh();
 

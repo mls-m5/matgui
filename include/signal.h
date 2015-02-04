@@ -113,21 +113,13 @@ public:;
 //A base class made just to be able to add all signals to a collection to be called at once
 class SignalBase {
 public:
-	SignalBase() {
-		_signals.push_back(this);
-	}
-	virtual ~SignalBase() {
-		_signals.remove(this);
-	}
+	//Signals can only be created and deleted on the main thread
+	SignalBase();
+	virtual ~SignalBase();
 
 	virtual void flush() = 0;
 
-	static void flushAll() {
-		for (auto signal: _signals) {
-			signal->flush();
-		}
-	}
-	static std::list<SignalBase*> _signals;
+	static void flushAll();
 };
 
 
@@ -184,19 +176,25 @@ public:
 
 	//Put a call on the queue
 	void emit(_argument arg = 0) {
-		if (!this->empty()) { //Dont bother to broadcast if nobody listen
+		if (!this->empty()) { //Dont bother to broadcast if no object listens
 			if (_onlySaveLast) { //Use this with objects emitting very many signals
 				if (_queue.empty()) {
 					_queue.push(arg);
 				}
 				else {
-					_queue.front() = arg;
+					//Note: possible non-atomic operation
+					_queue.front() = arg; //Replace previous argument
 				}
 			}
 			else {
 				_queue.push(arg);
 			}
 		}
+	}
+
+	//Shorthand for function emit(...)
+	inline void operator()(_argument arg = 0) {
+		emit(arg);
 	}
 
 	//Call all connected functions
@@ -305,5 +303,8 @@ protected:
 inline void flushSignals() {
 	SignalBase::flushAll();
 }
+
+void assertMainThread();
+void setMainThread();
 
 } //namespace MatSig

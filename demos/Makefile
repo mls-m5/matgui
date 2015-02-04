@@ -1,10 +1,11 @@
 CXX=g++
 RUNSTRING=./${TARGET}
 
-OBJECTS=simple.o game.o
+SRC_FILES=$(wildcard *-demo.cpp)
+OBJECTS=$(SRC_FILES:.cpp=.o);
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include" -I
-DEMOS=simple game
+CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include" -I $(LIBS)
+DEMOS=$(SRC_FILES:.cpp= );
 
 TARGET=simple
 LINKFLAGS=${FLAGS} ../matgui-sdl.a ${LIBS} 
@@ -17,11 +18,8 @@ all: ${DEMOS}
 	cat ./.dependtmp | sed 's/h$$/h \n\t \$(CXX) -c $$(CFLAGS) $$< -o $$@/' > ./.depend
 	rm ./.dependtmp
 
-${TARGET}: simple.o ../matgui-sdl.a
-	${CXX} -o ${TARGET} simple.o ${LINKFLAGS}
-	
-game: game.o ../matgui-sdl.a
-	${CXX} -o game game.o ${LINKFLAGS}
+%-demo: %-demo.o ../matgui-sdl.a
+	${CXX} -o $@ $< ${LINKFLAGS}
 	
 #include .depend
 

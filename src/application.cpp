@@ -22,6 +22,7 @@ namespace MatGui {
 static std::list<Window *> windows;
 
 Application::Application(int argc, char** argv) {
+	MatSig::setMainThread();
     if (SDL_Init(SDL_INIT_VIDEO) < 0) /* Initialize SDL's Video subsystem */
         sdldie("Unable to initialize SDL"); /* Or die on error */
 
@@ -37,8 +38,6 @@ Application::Application(int argc, char** argv) {
 //    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); //todo: consider using this when doing pure gui implementations to be able to update just parts of the screen
 
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-
 }
 
 void Application::mainLoop() {

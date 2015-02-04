@@ -90,6 +90,7 @@ public:
 	member_property(int, widthFlags);
 	member_property(int, heightFlags);
 	member_property(std::string, name);
+	member_property(class Layout *,parent);
 
 protected:
 	double _x, _y;
@@ -99,6 +100,7 @@ protected:
 	bool _owned = true; //Id the widget should be deleted by its parent
 	bool _highlight = false;
 	std::string _name;
+	class Layout *_parent;
 };
 
 } //namespace MatGui

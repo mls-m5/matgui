@@ -10,7 +10,15 @@ Matgui is a simple gui that aims to
 
 
 
+Design
+-------
+Views have a property named parent. If this is set when the parent is deleted, the view will delete itself from its parent
+
+Layout automatically sets the parent-property when a child view is added
+
+
 example usage:
+--------
 
 
 ```

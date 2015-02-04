@@ -6,6 +6,7 @@
  */
 
 #include "view.h"
+#include "layout.h"
 
 namespace MatGui {
 
@@ -16,6 +17,9 @@ _weight(1)
 }
 
 View::~View() {
+	if (_parent) {
+		_parent->removeChild(this);
+	}
 }
 
 void View::draw() {

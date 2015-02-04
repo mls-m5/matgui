@@ -8,7 +8,9 @@
 
 #include "unittest.h"
 #include "signal.h"
+#include <thread>
 using namespace MatSig;
+using namespace std;
 
 class VoidCallbackClass {
 public:
