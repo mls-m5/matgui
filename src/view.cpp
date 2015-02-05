@@ -92,19 +92,19 @@ void View::onPointerLeave(pointerId id, double x, double y,
 	pointerLeave.emit( { id, x, y, state });
 }
 
-bool View::onKeyDown(KeySym sym, KeyScanCode scancode, int repeat) {
+bool View::onKeyDown(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat) {
 	//If there is no listener the key go to another view
 	if (keyDown) {
-		keyDown.emit( { sym, scancode, repeat });
+		keyDown.emit( { sym, scancode, modifiers, repeat });
 		return true;
 	} else {
 		return false;
 	}
 }
 
-bool View::onKeyUp(KeySym sym, KeyScanCode scancode, int repeat) {
+bool View::onKeyUp(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat) {
 	if (keyUp) {
-		keyUp.emit( { sym, scancode, repeat });
+		keyUp.emit( { sym, scancode, modifiers, repeat });
 		return true;
 	} else {
 		return false;

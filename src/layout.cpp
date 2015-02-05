@@ -19,13 +19,7 @@ margin(4){
 }
 
 Layout::~Layout() {
-	for (auto it: children) {
-		if (it->owned()) {
-			it->parent(nullptr);
-			delete it;
-		}
-	}
-	children.clear();
+	deleteAll();
 }
 
 void Layout::draw() {
@@ -46,6 +40,9 @@ void Layout::refreshChildren() {
 }
 
 void Layout::addChild(View* view) {
+	if (not view) {
+		return;
+	}
 	children.push_back(view);
 	view->parent(this);
 
@@ -167,6 +164,10 @@ void Layout::removeChild(View* view) {
 		return;
 	}
 
+	if (view == pointerFocusedChild) {
+		pointerFocusedChild = nullptr;
+	}
+
 	children.remove(view);
 	if (view->parent() == this) {
 		view->parent(nullptr);
@@ -175,6 +176,20 @@ void Layout::removeChild(View* view) {
 	refresh();
 
 	refreshChildren();
+}
+
+void Layout::deleteAll() {
+	for (auto it : children) {
+		if (it->parent() == this) {
+			it->parent(nullptr);
+		}
+		delete it;
+	}
+
+	children.clear();
+	pointerFocusedChild = nullptr;
+
+	refresh();
 }
 
 View *Layout::getChild(int index) {

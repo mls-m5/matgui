@@ -44,11 +44,11 @@ void Application::mainLoop() {
 	running = true;
 	auto oldTime = SDL_GetTicks();
 	while (running) { //todo: fix not constant updates
-		//Handle gives the developer the possibility to do things each frame
 		auto newTime = SDL_GetTicks();
 		auto passedTime = (double) (newTime - oldTime) / 1000.;
 		oldTime = newTime;
 		if (frameUpdate) {
+			//Handle gives the developer the possibility to do things each frame
 			frameUpdate.directCall(passedTime);
 		}
 
@@ -108,12 +108,12 @@ bool Application::handleEvents() {
 			break;
 			case SDL_KEYDOWN:
 			{
-				window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.repeat);
+				window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
 			}
 			break;
 			case SDL_KEYUP:
 			{
-				window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.repeat);
+				window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
 			}
 			break;
 			default:

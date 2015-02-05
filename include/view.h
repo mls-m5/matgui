@@ -10,6 +10,8 @@
 #include "matgui-common.h"
 #include "signal.h"
 
+#include "SDL2/SDL_keycode.h"
+
 //standard getters and setters
 #define member_set(type, m) void m (type value) { _ ## m = value; }
 #define member_get(type, m) type m () { return _ ## m; }
@@ -53,9 +55,10 @@ public:
 
 	typedef unsigned KeySym;
 	typedef unsigned KeyScanCode;
+	typedef unsigned KeyModifiers;
 
-	virtual bool onKeyDown(KeySym sym, KeyScanCode scancode, int repeat);
-	virtual bool onKeyUp(KeySym sym, KeyScanCode scancode, int repeat);
+	virtual bool onKeyDown(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat);
+	virtual bool onKeyUp(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat);
 
 	struct PointerArgument {
 		pointerId id;
@@ -66,6 +69,7 @@ public:
 	struct KeyArgument {
 		KeySym symbol;
 		KeyScanCode scanCode;
+		KeyModifiers modifier;
 		int repeats; //0 if first repeat
 	};
 
@@ -86,7 +90,6 @@ public:
 	member_property(double, width);
 	member_property(double, height);
 	member_property(double, weight);
-	member_property(bool, owned);
 	member_property(int, widthFlags);
 	member_property(int, heightFlags);
 	member_property(std::string, name);
@@ -97,7 +100,6 @@ protected:
 	double _width, _height;
 	int _widthFlags, _heightFlags;
 	double _weight = 0;
-	bool _owned = true; //Id the widget should be deleted by its parent
 	bool _highlight = false;
 	std::string _name;
 	class Layout *_parent;

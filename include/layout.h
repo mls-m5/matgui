@@ -38,9 +38,7 @@ public:
 	virtual void addChildAfter(View *view, View* after);
 	virtual void removeChild(View *view);
 	virtual void deleteChild(View *view);
-	virtual void clear(){
-		children.clear();
-	}
+	virtual void deleteAll();
 	virtual View *getChild(int index);
 	virtual View *getChild(std::string name);
 	virtual void replaceChild(int index, View *view);
@@ -60,6 +58,5 @@ protected:
 	int orientation;
 	double margin;
 };
-
 
 } //namespace MatGui

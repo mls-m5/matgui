@@ -285,6 +285,14 @@ public:
 	}
 
 
+	//Clear signals queue
+	void clearQueue() {
+		//A efficient way to clear lists according to the internet
+		std::queue<_argument> empty;
+		std::swap( _queue, empty );
+	}
+
+
 	void onlySaveLast(bool value) {
 		_onlySaveLast = value;
 	}
