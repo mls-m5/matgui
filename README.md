@@ -8,7 +8,7 @@ Matgui is a simple gui that aims to
 * Thread safe
 * Super easy to build and used (compared to gtk, qt, ect)
 
-
+Matgui is for the moment based on SDL2
 
 Design
 -------

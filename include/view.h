@@ -50,8 +50,7 @@ public:
 			pointerState state);
 	virtual void onPointerEnter(pointerId id, double x, double y,
 			pointerState state);
-	virtual void onPointerLeave(pointerId id, double x, double y,
-			pointerState state);
+	virtual void onPointerLeave();
 
 	typedef unsigned KeySym;
 	typedef unsigned KeyScanCode;
@@ -80,7 +79,7 @@ public:
 	Signal <PointerArgument> pointerUp;
 
 	Signal <PointerArgument> pointerEnter;
-	Signal <PointerArgument> pointerLeave;
+	Signal <> pointerLeave;
 
 	Signal <KeyArgument> keyDown;
 	Signal <KeyArgument> keyUp;
@@ -102,7 +101,7 @@ protected:
 	double _weight = 0;
 	bool _highlight = false;
 	std::string _name;
-	class Layout *_parent;
+	class Layout *_parent = nullptr;
 };
 
 } //namespace MatGui

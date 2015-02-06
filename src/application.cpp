@@ -12,16 +12,18 @@
 #include "signal.h"
 #include "SDL2/SDL_opengl.h"
 #include "window.h"
-#include "windowdata.h"
 #include "draw.h"
+#include "windowdata.h"
 
 using namespace std;
 
 namespace MatGui {
 
 static std::list<Window *> windows;
+static Application *application = nullptr;
 
 Application::Application(int argc, char** argv) {
+	application = this;
 	MatSig::setMainThread();
     if (SDL_Init(SDL_INIT_VIDEO) < 0) /* Initialize SDL's Video subsystem */
         sdldie("Unable to initialize SDL"); /* Or die on error */
@@ -52,12 +54,10 @@ void Application::mainLoop() {
 			frameUpdate.directCall(passedTime);
 		}
 
-		glClear ( GL_COLOR_BUFFER_BIT );
 
 		for (auto it: windows) {
 			it->draw();
 			//Swap our back buffer to the front
-			SDL_GL_SwapWindow(it->windowData->window);
 		}
 
 		if (handleEvents()) {
@@ -70,7 +70,7 @@ void Application::mainLoop() {
 
 Window *Application::getWindow(unsigned int w) {
 	for (auto it: windows) {
-		if (w == it->windowData->windowId) {
+		if (w == it->_windowData->windowId) {
 			return it;
 		}
 	}
@@ -116,6 +116,21 @@ bool Application::handleEvents() {
 				window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
 			}
 			break;
+
+			case SDL_WINDOWEVENT:
+
+				switch (event.window.event) {
+				case SDL_WINDOWEVENT_CLOSE:
+					if (not window->onRequestClose()) {
+						window->hide();
+					}
+					break;
+				case SDL_WINDOWEVENT_LEAVE:
+					window->onPointerLeave();
+					break;
+				}
+
+				break;
 			default:
 				break;
 			}
@@ -146,6 +161,9 @@ void Application::addWindow(class Window* window) {
 
 void Application::removeWindow(class Window* window) {
 	windows.remove(window);
+	if (windows.empty()) {
+		application->quit();
+	}
 }
 
 }  // namespace MatGui

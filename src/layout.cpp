@@ -254,8 +254,7 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 		if (it->isPointerInside(wx, wy)){
 			if (it != pointerFocusedChild) {
 				if (pointerFocusedChild) {
-					pointerFocusedChild->onPointerLeave(id,
-							wx - pointerFocusedChild->x(), wy-pointerFocusedChild->y(), state);
+					pointerFocusedChild->onPointerLeave();
 				}
 				pointerFocusedChild = it;
 				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
@@ -267,8 +266,7 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 	}
 	if (pointerFocusedChild) {
 		if (not pointerFocusedChild->isPointerInside(wx, wy)) {
-			pointerFocusedChild->onPointerLeave(id,
-					wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
+			pointerFocusedChild->onPointerLeave();
 			pointerFocusedChild = nullptr;
 		}
 	}
@@ -284,8 +282,7 @@ void Layout::onPointerEnter(pointerId id, double x, double y,
 		if (it->isPointerInside(wx, wy)){
 			if (it != pointerFocusedChild) {
 				if (pointerFocusedChild) {
-					pointerFocusedChild->onPointerLeave(id,
-							wx - pointerFocusedChild->x(), wy-pointerFocusedChild->y(), state);
+					pointerFocusedChild->onPointerLeave();
 				}
 				pointerFocusedChild = it;
 				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
@@ -296,16 +293,12 @@ void Layout::onPointerEnter(pointerId id, double x, double y,
 	View::onPointerEnter(id, x, y, state);
 }
 
-void Layout::onPointerLeave(pointerId id, double x, double y,
-		pointerState state) {
-	auto wx = x + _x;
-	auto wy = y + _y;
+void Layout::onPointerLeave() {
 	if (pointerFocusedChild) {
-		pointerFocusedChild->onPointerLeave(id,
-				wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
+		pointerFocusedChild->onPointerLeave();
 		pointerFocusedChild = nullptr;
 	}
-	View::onPointerEnter(id, wx, wy, state);
+	View::onPointerLeave();
 }
 
 View* Layout::getChild(std::string name) {

@@ -86,10 +86,9 @@ void View::onPointerEnter(pointerId id, double x, double y,
 	pointerEnter.emit( { id, x, y, state });
 }
 
-void View::onPointerLeave(pointerId id, double x, double y,
-		pointerState state) {
+void View::onPointerLeave() {
 	_highlight = false;
-	pointerLeave.emit( { id, x, y, state });
+	pointerLeave.emit();
 }
 
 bool View::onKeyDown(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat) {

@@ -24,7 +24,7 @@ class ConnectionBase {
 public:
 	virtual ~ConnectionBase() {}
 
-	virtual void call(_argument arg) = 0;
+	virtual _returnType call(_argument arg) = 0;
 	virtual bool isObject(void *o) = 0;
 };
 
@@ -42,8 +42,8 @@ public:;
 
 	virtual ~ClassConnection() {}
 
-	void call(_argument arg) override {
-		(*_objectPointer.*_functionPointer)(arg);
+	_returnType call(_argument arg) override {
+		return (*_objectPointer.*_functionPointer)(arg);
 	}
 
 	bool isObject(void *o) override {
@@ -73,8 +73,8 @@ public:;
 	virtual ~VoidClassConnection() {}
 
 	//This function does not use the argument
-	void call(_argument arg) override {
-		(*_objectPointer.*_functionPointer)();
+	_returnType call(_argument arg) override {
+		return (*_objectPointer.*_functionPointer)();
 	}
 
 	bool isObject(void *o) override {
@@ -98,8 +98,8 @@ public:;
 
 	virtual ~FunctionConnection() {}
 
-	void call(_argument arg) override {
-		_functionPointer(arg);
+	_returnType call(_argument arg) override {
+		return _functionPointer(arg);
 	}
 
 	bool isObject(void *o) override {
@@ -168,8 +168,8 @@ struct TypeIsVoid< void >
 };
 
 
-template <typename _argument = void*>
-class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<void, _argument>>> {
+template <typename _argument = void*, typename _returnValue = void>
+class Signal: SignalBase, std::list<std::shared_ptr<ConnectionBase<_returnValue, _argument>>> {
 public:
 	typedef std::lock_guard<std::mutex> LockGuard;
 	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
@@ -210,15 +210,34 @@ public:
 		}
 	}
 
+
 	//Call without putting on the queue
-	//Remember that this messes with threading
-	void directCall(_argument arg = 0) {
+	//Remember that this probably only should be called from the gui thread
+	template <typename T = _returnValue>
+	typename std::enable_if<std::is_void<T>::value>::type //This checks if the return value is void
+	directCall(_argument arg = 0) {
 		if (!this->empty()) {
 			for (auto connection: *this) {
 				connection->call(arg);
 			}
 		}
 	}
+
+	//The same as above but with return value
+	//Note that it only returns the last return value
+	template <typename T = _returnValue>
+	typename std::enable_if<!std::is_void<T>::value, T>::type //Check for non void return value
+	directCall(_argument arg = 0) {
+		if (!this->empty()) {
+			_returnValue ret = 0;
+			for (auto connection: *this) {
+				ret = connection->call(arg);
+			}
+			return ret;
+		}
+		return 0;
+	}
+
 
 	//this operator is used to check if it is any use to emit a signal
 	operator bool() {
@@ -231,7 +250,7 @@ public:
 	template <class _classType>
 	void connect(_classType *c, void (_classType::*f)(_argument)) {
 		LockGuard guard(_mutex);
-		std::shared_ptr<ConnectionBase<void, _argument>> connection(new ClassConnection<_classType, void, _argument> (c, f));
+		std::shared_ptr<ConnectionBase<_returnValue, _argument>> connection(new ClassConnection<_classType, void, _argument> (c, f));
 		this->push_back(connection);
 	}
 
@@ -242,7 +261,7 @@ public:
 	template <class _classType>
 	void connect(_classType *c, void (_classType::*f)(void)) {
 		LockGuard guard(_mutex);
-		std::shared_ptr<ConnectionBase<void, _argument>> connection(new VoidClassConnection<_classType, void, _argument> (c, f));
+		std::shared_ptr<ConnectionBase<_returnValue, _argument>> connection(new VoidClassConnection<_classType, void, _argument> (c, f));
 		this->push_back(connection);
 	}
 
@@ -252,8 +271,8 @@ public:
 	//signalname.connect(nameOfFunction)
 	void connect(void (*f)( _argument)) {
 		LockGuard guard(_mutex);
-		std::shared_ptr<ConnectionBase<void, _argument>> connection(
-				new FunctionConnection<void, _argument> (f));
+		std::shared_ptr<ConnectionBase<_returnValue, _argument>> connection(
+				new FunctionConnection<_returnValue, _argument> (f));
 		this->push_back(connection);
 	}
 
@@ -263,8 +282,8 @@ public:
 	//signalname.connect(nameOfFunction)
 	void connect(void (*f)(SignalBase*, _argument)) {
 		LockGuard guard(_mutex);
-		std::shared_ptr<ConnectionBase<void, _argument>> connection(
-				new FunctionConnectionWithReference<void, _argument> (this, f));
+		std::shared_ptr<ConnectionBase<_returnValue, _argument>> connection(
+				new FunctionConnectionWithReference<_returnValue, _argument> (this, f));
 		this->push_back(connection);
 	}
 

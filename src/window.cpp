@@ -35,24 +35,24 @@ void checkSDLError(int line = -1)
 
 
 Window::Window(string title) {
-	windowData = new WindowData;
+	_windowData = new WindowData;
 
     // Create our window centered at 512x512 resolution
-    windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    _windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 //    if (!windowData->mainwindow) /* Die if creation failed */
 //        sdldie("Unable to create window");
 //
     checkSDLError(__LINE__);
 
-    windowData->windowId = SDL_GetWindowID(windowData->window);
+    _windowData->windowId = SDL_GetWindowID(_windowData->window);
 
     // Create our opengl context and attach it to our window
-    windowData->context = SDL_GL_CreateContext(windowData->window);
+    _windowData->context = SDL_GL_CreateContext(_windowData->window);
     checkSDLError(__LINE__);
 
-    initDrawModule(512, 512);
     setLocation(0,0, 512, 512);
+    initDrawModule(_width, _height); //Init the drawmodule for the CURRENT CONTEXT
 
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
@@ -61,9 +61,34 @@ Window::Window(string title) {
 }
 
 Window::~Window() {
-    SDL_GL_DeleteContext(windowData->context);
-    SDL_DestroyWindow(windowData->window);
-	delete windowData;
+    SDL_GL_DeleteContext(_windowData->context);
+    SDL_DestroyWindow(_windowData->window);
+	delete _windowData;
+    Application::removeWindow(this);
+}
+
+void Window::draw() {
+	SDL_GL_MakeCurrent(_windowData->window, _windowData->context);
+	setDimensions(_width, _height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Layout::draw();
+	SDL_GL_SwapWindow(_windowData->window);
+}
+
+bool Window::onRequestClose() {
+	return closeSignal.directCall();
+}
+
+
+void Window::show() {
+	SDL_ShowWindow(_windowData->window);
+	Application::addWindow(this);
+}
+
+void Window::hide() {
+	SDL_HideWindow(_windowData->window);
+    Application::removeWindow(this);
 }
 
 } /* namespace MatGui */
+

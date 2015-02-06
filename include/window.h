@@ -17,8 +17,15 @@ public:
 	Window(std::string title);
 	virtual ~Window();
 
+	void draw() override;
+	bool onRequestClose();
+
+	void show();
+	void hide();
+
+	Signal<void *, bool> closeSignal;
 protected:
-	class WindowData *windowData = 0;
+	class WindowData *_windowData = 0;
 
 	friend class Application;
 };

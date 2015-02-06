@@ -28,6 +28,10 @@ unsigned int createTextureFromFile(const std::string filename) {
 	}
 	SDL_Surface* surface = IMG_Load(filename.c_str());
 
+	if (surface == NULL) {
+		return 0;
+	}
+
 	glGenTextures(1, &textureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -86,6 +90,9 @@ void Texture::load(const std::string filename) {
 	auto find = loadedTextures.find(filename);
 	if (find == loadedTextures.end()){
 		_textureId = createTextureFromFile(filename);
+		if (_textureId) {
+			loadedTextures[filename] = _textureId;
+		}
 	}
 	else {
 		_textureId = find->second;

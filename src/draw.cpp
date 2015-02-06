@@ -239,7 +239,8 @@ bool initDrawModule(double width, double height) {
 	graphProgram.mvpMatrix = graphShaderProgram->getUniform("mvp_matrix");
 
 	setDimensions(width, height);
-	return false;
+
+	return true;
 }
 
 void QuitDrawModule() {
