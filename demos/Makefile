@@ -4,7 +4,7 @@ RUNSTRING=./${TARGET}
 SRC_FILES=$(wildcard *-demo.cpp)
 OBJECTS=$(SRC_FILES:.cpp=.o);
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include" -I $(LIBS)
+CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/matgui" -I $(LIBS)
 DEMOS=$(SRC_FILES:.cpp= );
 
 TARGET=simple

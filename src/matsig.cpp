@@ -6,7 +6,7 @@
  */
 
 
-#include "signal.h"
+#include "matsig.h"
 #include <thread>
 #include <iostream>
 

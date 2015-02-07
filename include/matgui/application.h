@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "signal.h"
+#include "matsig.h"
 
 namespace MatGui {
 

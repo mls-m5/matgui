@@ -8,7 +8,7 @@
 #pragma once
 
 #include "matgui-common.h"
-#include "signal.h"
+#include "matsig.h"
 
 #include "SDL2/SDL_keycode.h"
 

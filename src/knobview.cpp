@@ -29,7 +29,9 @@ bool KnobView::onPointerUp(pointerId id, double x, double y) {
 bool KnobView::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
 	if (state) {
+		//Todo: make this nicer, like that the control does not go all the way round or something like that
 		double v = atan2(x - _width / 2, -y + _height / 2) / pi2 + .5;
+		v *= (1. + _step / (_max - _min)); //Adding a bit extra to make it possible to get the highest value
 		amount(v);
 		changed.emit(_value);
 		return true;

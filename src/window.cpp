@@ -34,12 +34,12 @@ void checkSDLError(int line = -1)
 }
 
 
-Window::Window(string title) {
+Window::Window(string title, bool resizable) {
 	_windowData = new WindowData;
 
     // Create our window centered at 512x512 resolution
     _windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | (resizable? SDL_WINDOW_RESIZABLE : 0));
 //    if (!windowData->mainwindow) /* Die if creation failed */
 //        sdldie("Unable to create window");
 //
@@ -69,7 +69,7 @@ Window::~Window() {
 
 void Window::draw() {
 	SDL_GL_MakeCurrent(_windowData->window, _windowData->context);
-	setDimensions(_width, _height);
+//	setDimensions(_width, _height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Layout::draw();
 	SDL_GL_SwapWindow(_windowData->window);
@@ -90,5 +90,8 @@ void Window::hide() {
     Application::removeWindow(this);
 }
 
-} /* namespace MatGui */
+bool Window::onResize(int width, int height) {
+	Layout::setLocation(0, 0, width, height);
+}
 
+} /* namespace MatGui */

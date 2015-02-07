@@ -128,7 +128,10 @@ bool Application::handleEvents() {
 				case SDL_WINDOWEVENT_LEAVE:
 					window->onPointerLeave();
 					break;
-				}
+				case SDL_WINDOWEVENT_RESIZED:
+					window->onResize(event.window.data1, event.window.data2);
+					break;
+				} //end switch
 
 				break;
 			default:

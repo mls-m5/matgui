@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 
 	window1.addChild(new Button("hej 1"));
 	window2.addChild(new Button("hej 2"));
+	window2.addChild(new Button("hej 3"));
 
 	app.mainLoop();
 }
