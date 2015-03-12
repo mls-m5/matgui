@@ -21,23 +21,22 @@ public:
 
 	void draw() override;
 
-	void label(const std::string value) {
-		_label = value;
+	void label(const std::string text) {
+		_fontView.text(text);
 	}
 
 	const std::string &label() {
-		return _label;
+		return _fontView.text();
 	}
 
-	void font(std::shared_ptr<Font> font) {
-		_font = font;
+	void font(Font font) {
+		_fontView.font(font);
 	}
 
 	protected:
 
 
-	std::shared_ptr<Font> _font;
-	std::string _label;
+	FontView _fontView;
 };
 
 }

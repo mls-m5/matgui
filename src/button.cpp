@@ -11,9 +11,9 @@
 
 namespace MatGui {
 
-Button::Button(std::string label):
-	_label(label){
-	_font = std::shared_ptr<Font>(new Font(30));
+Button::Button(std::string label) {
+	_fontView.font(Font(30));
+	this->label(label);
 }
 
 Button::~Button() {
@@ -22,9 +22,10 @@ Button::~Button() {
 
 void Button::draw() {
 	drawRect(_x, _y, 0, _width, _height, _highlight? DrawStyle::Filled : DrawStyle::Lines);
-	if (_font and !_label.empty()) {
-		_font->draw(_x + _width / 2., _y + _height / 2., _label, true);
+	if (_fontView) {
+		_fontView.draw(_x + _width / 2., _y + _height / 2.);
 	}
 }
 
-}
+} //namespace Matgui
+
