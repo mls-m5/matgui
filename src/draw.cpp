@@ -83,7 +83,6 @@ static const GLfloat gSquareVertices[] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.
 static const GLfloat gSquareVerticesCenteredAtOrigo[] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
 static const GLfloat gSquareColors[] = {
 		.8, .8, 1., .5,
-//		0,.5,.5,0
 };
 
 
@@ -191,6 +190,29 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
     glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
 
     glDrawArrays(GL_LINE_STRIP, 0, size);
+
+    glDisableVertexAttribArray(graphProgram.x);
+    glDisableVertexAttribArray(graphProgram.y);
+
+    glLineWidth(1);
+}
+
+
+void drawLine(double x1, double y1, double x2, double y2) {
+	glLineWidth(2);
+	graphShaderProgram->useProgram();
+
+	double tmpX[] = {x1, x2};
+	double tmpY[] = {y1, y2};
+
+	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
+
+	glEnableVertexAttribArray(graphProgram.x);
+    glVertexAttribPointer(graphProgram.x, 1, GL_DOUBLE, GL_FALSE, 0, tmpX);
+	glEnableVertexAttribArray(graphProgram.y);
+    glVertexAttribPointer(graphProgram.y, 1, GL_DOUBLE, GL_FALSE, 0, tmpY);
+
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
 
     glDisableVertexAttribArray(graphProgram.x);
     glDisableVertexAttribArray(graphProgram.y);

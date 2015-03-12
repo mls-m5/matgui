@@ -42,6 +42,7 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t);
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t = 0);
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
+void drawLine(double x1, double y1, double x2, double y2);
 
 //Alternative syntax for functions (probably future syntax)
 inline void drawElipse(double x, double y, double a, double sx, double sy, DrawStyle_t drawStyle) {
