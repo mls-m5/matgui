@@ -56,18 +56,22 @@ void setMainThread() {
 }
 
 void assertMainThread() {
+#ifndef __ANDROID__
 	if (std::this_thread::get_id() != mainThreadId) {
 		std::cerr << "Error! Assert This function must be called from main thread" << std::endl;
 		throw std::runtime_error("Assert This function must be called from main thread");
 	}
+#endif
 }
 
 //Todo: implement delete later method
 SignalBase::~SignalBase() {
+#ifndef __ANDROID__
 	if (std::this_thread::get_id() != mainThreadId) {
 		std::cerr << "Error! Signals (and views) must be created and removed from the same thread" << std::endl;
 		throw std::runtime_error("Signals (and views) must be created and deleted from the same thread");
 	}
+#endif
 	deletedSignals.push_back(this);
 }
 

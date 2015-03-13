@@ -202,15 +202,23 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glLineWidth(2);
 	graphShaderProgram->useProgram();
 
-	double tmpX[] = {x1, x2};
-	double tmpY[] = {y1, y2};
+#ifdef __ANDROID__
+	typedef float type;
+	constexpr int typeName = GL_FLOAT;
+#else
+	typedef double type;
+	constexpr int typeName = GL_DOUBLE;
+#endif
+
+	type tmpX[] = {x1, x2};
+	type tmpY[] = {y1, y2};
 
 	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
 
 	glEnableVertexAttribArray(graphProgram.x);
-    glVertexAttribPointer(graphProgram.x, 1, GL_DOUBLE, GL_FALSE, 0, tmpX);
+    glVertexAttribPointer(graphProgram.x, 1, typeName, GL_FALSE, 0, tmpX);
 	glEnableVertexAttribArray(graphProgram.y);
-    glVertexAttribPointer(graphProgram.y, 1, GL_DOUBLE, GL_FALSE, 0, tmpY);
+    glVertexAttribPointer(graphProgram.y, 1, typeName, GL_FALSE, 0, tmpY);
 
     glDrawArrays(GL_LINE_STRIP, 0, 2);
 

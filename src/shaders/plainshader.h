@@ -20,7 +20,6 @@ varying vec4 fColor;
 void main() {
 	gl_Position = mvp_matrix * vPosition;
 	fColor = uColor / (1. + vPosition.y / 4.); //A little shading
-	gl_TexCoord[0] = gl_MultiTexCoord0;
 }
 )V0G0N";
 

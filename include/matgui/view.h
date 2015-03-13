@@ -10,8 +10,6 @@
 #include "matgui-common.h"
 #include "matsig.h"
 
-#include "SDL2/SDL_keycode.h"
-
 //standard getters and setters
 #define member_set(type, m) void m (type value) { _ ## m = value; }
 #define member_get(type, m) type m () { return _ ## m; }
