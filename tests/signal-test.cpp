@@ -7,7 +7,7 @@
 
 
 #include "unittest.h"
-#include "signal.h"
+#include "matsig.h"
 #include <thread>
 using namespace MatSig;
 using namespace std;
