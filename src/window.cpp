@@ -35,7 +35,7 @@ void checkSDLError(int line = -1)
 
 
 Window::Window(string title, bool resizable) {
-	_windowData = new WindowData;
+	_windowData.reset(new WindowData);
 
     // Create our window centered at 512x512 resolution
     _windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -63,7 +63,6 @@ Window::Window(string title, bool resizable) {
 Window::~Window() {
     SDL_GL_DeleteContext(_windowData->context);
     SDL_DestroyWindow(_windowData->window);
-	delete _windowData;
     Application::removeWindow(this);
 }
 

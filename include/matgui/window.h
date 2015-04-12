@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include "linearlayout.h"
 
 namespace MatGui {
@@ -29,7 +30,7 @@ public:
 	Signal<void *, bool> closeSignal;
 
 protected:
-	class WindowData *_windowData = 0;
+	std::unique_ptr<class WindowData> _windowData;
 
 	friend class Application;
 };
