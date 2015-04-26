@@ -235,6 +235,14 @@ bool Layout::onPointerUp(pointerId id, double x, double y) {
 	auto wx = x + _x;
 	auto wy = y + _y;
 
+	if (pointerFocusedChild) {
+		if (not pointerFocusedChild->isPointerInside(wx, wy)) {
+			pointerFocusedChild->onPointerLeave();
+			pointerFocusedChild = nullptr;
+			return true;
+		}
+	}
+
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
 			if (it->onPointerUp(id, wx - it->x(), wy - it->y())){
@@ -249,6 +257,13 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
 	auto wx = x + _x;
 	auto wy = y + _y;
+
+	if (state) {
+		if (pointerFocusedChild) {
+			return pointerFocusedChild->onPointerMove(id,
+					wx - pointerFocusedChild->x(), wy - pointerFocusedChild->y(), state);
+		}
+	}
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){

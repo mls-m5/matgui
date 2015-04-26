@@ -14,7 +14,7 @@
 
 namespace MatGui {
 
-class Button : public View{
+class Button : public View {
 public:
 	Button(std::string label = "");
 	virtual ~Button();

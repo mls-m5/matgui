@@ -36,7 +36,14 @@ public:
 
 	//Set the controler with a value from 0 to 1
 	void amount(_valueType v) {
-		auto newValue = _min + v * (_max - _min);
+		auto val = v;
+		if (val < 0) {
+			val = 0;
+		}
+		else if (val > 1) {
+			val = 1;
+		}
+		auto newValue = _min + val* (_max - _min);
 		if (_step) {
 			newValue = roundDown(newValue, _step);
 		}
