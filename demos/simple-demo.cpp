@@ -1,15 +1,14 @@
 /*
- * View.cpp
+ * simple-demo.cpp
  *
  *  Created on: 22 jan 2014
  *      Author: Mattias Lasersköld
  */
 #include <iostream>
 
-#include "application.h"
-#include "window.h"
-#include "button.h"
-#include "draw.h"
+#include "application.h" //for the application to start
+#include "window.h"  //for windows view
+#include "button.h"  //for button view
 #include "imageview.h"
 #include "knobview.h"
 #include "progressview.h"
@@ -17,12 +16,14 @@
 using namespace MatGui;
 using namespace std;
 
+
+//Example callback function
 ProgressView *progressView;
 void callback(View::PointerArgument arg) {
 	cout << "callback... x = " << arg.x << endl;
 }
 
-
+//Another callback example
 void knobCallback(double value) {
 	progressView->value(value);
 }
