@@ -63,6 +63,15 @@ int main(int argc, char *argv[])
 }
 ```
 
+Buildflags
+--------
 
+Here is some example flags
+```
+CXXFLAGS = -std=c++11 -Iinclude/ -Imatgui/include/matgui
+LIBS = -lGL -lSDL2 -lSDL2_ttf -lSDL2_image
+
+CXXFLAGS += -DUSE_BITMAP_FONT //This flag will use the builtin bitmapfont instead of SDLs-to avoid dependencies
+```
 
 It is currently in early development phase, please contact me if you want more information if how to use it

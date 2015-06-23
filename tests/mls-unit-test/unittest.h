@@ -20,11 +20,33 @@ extern int test_result;
 extern const char* test_file_name;
 static std::map<std::string, std::string> test_results;
 
-inline int runTests(){
+inline int runTests(int argc, char **argv){
 	using std::cout;
 	using std::endl;
 	int numFailed = 0;
 	int numSucceded = 0;
+
+	//Let the user choose test from command line
+	if (argc > 1) {
+		if (std::string(argv[1]) == "-l") {
+			cout << "available tests:" << endl;
+			for (auto it: testMap) {
+				cout << it.first << endl;
+			}
+			return 0;
+		}
+
+		auto tmpMap = std::move(testMap);
+		for (auto i = 1; i < argc; ++i) {
+			auto f = tmpMap.find(argv[i]);
+			if (f != tmpMap.end()) {
+				auto testName = argv[i];
+				testMap[testName] = f->second;
+			}
+		}
+	}
+
+
 	cout << "==== Starts test suit " << test_file_name <<  " ====" << endl << endl;
 
 	for (auto it: testMap){
@@ -84,7 +106,7 @@ inline int runTests(){
 //Remember to return 0 on success!!!
 #define TEST_CASE(name) ; testMap[name] = []() -> void
 
-#define TEST_SUIT_END ; } int main() { initTests(); return runTests(); }
+#define TEST_SUIT_END ; } int main(int argv, char **argc) { initTests(); return runTests(argv, argc); }
 
 #define PRINT_INFO std::cout << __FILE__ << ":" << __LINE__ << ": " ;
 #define ASSERT(x, error) if (!(x)) { PRINT_INFO; test_result ++; std::cout << #x << ": " << error << std::endl; return; }

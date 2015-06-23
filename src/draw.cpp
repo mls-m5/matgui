@@ -110,6 +110,9 @@ void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
 	textureShaderProgram->useProgram();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	modelTransform(textureProgram.mvpMatrix, p, a, sx, sy);
     glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
     if (style & DrawStyle::CenterOrigo) {
