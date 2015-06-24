@@ -25,7 +25,6 @@ typedef TTF_Font FontType;
 typedef SDL_Color ColorType;
 #endif
 
-#include <SDL2/SDL_opengl.h>
 #include <list>
 #include "draw.h"
 
