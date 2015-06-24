@@ -9,13 +9,8 @@
 
 #include "matgui-common.h"
 #include "matsig.h"
-
-//standard getters and setters
-#define member_set(type, m) void m (type value) { _ ## m = value; }
-#define member_get(type, m) type m () { return _ ## m; }
-#define member_property(type, m) member_get(type, m) member_set(type, m)
-#define member_property_declaration(type, m) public: member_get(type, m) member_set(type, m) protected: type _ ## m;
-#define member_property_declaration_default(type, m, defValue) public: member_get(type, m) member_set(type, m) protected: type _ ## m = defValue;
+#include "style.h"
+#include "memberproperties.h"
 
 namespace MatGui {
 
@@ -35,8 +30,16 @@ public:
 	View();
 	virtual ~View();
 
-	virtual void draw();
+	virtual void draw() {
+		currentStyle.drawBasicView(this);
+	}
+
 	virtual void refresh() {};
+	virtual void updateStyle() {
+		currentStyle = style;
+		currentStyle += hoverStyle;
+
+	}
 	virtual void setLocation(double x, double y, double w, double h,
 			double weight = 1);
 	virtual bool isPointerInside(double x, double y);
@@ -93,6 +96,37 @@ public:
 	member_property(int, heightFlags);
 	member_property(std::string, name);
 	member_property(class Layout *,parent);
+
+	void highlight(bool value) {
+		if (_highlight == value) {
+			return;
+		}
+		_highlight = value;
+		hoverStyle.enabled = value;
+		updateStyle();
+	}
+
+	bool highlight() {
+		return _highlight;
+	}
+
+	//Helper functions
+	double right() {
+		return x() + width();
+	}
+
+	double bottom() {
+		return y() + height();
+	}
+
+	//This is the style that is used to paint the view
+	Paint currentStyle;
+
+	//This is styles that is enabled or disabled depending on the views state
+	Paint hoverStyle;
+
+	//This is the style of the view with no changes to it
+	Paint style;
 
 protected:
 	double _x, _y;

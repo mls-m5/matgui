@@ -17,11 +17,14 @@ struct vec {
 };
 
 enum DrawStyle : int {
-	Filled = 0,
-	Lines = 1,
+	None = 0,
+	Filled = 1,
+	Lines = 2,
 
 	OrigoTopLeft = 0,
-	CenterOrigo = 2,
+	CenterOrigo = 4,
+
+	Inherit = 1024,
 };
 
 //This is only to be able to do binary operators
@@ -36,13 +39,18 @@ void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double
 void resetTransform(unsigned int poniter);
 //Draw a rectangle with origin in the top left corner
 void drawRect(vec p, double a, double scaleX, double scaleY, DrawStyle_t);
+void drawRect(double x, double y, double width, double hegiht, class Paint*);
+
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t);
+void drawElipse(double x, double y, double width, double height, class Paint*);
 
 //A texture with origo in the top left corner
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t = 0);
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
-void drawLine(double x1, double y1, double x2, double y2);
+
+void drawLine(double x1, double y1, double x2, double y2, float width = 2);
+void drawLine(double x1, double y1, double x2, double y2, class Paint *paint);
 
 //Alternative syntax for functions (probably future syntax)
 inline void drawElipse(double x, double y, double a, double sx, double sy, DrawStyle_t drawStyle) {

@@ -51,6 +51,9 @@ int main(int argc, char *argv[])
 	window.addChild(button);
 	window.addChild(knob);
 	window.addChild(button2);
+	
+	window.style.fill.setColor(1, 1, 1); //Change the window style
+	window.updateStyle();
 
 	button->clicked.connect(callback); //callback to a function
 	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work

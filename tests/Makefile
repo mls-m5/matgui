@@ -28,8 +28,8 @@ run: ${TARGET}
 	${RUNSTRING}
 
 clean:
-	rm *.o
-	rm ${TESTS}
-	rm .depend
+	rm -f *.o
+	rm -f ${TESTS}
+	rm -f .depend
 
 rebuild: clean ${TARGET}

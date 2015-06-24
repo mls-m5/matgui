@@ -14,15 +14,13 @@ View::View():
 _weight(1)
 {
 	setLocation(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
+	hoverStyle.enabled = false;
 }
 
 View::~View() {
 	if (_parent) {
 		_parent->removeChild(this);
 	}
-}
-
-void View::draw() {
 }
 
 void View::setLocation(double x, double y, double w, double h, double weight) {
@@ -82,12 +80,12 @@ bool View::onPointerMove(pointerId id, double x, double y,
 
 void View::onPointerEnter(pointerId id, double x, double y,
 		pointerState state) {
-	_highlight = true;
+	highlight(true);
 	pointerEnter.emit( { id, x, y, state });
 }
 
 void View::onPointerLeave() {
-	_highlight = false;
+	highlight(false);
 	pointerLeave.emit();
 }
 

@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "paint.h"
 #include <math.h>
 #include <vector>
 
@@ -6,6 +7,7 @@
 #include "shaders/textureshader.h"
 #include "shaders/plainshader.h"
 #include "shaders/graphshader.h"
+#include "shaders/lineshader.h"
 
 namespace MatGui {
 
@@ -29,6 +31,13 @@ static struct {
 	GLuint y;
 	GLuint mvpMatrix;
 } graphProgram;
+
+static struct {
+	GLuint v;
+	GLuint mvpMatrix;
+	GLuint color;
+	ShaderProgram *program = 0;
+} lineProgram;
 
 
 static GLfloat transformMatrix[16];
@@ -85,7 +94,7 @@ static const GLfloat gSquareColors[] = {
 		.8, .8, 1., .5,
 };
 
-
+//Deprecated function
 void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareShaderProgram->useProgram();
 
@@ -101,7 +110,33 @@ void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 
     glUniform4fv(program1.color, 1, gSquareColors);
 
-    glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, 4);
+    if (drawStyle & DrawStyle::Filled) {
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    }
+    else {
+    	glDrawArrays(GL_LINE_LOOP, 0, 4);
+    }
+
+    glDisableVertexAttribArray(program1.vertices);
+}
+
+
+void drawRect(double x, double y, double width, double hegiht, class Paint* paint) {
+	squareShaderProgram->useProgram();
+
+	modelTransform(program1.mvpMatrix, {x, y}, 0, width, hegiht);
+
+	glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    glEnableVertexAttribArray(program1.vertices);
+
+    if (paint->fill) {
+    	glUniform4fv(program1.color, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    }
+    if (paint->line) {
+    	glUniform4fv(program1.color, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, 4);
+    }
 
     glDisableVertexAttribArray(program1.vertices);
 }
@@ -156,6 +191,7 @@ public:
 	}
 } elipseVertices;
 
+//Deprecated function
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareShaderProgram->useProgram();
 
@@ -166,6 +202,25 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
     glUniform4fv(program1.color, 1, gSquareColors);
 
     glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
+
+    glDisableVertexAttribArray(program1.vertices);
+}
+
+void drawElipse(double x, double y, double width, double height, class Paint* paint) {
+	squareShaderProgram->useProgram();
+
+	modelTransform(program1.mvpMatrix, {x, y}, 0, width, height);
+    glVertexAttribPointer(program1.vertices, 2, GL_FLOAT, GL_FALSE, 0, &elipseVertices[0]);
+    glEnableVertexAttribArray(program1.vertices);
+
+    if (paint->fill) {
+    	glUniform4fv(program1.color, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
+    }
+    if (paint->line) {
+    	glUniform4fv(program1.color, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, elipseVertices.size() / 2);
+    }
 
     glDisableVertexAttribArray(program1.vertices);
 }
@@ -201,8 +256,8 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
 }
 
 
-void drawLine(double x1, double y1, double x2, double y2) {
-	glLineWidth(2);
+void drawLine(double x1, double y1, double x2, double y2, float width) {
+	glLineWidth(width);
 	graphShaderProgram->useProgram();
 
 #ifdef __ANDROID__
@@ -227,6 +282,35 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
     glDisableVertexAttribArray(graphProgram.x);
     glDisableVertexAttribArray(graphProgram.y);
+
+    glLineWidth(1);
+}
+
+
+void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
+	glLineWidth(paint->line.width());
+	lineProgram.program->useProgram();
+
+#ifdef __ANDROID__
+	typedef float type;
+	constexpr int typeName = GL_FLOAT;
+#else
+	typedef double type;
+	constexpr int typeName = GL_DOUBLE;
+#endif
+
+	type tmpV[] = {x1, y1, x2, y2};
+
+	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
+
+	glEnableVertexAttribArray(lineProgram.v);
+    glVertexAttribPointer(lineProgram.v, 2, typeName, GL_FALSE, 0, tmpV);
+
+    glUniform4fv(lineProgram.color, 1, &paint->line.r);
+
+    glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+    glDisableVertexAttribArray(lineProgram.v);
 
     glLineWidth(1);
 }
@@ -271,6 +355,15 @@ bool initDrawModule(double width, double height) {
 	graphProgram.y = graphShaderProgram->getAttribute("vY");
 	graphProgram.mvpMatrix = graphShaderProgram->getUniform("mvp_matrix");
 
+
+	{
+		auto program = new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
+		lineProgram.program = program;
+		lineProgram.v = program->getAttribute("v");
+		lineProgram.color = program->getUniform("uColor");
+		lineProgram.mvpMatrix = program->getUniform("mvp_matrix");
+	}
+
 	setDimensions(width, height);
 
 	return true;
@@ -278,6 +371,10 @@ bool initDrawModule(double width, double height) {
 
 void QuitDrawModule() {
 	delete squareShaderProgram;
+	delete graphShaderProgram;
+	delete textureShaderProgram;
+	delete lineProgram.program;
 }
 
 } //Namespace Matgui
+
