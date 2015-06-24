@@ -7,12 +7,14 @@
 
 #include "font.h"
 
-#ifdef __ANDROID
+#ifdef __ANDROID__
 #define USE_BITMAP_FONT //Define this variable to have bitmap fonts instead
 #endif
 
 #ifdef USE_BITMAP_FONT
 #include "bitmapfont.h"
+
+#include "common-gl.h"
 
 typedef void FontType;
 #else
@@ -25,7 +27,6 @@ typedef SDL_Color ColorType;
 
 #include <SDL2/SDL_opengl.h>
 #include <list>
-#include "shaderprogram.h"
 #include "draw.h"
 
 

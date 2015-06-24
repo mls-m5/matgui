@@ -5,21 +5,9 @@
  *      Author: mattias
  */
 
-#ifndef SHADERPROGRAM_H_
-#define SHADERPROGRAM_H_
+#pragma once
 
-#define GL_GLEXT_PROTOTYPES 1
-#define GL3_PROTOTYPES 1
-#include "matgui-common.h"
-
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#else
-
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
+#include "common-gl.h"
 
 #include <string>
 
@@ -69,4 +57,3 @@ static void checkGlError(const char* op) {
     }
 }
 
-#endif /* SHADERPROGRAM_H_ */

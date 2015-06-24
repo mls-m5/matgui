@@ -134,8 +134,10 @@ void drawRect(double x, double y, double width, double hegiht, class Paint* pain
     	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
     if (paint->line) {
+    	glLineWidth(paint->line.width());
     	glUniform4fv(program1.color, 1, &paint->line.r);
     	glDrawArrays(GL_LINE_LOOP, 0, 4);
+    	glLineWidth(1);
     }
 
     glDisableVertexAttribArray(program1.vertices);
@@ -218,8 +220,10 @@ void drawElipse(double x, double y, double width, double height, class Paint* pa
     	glDrawArrays(GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
     }
     if (paint->line) {
+    	glLineWidth(paint->line.width());
     	glUniform4fv(program1.color, 1, &paint->line.r);
     	glDrawArrays(GL_LINE_LOOP, 0, elipseVertices.size() / 2);
+    	glLineWidth(1);
     }
 
     glDisableVertexAttribArray(program1.vertices);

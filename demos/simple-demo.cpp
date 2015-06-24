@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 
 	button->clicked.connect(callback); //callback to a function
 	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+
 	knob->changed.connect(knobCallback);
 	window->keyDown.connect(keyDownCallback);
 
