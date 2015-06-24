@@ -9,23 +9,28 @@
 
 #ifdef __ANDROID__
 #define USE_BITMAP_FONT //Define this variable to have bitmap fonts instead
+
+#include "common-gl.h"
+
+#else
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_opengl.h>
 #endif
 
 #ifdef USE_BITMAP_FONT
 #include "bitmapfont.h"
 
-#include "common-gl.h"
-
 typedef void FontType;
 #else
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 typedef TTF_Font FontType;
 typedef SDL_Color ColorType;
 #endif
 
 #include <list>
+#include "shaderprogram.h"
 #include "draw.h"
 
 
@@ -83,7 +88,7 @@ struct FontViewData {
 				glBindTexture(GL_TEXTURE_2D, texture); //the texture name is already created
 			}
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
 					GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 			view._width = messageSurface->w;
