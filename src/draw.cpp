@@ -2,12 +2,15 @@
 #include "paint.h"
 #include <math.h>
 #include <vector>
+#include <memory>
 
 #include "shaderprogram.h"
 #include "shaders/textureshader.h"
 #include "shaders/plainshader.h"
 #include "shaders/graphshader.h"
 #include "shaders/lineshader.h"
+
+using std::unique_ptr;
 
 namespace MatGui {
 
@@ -36,17 +39,17 @@ static struct {
 	GLuint v;
 	GLuint mvpMatrix;
 	GLuint color;
-	ShaderProgram *program = 0;
+	unique_ptr<ShaderProgram> program = 0;
 } lineProgram;
 
 
 static GLfloat transformMatrix[16];
 static double screenWidth, screenHeight;
-static ShaderProgram *squareShaderProgram = 0;
+static unique_ptr<ShaderProgram> squareShaderProgram = 0;
 
-static ShaderProgram *textureShaderProgram = 0;
+static unique_ptr<ShaderProgram> textureShaderProgram = 0;
 
-static ShaderProgram *graphShaderProgram = 0;
+static unique_ptr<ShaderProgram> graphShaderProgram = 0;
 
 struct colorDataStruct{
 	GLfloat r, g, b, a;
@@ -326,10 +329,7 @@ void setDimensions(double width, double height){
 }
 
 bool initDrawModule(double width, double height) {
-	if (squareShaderProgram){
-		delete squareShaderProgram;
-	}
-	squareShaderProgram = new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode);
+	squareShaderProgram.reset(new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode));
 
     if (!squareShaderProgram->getProgram()) {
         debug_print("Could not create program.");
@@ -345,7 +345,7 @@ bool initDrawModule(double width, double height) {
 
 
 
-	textureShaderProgram = new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode);
+	textureShaderProgram.reset(new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode));
 
 	textureProgram.vertices = textureShaderProgram->getAttribute("vPosition");
 	textureProgram.texcoords = textureShaderProgram->getAttribute("vtex");
@@ -354,7 +354,7 @@ bool initDrawModule(double width, double height) {
 	textureProgram.texture = textureShaderProgram->getUniform("texture1");
 
 
-	graphShaderProgram = new ShaderProgram(GraphShader::vertexCode, GraphShader::fragmentCode);
+	graphShaderProgram.reset(new ShaderProgram(GraphShader::vertexCode, GraphShader::fragmentCode));
 	graphProgram.x = graphShaderProgram->getAttribute("vX");
 	graphProgram.y = graphShaderProgram->getAttribute("vY");
 	graphProgram.mvpMatrix = graphShaderProgram->getUniform("mvp_matrix");
@@ -362,7 +362,7 @@ bool initDrawModule(double width, double height) {
 
 	{
 		auto program = new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
-		lineProgram.program = program;
+		lineProgram.program.reset(program);
 		lineProgram.v = program->getAttribute("v");
 		lineProgram.color = program->getUniform("uColor");
 		lineProgram.mvpMatrix = program->getUniform("mvp_matrix");
@@ -374,10 +374,10 @@ bool initDrawModule(double width, double height) {
 }
 
 void QuitDrawModule() {
-	delete squareShaderProgram;
-	delete graphShaderProgram;
-	delete textureShaderProgram;
-	delete lineProgram.program;
+	squareShaderProgram.reset();
+	graphShaderProgram.reset();
+	textureShaderProgram.reset();
+	lineProgram.program.reset();
 }
 
 } //Namespace Matgui

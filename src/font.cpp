@@ -88,7 +88,7 @@ struct FontViewData {
 				glBindTexture(GL_TEXTURE_2D, texture); //the texture name is already created
 			}
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
 					GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 			view._width = messageSurface->w;

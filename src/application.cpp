@@ -5,6 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
+#ifndef __ANDROID__
+
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "application.h"
@@ -171,3 +173,4 @@ void Application::removeWindow(class Window* window) {
 
 }  // namespace MatGui
 
+#endif //__ANDROID__ block
