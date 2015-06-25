@@ -12,11 +12,15 @@
 
 #include "common-gl.h"
 
+#define internal_format GL_BGRA
+
 #else
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_opengl.h>
+
+#define internal_format GL_RGBA
 #endif
 
 #ifdef USE_BITMAP_FONT
@@ -88,7 +92,7 @@ struct FontViewData {
 				glBindTexture(GL_TEXTURE_2D, texture); //the texture name is already created
 			}
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+			glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_BGRA,
 					GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 			view._width = messageSurface->w;
@@ -144,7 +148,7 @@ void renderText(const FontType *font, GLubyte r, GLubyte g, GLubyte b,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_BGRA,
 	             GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 	drawTextureRect({x, y}, 0, messageSurface->w, messageSurface->h, Texture, centered ? DrawStyle::CenterOrigo : DrawStyle::OrigoTopLeft);
