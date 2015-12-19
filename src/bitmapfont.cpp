@@ -119,8 +119,15 @@ BitmapFontData getFontDataVector(string text) {
 }
 
 std::map<char, BitmapFontData> fontBitmap = {
-{
+{ //Space
+' ',
+"l  \n",
+
+
+},{
+
 '1',
+
 R"tag(
   x
  xx
@@ -712,7 +719,7 @@ R"tag(
  xx
   x
   x
- xx  
+ xxx 
   x
   x
 lxxx
