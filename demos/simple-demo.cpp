@@ -37,34 +37,34 @@ int main(int argc, char *argv[])
 {
 	Application app(argc, argv); //Initialize stuff
 
-	auto window = new Window("matgui-demo"); //create the window
+	Window window("matgui-demo"); //create the window
 
-	auto button = new Button("knapp 1");
-	auto button2 = new Button("stäng");
-	auto knob = new KnobView;
-	auto progress = new ProgressView;
+	Button button("knapp 1");
+	Button button2("stäng");
+	KnobView knob;
+	ProgressView progress;
 
-	progressView = progress;
+	progressView = &progress;
 
-	window->addChild(button);
-	window->addChild(knob);
-	window->addChild(button2);
-	window->addChild(progress);
+	window.addChild(&button);
+	window.addChild(&knob);
+	window.addChild(&button2);
+	window.addChild(&progress);
 
-	auto layout2 = new LinearLayout;
-	layout2->setOrientation(LAYOUT_HORIZONTAL);
-	layout2->addChild(new Label("etikett"));
-	layout2->addChild(new ImageView("gfx/test.png"));
+	LinearLayout layout2;
+	layout2.setOrientation(LAYOUT_HORIZONTAL);
+	layout2.addChild(new Label("etikett")); //You can also use pointers
+	layout2.addChild(new ImageView("gfx/test.png"));
 
-	window->addChild(layout2);
+	window.addChild(&layout2);
 
-	button->clicked.connect(callback); //callback to a function
-	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+	button.clicked.connect(callback); //callback to a function
+	button2.clicked.connect(&app, &Application::quit); //A demo just to show how signals work
 
-	knob->changed.connect(knobCallback);
-	window->keyDown.connect(keyDownCallback);
+	knob.changed.connect(knobCallback);
+	window.keyDown.connect(keyDownCallback);
 
-	knob->value(.3);
+	knob.value(.3);
 
 	app.mainLoop();
 
