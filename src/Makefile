@@ -1,6 +1,6 @@
 COMPILER=g++
 
-GUIOBJECTS=view.o knobview.o button.o matsig.o linearlayout.o layout.o progressview.o imageview.o
+GUIOBJECTS=view.o knobview.o button.o matsig.o linearlayout.o layout.o progressview.o imageview.o label.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o bitmapfont.o paint.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
 #LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image

@@ -12,6 +12,7 @@
 #include "imageview.h"
 #include "knobview.h"
 #include "progressview.h"
+#include "label.h"
 
 using namespace MatGui;
 using namespace std;
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
 
 	auto layout2 = new LinearLayout;
 	layout2->setOrientation(LAYOUT_HORIZONTAL);
-	layout2->addChild(new Button("knapp"));
+	layout2->addChild(new Label("etikett"));
 	layout2->addChild(new ImageView("gfx/test.png"));
 
 	window->addChild(layout2);
