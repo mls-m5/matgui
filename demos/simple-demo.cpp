@@ -62,6 +62,9 @@ int main(int argc, char *argv[])
 	button2.clicked.connect(&app, &Application::quit); //A demo just to show how signals work
 
 	knob.changed.connect(knobCallback);
+	knob.changed.connect([] (double) {
+		cout << "lambda function called from signal" << endl;
+	});
 	window.keyDown.connect(keyDownCallback);
 
 	knob.value(.3);
