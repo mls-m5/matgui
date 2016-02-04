@@ -5,23 +5,149 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "paint.h"
+//#include "paint.h"
 #include "view.h"
+#include "draw.h"
+#include "memberproperties.h"
+#include <ciso646>
 
-namespace MatGui {
+//
+//enum DrawStyle : int { //Testing this is defined in draw.h
+//	None = 0,
+//	Filled = 1,
+//	Lines = 2,
+//
+//	OrigoTopLeft = 0,
+//	CenterOrigo = 4,
+//
+//	Inherit = 1024,
+//};
 
-Paint::Paint() {
+//namespace MatGui {
+//
+//	class View;
+//
+//	class ColorStyle {
+//	public:
+//		float r = 0, g = 0, b = 0, a = 1;
+//		bool inherit = true;
+//
+//		//set color and disable inherit flag
+//		void setColor(float red, float green, float blue) {
+//			r = red;
+//			g = green;
+//			b = blue;
+//			a = 1;
+//
+//			if (_style == DrawStyle::None) {
+//				_style = DrawStyle::Filled;
+//			}
+//
+//			inherit = false;
+//		}
+//
+//		void setColor(float red, float green, float blue, float alpha) {
+//			r = red;
+//			g = green;
+//			b = blue;
+//			a = alpha;
+//
+//			if (_style == DrawStyle::None) {
+//				_style = DrawStyle::Filled;
+//			}
+//
+//			inherit = false;
+//		}
+//
+//		//set style and disable inherit flag
+//		void style(DrawStyle value) {
+//			_style = value;
+//			inherit = false;
+//		}
+//
+//		operator bool() {
+//			return _style != DrawStyle::None;
+//		}
+//
+//		//shorthand notation
+//		//member_get(DrawStyle, style);
+//		inline DrawStyle style() { return _style; }
+//
+//		void operator += (ColorStyle &s) {
+//			if (not s.inherit) {
+//				*this = s;
+//			}
+//		}
+//
+//		//remember to set this to override previous value
+//
+//	protected:
+//		DrawStyle _style = DrawStyle::Filled;
+//
+//		friend class Paint;
+//	};
+//
+//	class LineStyle : public ColorStyle {
+//	public:
+//
+//		void width(float w) {
+//			_width = w;
+//			inherit = false;
+//		}
+//
+//		member_get(float, width);
+//
+//	protected:
+//		float _width = 1;
+//	};
+//
+//	class Paint {
+//	public:
+//		Paint();
+//		virtual ~Paint();
+//
+//		ColorStyle fill;
+//		LineStyle line;
+//
+//		bool enabled = true;
+//
+//		void push(Paint &s);
+//
+//		void operator+=(Paint &s) {
+//			push(s);
+//		}
+//
+//		void drawLine(double x, double y, double x2, double y2);
+//		void drawRect(double x, double y, double width, double height);
+//		void drawElipse(double x, double y, double width, double height);
+//
+//		void drawBasicView(View*);
+//	};
+//
+//	//} /* namespace MatGui */
+//	//
+//	//
+//	//
+//	//namespace MatGui {
+//
+//}
+
+using namespace MatGui;
+
+MatGui::Paint::Paint() {
 	fill._style = DrawStyle::None;
 }
 
-Paint::~Paint() {
+
+
+MatGui::Paint::~Paint() {
 }
 
-void Paint::drawRect(double x, double y, double width, double height) {
+void MatGui::Paint::drawRect(double x, double y, double width, double height) {
 	MatGui::drawRect(x, y, width, height, this);
 }
 
-void Paint::push(Paint& s) {
+void MatGui::Paint::push(Paint& s) {
 	if (not s.enabled) {
 		return;
 	}
@@ -29,18 +155,18 @@ void Paint::push(Paint& s) {
 	line += s.line;
 }
 
-void Paint::drawLine(double x, double y, double x2, double y2) {
+void MatGui::Paint::drawLine(double x, double y, double x2, double y2) {
 	if (line.style()) {
 		MatGui::drawLine(x, y, x2, y2, this);
 	}
 }
 
-void Paint::drawElipse(double x, double y, double width, double height) {
+void MatGui::Paint::drawElipse(double x, double y, double width, double height) {
 	MatGui::drawElipse(x, y, width, height, this);
 }
 
-void Paint::drawBasicView(View* view) {
+void MatGui::Paint::drawBasicView(View* view) {
 	drawRect(view->x(), view->y(), view->width(), view->height());
 }
 
-} /* namespace MatGui */
+//} /* namespace MatGui */

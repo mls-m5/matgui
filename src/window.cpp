@@ -10,6 +10,7 @@
 #include "windowdata.h"
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "common-gl.h"
 
 #include "application.h"
 using std::cout; using std::endl;
@@ -45,11 +46,23 @@ Window::Window(string title, bool resizable) {
 //
     checkSDLError(__LINE__);
 
-    _windowData->windowId = SDL_GetWindowID(_windowData->window);
-
     // Create our opengl context and attach it to our window
     _windowData->context = SDL_GL_CreateContext(_windowData->window);
     checkSDLError(__LINE__);
+
+	//Windows needs to make the context current
+	if (SDL_GL_MakeCurrent(_windowData->window, _windowData->context)) {
+		throw 10000000; //Throw random error message if failed
+	}
+
+	cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) << endl;
+
+	//#ifdef USING_GLEW
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		cout << "Problems with glewInit" << endl;
+	}
+	//#endif
 
     setLocation(0,0, 512, 512);
     initDrawModule(_width, _height); //Init the drawmodule for the CURRENT CONTEXT
@@ -88,11 +101,13 @@ void Window::show() {
 
 void Window::hide() {
 	SDL_HideWindow(_windowData->window);
-    Application::removeWindow(this);
+	Application::removeWindow(this);
 }
+
 
 bool Window::onResize(int width, int height) {
 	Layout::setLocation(0, 0, width, height);
+	return true;
 }
 
 } /* namespace MatGui */

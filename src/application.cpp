@@ -12,7 +12,6 @@
 #include "application.h"
 #include "commonsdl.h"
 #include "signal.h"
-#include "SDL2/SDL_opengl.h"
 #include "window.h"
 #include "draw.h"
 #include "windowdata.h"
@@ -33,8 +32,8 @@ Application::Application(int argc, char** argv) {
     /* Request opengl 3.2 context.
      * SDL doesn't have the ability to choose which profile at this time of writing,
      * but it should default to the core profile */
-//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2); //This prevents the rendering function from rendering anything of some reason
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2); //This prevents the rendering function from rendering anything of some reason
 
 //    Turn on double buffering with a 24bit Z buffer.
 //    You may need to change this to 16 or 32 for your system

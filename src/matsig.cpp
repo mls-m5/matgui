@@ -9,6 +9,7 @@
 #include "matsig.h"
 #include <thread>
 #include <iostream>
+#include <ciso646>
 
 namespace MatSig {
 

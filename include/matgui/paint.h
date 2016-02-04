@@ -8,6 +8,8 @@
 #pragma once
 #include "draw.h"
 #include "memberproperties.h"
+#include <ciso646> //or, and etc
+
 
 namespace MatGui {
 
@@ -110,3 +112,4 @@ public:
 };
 
 } /* namespace MatGui */
+

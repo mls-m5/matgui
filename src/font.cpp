@@ -17,8 +17,6 @@
 #else
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_opengl.h>
 
 #define internal_format GL_RGBA
 #endif
@@ -27,7 +25,11 @@
 #include "bitmapfont.h"
 
 typedef void FontType;
+
 #else
+
+#include <SDL2/SDL_ttf.h>
+#include "glfunctions.h"
 
 typedef TTF_Font FontType;
 typedef SDL_Color ColorType;

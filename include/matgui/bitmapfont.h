@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <string.h>
+#include <ciso646> //For or, and, etc...
 
 
 
