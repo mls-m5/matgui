@@ -21,6 +21,7 @@ using namespace std;
 namespace MatGui {
 
 static std::list<Window *> windows;
+static Window* activeWindow = nullptr;
 static Application *application = nullptr;
 
 Application::Application(int argc, char** argv) {
@@ -81,44 +82,13 @@ Window *Application::getWindow(unsigned int w) {
 bool Application::handleEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		auto window = getWindow(event.window.windowID);
 		if (event.type == SDL_QUIT) {
 			return true;
 		}
 
+		auto window = getWindow(event.window.windowID);
 		if (window) {
-			switch (event.type) {
-			case SDL_MOUSEMOTION:
-			{
-				auto &e = event.motion;
-				window->onPointerMove(0, (double)e.x, (double)e.y, e.state);
-			}
-			break;
-			case SDL_MOUSEBUTTONDOWN:
-			{
-				auto &e = event.motion;
-				window->onPointerDown(0, (double)e.x, (double)e.y);
-			}
-			break;
-
-			case SDL_MOUSEBUTTONUP:
-			{
-				auto &e = event.motion;
-				window->onPointerUp(0, (double)e.x, (double)e.y);
-			}
-			break;
-			case SDL_KEYDOWN:
-			{
-				window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
-			}
-			break;
-			case SDL_KEYUP:
-			{
-				window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
-			}
-			break;
-
-			case SDL_WINDOWEVENT:
+			if (event.type == SDL_WINDOWEVENT) {
 
 				switch (event.window.event) {
 				case SDL_WINDOWEVENT_CLOSE:
@@ -132,11 +102,51 @@ bool Application::handleEvents() {
 				case SDL_WINDOWEVENT_RESIZED:
 					window->onResize(event.window.data1, event.window.data2);
 					break;
-				} //end switch
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					activeWindow = window;
+					break;
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					if (activeWindow == window) {
+						activeWindow = nullptr;
+					}
+				}
+			}
+			else {
 
+				switch (event.type) {
+				case SDL_MOUSEMOTION:
+				{
+					auto &e = event.motion;
+					window->onPointerMove(0, (double)e.x, (double)e.y, e.state);
+				}
 				break;
-			default:
+				case SDL_MOUSEBUTTONDOWN:
+				{
+					auto &e = event.motion;
+					window->onPointerDown(0, (double)e.x, (double)e.y);
+				}
 				break;
+
+				case SDL_MOUSEBUTTONUP:
+				{
+					auto &e = event.motion;
+					window->onPointerUp(0, (double)e.x, (double)e.y);
+				}
+				break;
+				case SDL_KEYDOWN:
+				{
+					window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
+				}
+				break;
+				case SDL_KEYUP:
+				{
+					window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
+				}
+				break;
+
+				default:
+					break;
+				}
 			}
 		}
 	}

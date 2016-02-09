@@ -44,6 +44,8 @@ Window::Window(string title, bool resizable) {
 //    if (!windowData->mainwindow) /* Die if creation failed */
 //        sdldie("Unable to create window");
 //
+	_windowData->windowId = SDL_GetWindowID(_windowData->window);
+
     checkSDLError(__LINE__);
 
     // Create our opengl context and attach it to our window
