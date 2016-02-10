@@ -8,12 +8,30 @@
 
 #pragma once
 
+#include <vector>
+
 namespace MatGui {
 
 struct vec {
 	vec(double x, double y, double z): x(x), y(y), z(z) {}
 	vec(double x, double y): x(x), y(y), z(0) {}
 	double x; double y; double z;
+};
+
+#ifdef __ANDROID__
+typedef float DrawReal;
+#define drawTypeName GL_FLOAT
+#else
+typedef double DrawReal;
+#define drawTypeName GL_DOUBLE
+#endif
+
+struct vec2 {
+	vec2() {}
+	template <typename T>
+	vec2(T v) : x(v.x), y(v.y) {}
+	vec2(DrawReal x, DrawReal y) : x(x), y(y) {}
+	DrawReal x; DrawReal y;
 };
 
 enum DrawStyle : int {
@@ -51,6 +69,9 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
 
 void drawLine(double x1, double y1, double x2, double y2, float width = 2);
 void drawLine(double x1, double y1, double x2, double y2, class Paint *paint);
+
+
+void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, class Paint *paint);
 
 //Alternative syntax for functions (probably future syntax)
 inline void drawElipse(double x, double y, double a, double sx, double sy, DrawStyle_t drawStyle) {

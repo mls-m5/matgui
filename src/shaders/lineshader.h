@@ -24,7 +24,7 @@ void main() {
 const char *fragmentCode = R"V0G0N(
 uniform  vec4 uColor;
 void main() {
-  gl_FragColor = vec4(uColor.x, uColor.y, uColor.z, 1);
+  gl_FragColor = uColor;
 }
 )V0G0N";
 

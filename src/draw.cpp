@@ -323,6 +323,32 @@ void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
 }
 
 
+
+void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, class Paint *paint) {
+	glLineWidth(paint->line.width());
+	lineProgram.program->useProgram();
+
+	modelTransform(lineProgram.mvpMatrix, { x, y }, angle, 1, 1);
+
+	glEnableVertexAttribArray(lineProgram.v);
+	glVertexAttribPointer(lineProgram.v, 2, drawTypeName, GL_FALSE, 0, &vectorList.front().x);
+
+
+	if (paint->line) {
+		glUniform4fv(lineProgram.color, 1, &paint->line.r);
+		glDrawArrays(GL_LINE_LOOP, 0, vectorList.size());
+	}
+	if (paint->fill) {
+		glUniform4fv(lineProgram.color, 1, &paint->fill.r);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, vectorList.size());
+	}
+
+	glDisableVertexAttribArray(lineProgram.v);
+
+	glLineWidth(1);
+}
+
+
 void setDimensions(double width, double height){
 	screenWidth = width;
 	screenHeight = height;
