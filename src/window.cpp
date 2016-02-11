@@ -59,12 +59,12 @@ Window::Window(string title, bool resizable) {
 
 	cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) << endl;
 
-	//#ifdef USING_GLEW
+	#ifdef USING_GLEW
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		cout << "Problems with glewInit" << endl;
 	}
-	//#endif
+	#endif
 
     setLocation(0,0, 512, 512);
     initDrawModule(_width, _height); //Init the drawmodule for the CURRENT CONTEXT
