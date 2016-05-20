@@ -28,3 +28,20 @@ void main() {
 
 
 }
+
+static struct {
+	GLuint x;
+	GLuint y;
+	GLuint mvpMatrix;
+	unique_ptr<ShaderProgram> program;
+
+	void init() {
+		program.reset(new ShaderProgram(GraphShader::vertexCode, GraphShader::fragmentCode));
+		x = program->getAttribute("vX");
+		y = program->getAttribute("vY");
+		mvpMatrix = program->getUniform("mvp_matrix");
+
+		debug_check_true(program->getProgram(), "could not create graph program");
+
+	}
+} graphProgram;
