@@ -51,6 +51,9 @@ static unique_ptr<ShaderProgram> textureShaderProgram = 0;
 
 static unique_ptr<ShaderProgram> graphShaderProgram = 0;
 
+
+#define debug_check_true( cond , text) if (not (cond)) debug_print("%s: %s", #cond, text);
+
 struct colorDataStruct{
 	GLfloat r, g, b, a;
 };
@@ -331,10 +334,7 @@ void setDimensions(double width, double height){
 bool initDrawModule(double width, double height) {
 	squareShaderProgram.reset(new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode));
 
-    if (!squareShaderProgram->getProgram()) {
-        debug_print("Could not create program.");
-        return false;
-    }
+	debug_check_true(squareShaderProgram->getProgram(), "could not create square program");
 
     squareShaderProgram->useProgram();
     checkGlError("glUseProgram");
@@ -343,9 +343,8 @@ bool initDrawModule(double width, double height) {
 	program1.color = squareShaderProgram->getUniform("uColor");
 	program1.mvpMatrix = squareShaderProgram->getUniform("mvp_matrix");
 
-
-
 	textureShaderProgram.reset(new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode));
+	debug_check_true(textureShaderProgram->getProgram(), "could not create texture program");
 
 	textureProgram.vertices = textureShaderProgram->getAttribute("vPosition");
 	textureProgram.texcoords = textureShaderProgram->getAttribute("vtex");
@@ -359,9 +358,12 @@ bool initDrawModule(double width, double height) {
 	graphProgram.y = graphShaderProgram->getAttribute("vY");
 	graphProgram.mvpMatrix = graphShaderProgram->getUniform("mvp_matrix");
 
+	debug_check_true(graphShaderProgram->getProgram(), "could not create graph program");
+
 
 	{
 		auto program = new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
+		debug_check_true(program->getProgram(), "could not create graph program");
 		lineProgram.program.reset(program);
 		lineProgram.v = program->getAttribute("v");
 		lineProgram.color = program->getUniform("uColor");
