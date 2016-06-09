@@ -18,11 +18,6 @@ struct vec {
 	double x, y, z;
 };
 
-struct vec2 {
-	vec2(double x, double y): x(x), y(y) {}
-	double x, y;
-};
-
 #ifdef __ANDROID__
 typedef float DrawReal;
 #define drawTypeName GL_FLOAT

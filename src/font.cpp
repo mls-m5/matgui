@@ -29,7 +29,6 @@ typedef void FontType;
 #else
 
 #include <SDL2/SDL_ttf.h>
-#include "glfunctions.h"
 
 typedef TTF_Font FontType;
 typedef SDL_Color ColorType;
