@@ -18,6 +18,8 @@ class View;
 class ColorStyle {
 public:
 	float r = 0, g = 0, b = 0, a = 1;
+
+	//remember to set this to override previous value
 	bool inherit = true;
 
 	//set color and disable inherit flag
@@ -66,8 +68,6 @@ public:
 		}
 	}
 
-	//remember to set this to override previous value
-
 protected:
 	DrawStyle _style = DrawStyle::Filled;
 
@@ -88,6 +88,26 @@ protected:
 	float _width = 1;
 };
 
+class ShadowStyle: public ColorStyle {
+public:
+
+	void size(vec2 s) {
+		_size = s;
+		inherit = false;
+	}
+
+	void offset(vec2 o) {
+		_offset = o;
+		inherit = false;
+	}
+
+	member_get(vec2, size);
+
+protected:
+	vec2 _offset = vec2(0,0);
+	vec2 _size = vec2(0,0);
+};
+
 class Paint {
 public:
 	Paint();
@@ -95,6 +115,7 @@ public:
 
 	ColorStyle fill;
 	LineStyle line;
+	ShadowStyle shadow;
 
 	bool enabled = true;
 

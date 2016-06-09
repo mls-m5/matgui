@@ -61,28 +61,22 @@ void resetTransform(unsigned int pointer){
     glUniformMatrix4fv(pointer, 1, GL_FALSE, transformMatrix);
 }
 
-//Square
-static const GLfloat gSquareVertices[] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f };
-static const GLfloat gSquareVerticesCenteredAtOrigo[] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
-static const GLfloat gSquareColors[] = {
-		.8, .8, 1., .5,
-};
 
 //Deprecated function
 void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareProgram.program->useProgram();
 
-	modelTransform(squareProgram.mvpMatrix, p, a, sx, sy);
+	modelTransform(squareProgram.pMvpMatrix, p, a, sx, sy);
 
     if (drawStyle & DrawStyle::CenterOrigo) {
-    	glVertexAttribPointer(squareProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVerticesCenteredAtOrigo);
+    	glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.centeredVertices);
     }
     else {
-    	glVertexAttribPointer(squareProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    	glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.vertices);
     }
-    glEnableVertexAttribArray(squareProgram.vertices);
+    glEnableVertexAttribArray(squareProgram.pPertices);
 
-    glUniform4fv(squareProgram.color, 1, gSquareColors);
+    glUniform4fv(squareProgram.pColor, 1, squareProgram.colors);
 
     if (drawStyle & DrawStyle::Filled) {
     	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -91,30 +85,30 @@ void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
     	glDrawArrays(GL_LINE_LOOP, 0, 4);
     }
 
-    glDisableVertexAttribArray(squareProgram.vertices);
+    glDisableVertexAttribArray(squareProgram.pPertices);
 }
 
 
 void drawRect(double x, double y, double width, double hegiht, class Paint* paint) {
 	squareProgram.program->useProgram();
 
-	modelTransform(squareProgram.mvpMatrix, {x, y}, 0, width, hegiht);
+	modelTransform(squareProgram.pMvpMatrix, {x, y}, 0, width, hegiht);
 
-	glVertexAttribPointer(squareProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
-    glEnableVertexAttribArray(squareProgram.vertices);
+	glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.vertices);
+    glEnableVertexAttribArray(squareProgram.pPertices);
 
     if (paint->fill) {
-    	glUniform4fv(squareProgram.color, 1, &paint->fill.r);
+    	glUniform4fv(squareProgram.pColor, 1, &paint->fill.r);
     	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
     if (paint->line) {
     	glLineWidth(paint->line.width());
-    	glUniform4fv(squareProgram.color, 1, &paint->line.r);
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
     	glDrawArrays(GL_LINE_LOOP, 0, 4);
     	glLineWidth(1);
     }
 
-    glDisableVertexAttribArray(squareProgram.vertices);
+    glDisableVertexAttribArray(squareProgram.pPertices);
 }
 
 //static const GLfloat texturecoordinates[] = {0,0, 0,1, 1,0, 1,1};
@@ -125,20 +119,20 @@ void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawS
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	modelTransform(textureProgram.mvpMatrix, p, a, sx, sy);
-    glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.vertices);
     if (style & DrawStyle::CenterOrigo) {
-    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVerticesCenteredAtOrigo);
+    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.centeredVertices);
     }
     else {
-    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices);
+    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.vertices);
     }
     glEnableVertexAttribArray(textureProgram.vertices);
 
 
-    glVertexAttribPointer(textureProgram.texcoords, 2, GL_FLOAT, GL_FALSE, 0, gSquareVertices); //Set the texture coordinates
+    glVertexAttribPointer(textureProgram.texcoords, 2, GL_FLOAT, GL_FALSE, 0, squareProgram.vertices); //Set the texture coordinates
     glEnableVertexAttribArray(textureProgram.texcoords);
 
-    glUniform4fv(textureProgram.color, 1, gSquareColors);
+    glUniform4fv(textureProgram.color, 1, textureProgram.colors);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
@@ -152,76 +146,60 @@ void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawS
 
 
 
-static class ElipseVertices: public std::vector <GLfloat> {
-public:
-	ElipseVertices() {
-
-		int count = 20;
-		resize(count * 2);
-		for (int i = 0; i < count; ++i){
-			auto a = (double) i / count * pi2;
-			at(i * 2) = .5 + sin(a) / 2;
-			at(i * 2 + 1) = .5 + cos(a) / 2;
-		}
-
-	}
-} elipseVertices;
-
 //Deprecated function
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 	squareProgram.program->useProgram();
 
-	modelTransform(squareProgram.mvpMatrix, p, a / 180., sx, sy);
-    glVertexAttribPointer(squareProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, &elipseVertices[0]);
-    glEnableVertexAttribArray(squareProgram.vertices);
+	modelTransform(squareProgram.pMvpMatrix, p, a / 180., sx, sy);
+    glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, &squareProgram.ellipseVertices[0]);
+    glEnableVertexAttribArray(squareProgram.pPertices);
 
-    glUniform4fv(squareProgram.color, 1, gSquareColors);
+    glUniform4fv(squareProgram.pColor, 1, squareProgram.colors);
 
-    glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
+    glDrawArrays((drawStyle & DrawStyle::Lines)? GL_LINE_LOOP: GL_TRIANGLE_FAN, 0, squareProgram.ellipseVertices.size() / 2);
 
-    glDisableVertexAttribArray(squareProgram.vertices);
+    glDisableVertexAttribArray(squareProgram.pPertices);
 }
 
 void drawElipse(double x, double y, double width, double height, class Paint* paint) {
 	squareProgram.program->useProgram();
 
-	modelTransform(squareProgram.mvpMatrix, {x, y}, 0, width, height);
-    glVertexAttribPointer(squareProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, &elipseVertices[0]);
-    glEnableVertexAttribArray(squareProgram.vertices);
+	modelTransform(squareProgram.pMvpMatrix, {x, y}, 0, width, height);
+    glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, &squareProgram.ellipseVertices[0]);
+    glEnableVertexAttribArray(squareProgram.pPertices);
 
     if (paint->fill) {
-    	glUniform4fv(squareProgram.color, 1, &paint->fill.r);
-    	glDrawArrays(GL_TRIANGLE_FAN, 0, elipseVertices.size() / 2);
+    	glUniform4fv(squareProgram.pColor, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, squareProgram.ellipseVertices.size() / 2);
     }
     if (paint->line) {
     	glLineWidth(paint->line.width());
-    	glUniform4fv(squareProgram.color, 1, &paint->line.r);
-    	glDrawArrays(GL_LINE_LOOP, 0, elipseVertices.size() / 2);
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, squareProgram.ellipseVertices.size() / 2);
     	glLineWidth(1);
     }
 
-    glDisableVertexAttribArray(squareProgram.vertices);
+    glDisableVertexAttribArray(squareProgram.pPertices);
 }
 
 
 
-static std::vector <float> tmpFloat;
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size){
 	glLineWidth(2);
 	graphProgram.program->useProgram();
 
-	if (tmpFloat.size() < size){
-		tmpFloat.resize(size);
+	if (graphProgram.tmpFloat.size() < size){
+		graphProgram.tmpFloat.resize(size);
 		for (int i = 0; i < size; ++i){
-			tmpFloat[i] = i;
+			graphProgram.tmpFloat[i] = i;
 		}
 	}
 
 	modelTransform(graphProgram.mvpMatrix, {x, y}, a, sx, sy);
 
 	glEnableVertexAttribArray(graphProgram.x);
-    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0, &tmpFloat[0]);
+    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0, &graphProgram.tmpFloat[0]);
 	glEnableVertexAttribArray(graphProgram.y);
     glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
 

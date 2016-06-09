@@ -34,6 +34,7 @@ static struct {
 	GLuint y;
 	GLuint mvpMatrix;
 	unique_ptr<ShaderProgram> program;
+	std::vector <float> tmpFloat;
 
 	void init() {
 		program.reset(new ShaderProgram(GraphShader::vertexCode, GraphShader::fragmentCode));

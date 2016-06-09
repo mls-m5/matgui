@@ -47,6 +47,9 @@ static struct {
 	GLint texture;
 	unique_ptr<ShaderProgram> program;
 
+
+	const GLfloat colors[4] = {1., 1., 1., 1.,	};
+
 	void init() {
 		program.reset(new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode));
 		debug_check_true(program->getProgram(), "could not create texture program");

@@ -15,7 +15,12 @@ namespace MatGui {
 struct vec {
 	vec(double x, double y, double z): x(x), y(y), z(z) {}
 	vec(double x, double y): x(x), y(y), z(0) {}
-	double x; double y; double z;
+	double x, y, z;
+};
+
+struct vec2 {
+	vec2(double x, double y): x(x), y(y) {}
+	double x, y;
 };
 
 #ifdef __ANDROID__
