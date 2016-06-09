@@ -43,11 +43,13 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
 GLuint createProgram(std::string pVertexSource, std::string pFragmentSource) {
     GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource.c_str());
     if (!vertexShader) {
+    	debug_print("Shader program: failed creating vertex shader");
         return 0;
     }
 
     GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource.c_str());
     if (!pixelShader) {
+    	debug_print("Shader program: failed creating fragment shader");
         return 0;
     }
 
@@ -71,10 +73,18 @@ GLuint createProgram(std::string pVertexSource, std::string pFragmentSource) {
                     delete buf;
                 }
             }
+            else {
+            	debug_print("Shader program linking failed, but with no error log");
+            }
             glDeleteProgram(program);
             program = 0;
         }
     }
+    else {
+    	debug_print("glCreateProgram() failed");
+    }
+    checkGlError("before return");
+
     return program;
 }
 

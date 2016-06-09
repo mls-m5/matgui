@@ -37,5 +37,23 @@ void main() {
 
 }
 
+static struct {
+	GLint color;
+	GLint vertices;
+	GLint mvpMatrix;
+	unique_ptr<ShaderProgram> program;
+
+	void init() {
+		program.reset(new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode));
+		debug_check_true(program->getProgram(), "could not create square program");
+	    program->useProgram();
+	    checkGlError("glUseProgram");
+
+		vertices = program->getAttribute("vPosition");
+		color = program->getUniform("uColor");
+		mvpMatrix = program->getUniform("mvp_matrix");
+	}
+} squareProgram;
+
 
 

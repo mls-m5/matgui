@@ -32,3 +32,19 @@ void main() {
 }
 
 
+static struct {
+	GLuint v;
+	GLuint mvpMatrix;
+	GLuint color;
+	unique_ptr<ShaderProgram> program;
+
+	void init() {
+		auto p = new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
+		debug_check_true(p->getProgram(), "could not create graph program");
+		program.reset(p);
+		v = program->getAttribute("v");
+		color = program->getUniform("uColor");
+		mvpMatrix = program->getUniform("mvp_matrix");
+	}
+} lineProgram;
+

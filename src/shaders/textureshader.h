@@ -38,3 +38,24 @@ void main() {
 
 
 }
+
+static struct {
+	GLint color;
+	GLint vertices;
+	GLint texcoords;
+	GLint mvpMatrix;
+	GLint texture;
+	unique_ptr<ShaderProgram> program;
+
+	void init() {
+		program.reset(new ShaderProgram(TextureShader::vertexCode, TextureShader::fragmentCode));
+		debug_check_true(program->getProgram(), "could not create texture program");
+
+		vertices = program->getAttribute("vPosition");
+		texcoords = program->getAttribute("vtex");
+		color = program->getUniform("uColor");
+		mvpMatrix = program->getUniform("mvp_matrix");
+		texture = program->getUniform("texture1");
+	}
+} textureProgram;
+
