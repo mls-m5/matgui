@@ -150,6 +150,10 @@ void ShaderProgram::useProgram() {
 	}
 }
 
+void ShaderProgram::unUseProgram() {
+	glUseProgram(0);
+}
+
 void ShaderProgram::loadShaderFromFile(std::string vertexFile,	std::string fragmentFile) {
 	std::ifstream vfile(vertexFile);
 	if (!vfile) {

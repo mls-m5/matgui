@@ -22,6 +22,7 @@ public:
 	void loadShaderFromFile(std::string vertexFile, std::string fragmentFile);
 
 	void useProgram();
+	void unUseProgram();
 
 	GLuint getProgram() { return _program; };
 	GLint getUniform( char const* name );
