@@ -138,6 +138,12 @@ bool Application::handleEvents() {
 					window->onKeyDown(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);
 				}
 				break;
+				case SDL_MOUSEWHEEL:
+				{
+					auto &e = event.wheel;
+					window->onScroll(0, (double) e.x, (double) e.y);
+				}
+				break;
 				case SDL_KEYUP:
 				{
 					window->onKeyUp(event.key.keysym.sym, event.key.keysym.scancode, event.key.keysym.mod, event.key.repeat);

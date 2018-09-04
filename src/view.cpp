@@ -89,6 +89,10 @@ void View::onPointerLeave() {
 	pointerLeave.emit();
 }
 
+void View::onScroll(pointerId id, double x, double y) {
+	scroll.emit( {id, x, y});
+}
+
 bool View::onKeyDown(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat) {
 	//If there is no listener the key go to another view
 	if (keyDown) {

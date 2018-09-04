@@ -54,6 +54,7 @@ public:
 	virtual void onPointerEnter(pointerId id, double x, double y,
 			pointerState state);
 	virtual void onPointerLeave();
+	virtual void onScroll(pointerId id, double x, double y);
 
 	typedef unsigned KeySym;
 	typedef unsigned KeyScanCode;
@@ -66,6 +67,11 @@ public:
 		pointerId id;
 		double x, y;
 		pointerState state;
+	};
+
+	struct ScrollArgument {
+		pointerId id;
+		double x, y;
 	};
 
 	struct KeyArgument {
@@ -83,6 +89,7 @@ public:
 
 	Signal <PointerArgument> pointerEnter;
 	Signal <> pointerLeave;
+	Signal <ScrollArgument> scroll;
 
 	Signal <KeyArgument> keyDown;
 	Signal <KeyArgument> keyUp;
