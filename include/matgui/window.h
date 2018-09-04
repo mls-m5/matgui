@@ -15,7 +15,7 @@ namespace MatGui {
 
 class Window: public LinearLayout {
 public:
-	Window(std::string title, bool resizable = false);
+	Window(std::string title, int width = 512, int height = 512, bool resizable = false);
 	virtual ~Window();
 
 	void draw() override;

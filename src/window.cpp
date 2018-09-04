@@ -35,12 +35,12 @@ void checkSDLError(int line = -1)
 }
 
 
-Window::Window(string title, bool resizable) {
+Window::Window(string title, int width, int height, bool resizable) {
 	_windowData.reset(new WindowData);
 
     // Create our window centered at 512x512 resolution
     _windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | (resizable? SDL_WINDOW_RESIZABLE : 0));
+        width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | (resizable? SDL_WINDOW_RESIZABLE : 0));
 //    if (!windowData->mainwindow) /* Die if creation failed */
 //        sdldie("Unable to create window");
 //
@@ -66,7 +66,7 @@ Window::Window(string title, bool resizable) {
 	}
 	#endif
 
-    setLocation(0,0, 512, 512);
+    setLocation(0,0, width, height);
     initDrawModule(_width, _height); //Init the drawmodule for the CURRENT CONTEXT
 
     // This makes our buffer swap syncronized with the monitor's vertical refresh
