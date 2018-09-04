@@ -338,6 +338,13 @@ public:
 		this->push_back({f, reference});
 	}
 
+	//Connect to std::function
+	template <class _functionType>
+	void connect(std::function<_functionType> f, void *reference = 0) {
+		LockGuard guard(_mutex);
+		this->push_back({f, reference});
+	}
+
 
 
 	template <typename T>
