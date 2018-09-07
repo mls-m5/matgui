@@ -20,6 +20,7 @@ namespace MatGui {
 
 static GLfloat transformMatrix[16];
 static double screenWidth, screenHeight;
+static GLuint vertexArray = 0;
 
 
 struct colorDataStruct{
@@ -64,7 +65,7 @@ void resetTransform(unsigned int pointer){
 
 //Deprecated function
 void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
-	squareProgram.program->useProgram();
+	squareProgram.program->use();
 
 	modelTransform(squareProgram.pMvpMatrix, p, a, sx, sy);
 
@@ -90,7 +91,7 @@ void drawRect(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 
 
 void drawRect(double x, double y, double width, double hegiht, class Paint* paint) {
-	squareProgram.program->useProgram();
+	squareProgram.program->use();
 
 	modelTransform(squareProgram.pMvpMatrix, {x, y}, 0, width, hegiht);
 
@@ -113,7 +114,7 @@ void drawRect(double x, double y, double width, double hegiht, class Paint* pain
 
 //static const GLfloat texturecoordinates[] = {0,0, 0,1, 1,0, 1,1};
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
-	textureProgram.program->useProgram();
+	textureProgram.program->use();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -148,7 +149,7 @@ void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawS
 
 //Deprecated function
 void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
-	squareProgram.program->useProgram();
+	squareProgram.program->use();
 
 	modelTransform(squareProgram.pMvpMatrix, p, a / 180., sx, sy);
     glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, &squareProgram.ellipseVertices[0]);
@@ -162,7 +163,7 @@ void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t drawStyle){
 }
 
 void drawElipse(double x, double y, double width, double height, class Paint* paint) {
-	squareProgram.program->useProgram();
+	squareProgram.program->use();
 
 	modelTransform(squareProgram.pMvpMatrix, {x, y}, 0, width, height);
     glVertexAttribPointer(squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, &squareProgram.ellipseVertices[0]);
@@ -187,7 +188,7 @@ void drawElipse(double x, double y, double width, double height, class Paint* pa
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size){
 	glLineWidth(2);
-	graphProgram.program->useProgram();
+	graphProgram.program->use();
 
 	if (graphProgram.tmpFloat.size() < size){
 		graphProgram.tmpFloat.resize(size);
@@ -214,7 +215,7 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
 
 void drawLine(double x1, double y1, double x2, double y2, float width) {
 	glLineWidth(width);
-	graphProgram.program->useProgram();
+	graphProgram.program->use();
 
 #ifdef __ANDROID__
 	typedef float type;
@@ -245,7 +246,7 @@ void drawLine(double x1, double y1, double x2, double y2, float width) {
 
 void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
 	glLineWidth(paint->line.width());
-	lineProgram.program->useProgram();
+	lineProgram.program->use();
 
 #ifdef __ANDROID__
 	typedef float type;
@@ -275,7 +276,7 @@ void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
 
 void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, class Paint *paint) {
 	glLineWidth(paint->line.width());
-	lineProgram.program->useProgram();
+	lineProgram.program->use();
 
 	modelTransform(lineProgram.mvpMatrix, { x, y }, angle, 1, 1);
 
@@ -309,9 +310,21 @@ bool initDrawModule(double width, double height) {
     graphProgram.init();
     lineProgram.init();
 
+    glGenVertexArrays(1, &vertexArray);
+
 	setDimensions(width, height);
 
 	return true;
+}
+
+void setDepthEnabled(bool enabled) {
+	if (enabled) {
+		glEnable(GL_DEPTH_TEST);
+
+	}
+	else {
+		glDisable(GL_DEPTH_TEST);
+	}
 }
 
 void QuitDrawModule() {

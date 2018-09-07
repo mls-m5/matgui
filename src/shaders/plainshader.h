@@ -63,7 +63,7 @@ static struct {
 
 		program.reset(new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode));
 		debug_check_true(program->getProgram(), "could not create square program");
-	    program->useProgram();
+	    program->use();
 	    checkGlError("glUseProgram");
 
 		pPertices = program->getAttribute("vPosition");

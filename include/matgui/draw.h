@@ -52,6 +52,9 @@ typedef int DrawStyle_t;
 bool initDrawModule(double width, double height);
 void QuitDrawModule();
 
+//Graphics settings
+void setDepthEnabled(bool enabled);
+
 //Apply a transform to matrix at "pointer" in current shader program
 void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double scaleY);
 void resetTransform(unsigned int poniter);
