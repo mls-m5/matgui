@@ -106,6 +106,9 @@ void Window::hide() {
 	Application::removeWindow(this);
 }
 
+void Window::cursorVisibility(bool value) {
+	SDL_ShowCursor(value);
+}
 
 bool Window::onResize(int width, int height) {
 	Layout::setLocation(0, 0, width, height);

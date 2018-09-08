@@ -27,6 +27,8 @@ public:
 	void show();
 	void hide();
 
+	void cursorVisibility(bool value);
+
 	Signal<void *, bool> closeSignal;
 
 protected:
