@@ -125,7 +125,19 @@ std::map<char, BitmapFontData> fontBitmap = {
 
 
 },{
+'0',
 
+R"tag(
+  
+  xx
+ x  x
+ x  x
+ x  x
+ x  x
+l xx
+)tag",
+
+},{
 '1',
 
 R"tag(
@@ -151,7 +163,7 @@ lxxxx
 )tag",
 },{
 
-'2',
+'3',
 R"tag(
  xxxx
     x
@@ -217,7 +229,7 @@ l x
 },{
 
 
-'7',
+'8',
 R"tag(
   xx
  x  x
@@ -238,42 +250,6 @@ R"tag(
     x
     x
 l xx
-)tag",
-},{
-
-'.',
-R"tag(
-lx
-)tag",
-},{
-
-
-':',
-R"tag(
- x
- 
- 
-lx
-)tag",
-},{
-
-
-',',
-R"tag(
-lx
- x
-)tag",
-},{
-
-
-';',
-R"tag(
- x
- 
- 
- 
-lx
- x
 )tag",
 },{
 
@@ -722,7 +698,7 @@ R"tag(
  xxx 
   x
   x
-lxxx
+l xx
 )tag",
 },{
 
@@ -785,6 +761,7 @@ l  x
 'x',
 R"tag(
  x   x 
+  x x 
    x
   x x
 lx   x
@@ -847,6 +824,75 @@ R"tag(
   x
  x   x
 lxxxxx
+)tag",
+},{
+'-',
+R"tag(
+ xxx
+  
+ 
+l
+)tag",
+}
+
+,{
+
+'.',
+R"tag(
+lx
+)tag",
+},{
+
+':',
+R"tag(
+ x
+ 
+ 
+lx
+)tag",
+},{
+
+
+'=',
+R"tag(
+ xxx
+ 
+ 
+lxxx
+)tag",
+},{
+
+
+',',
+R"tag(
+lx
+ x
+)tag",
+},{
+
+
+';',
+R"tag(
+ x
+ 
+ 
+ 
+lx
+ x
+)tag",
+},
+
+
+{
+'!',
+R"tag(
+ xx
+ x
+ x
+ x
+ x
+
+lx
 )tag",
 }
 };
