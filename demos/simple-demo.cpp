@@ -13,6 +13,8 @@
 #include "knobview.h"
 #include "progressview.h"
 #include "label.h"
+#include "toggleview.h"
+#include "sliderview.h"
 
 using namespace MatGui;
 using namespace std;
@@ -55,6 +57,8 @@ int main(int argc, char *argv[])
 	layout2.setOrientation(LAYOUT_HORIZONTAL);
 	layout2.addChild(new Label("etikett")); //You can also use pointers
 	layout2.addChild(new ImageView("gfx/test.png"));
+	layout2.addChild(new ToggleView());
+	layout2.addChild(new SliderView());
 
 	window.addChild(&layout2);
 

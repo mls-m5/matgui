@@ -22,6 +22,7 @@ public:
 	Game() {
 		texture.load("gfx/test.png");
 		clicked.connect(this, &Game::viewClicked);
+		rectStyle.fill.setColor(1,1,1);
 	}
 
 	~Game() {
@@ -29,7 +30,12 @@ public:
 	}
 
 	void draw() override {
-		drawRect({_x + _width / 2., _y + _height / 2.}, _angle, 20, 20, DrawStyle::Filled);
+		rectStyle.drawRect(
+				_x + _width / 2.,
+				_y + _height / 2.,
+				20,
+				20
+		);
 		drawTextureRect(_x + _textureX, _y + _textureY, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
 	}
 
@@ -57,6 +63,7 @@ public:
 	double _angle = 0;
 	double _rotation = 1;
 	Texture texture;
+	Paint rectStyle;
 };
 
 int main(int argc, char**argv) {

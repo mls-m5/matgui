@@ -16,6 +16,7 @@ static constexpr double middleWidth = .1;
 static constexpr double handleHeight = .1;
 
 SliderView::SliderView() {
+	indicatorStyle.fill.setColor(1,1,1, .5);
 }
 
 SliderView::~SliderView() {
@@ -42,16 +43,22 @@ bool SliderView::onPointerMove(pointerId id, double x, double y,
 }
 
 void SliderView::draw() {
+	currentStyle.drawBasicView(this);
 
-	if (_highlight) {
-		drawRect(_x, _y, 0, _width, _height, DrawStyle::Filled);
-	}
-
-	drawRect(vec(_x + _width * (1 - middleWidth) / 2., _y), 0, _width * middleWidth, _height, DrawStyle::Filled);
+	indicatorStyle.drawRect(
+			_x + _width * (1 - middleWidth) / 2.,
+			_y,
+			_width * middleWidth,
+			_height);
 
 	const double v = 1 - (_value - _min) / (_max - _min);
 
-	drawRect(_x, _y + _height * (1 - handleHeight) * v, 0, _width, _height * handleHeight, DrawStyle::Filled);
+	indicatorStyle.drawRect(
+			_x,
+			_y + _height * (1 - handleHeight) * v,
+			_width,
+			_height * handleHeight
+	);
 }
 
 }

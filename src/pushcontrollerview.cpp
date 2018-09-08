@@ -43,13 +43,24 @@ void PushControlerView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	if (_highlight) {
-		drawRect(_x + middleX - radius, _y + middleY - radius, 0, radius * 2, radius * 2, DrawStyle::Filled);
-	}
-	drawRect(_x + middleX - radius, _y + middleY - radius, 0, radius * 2, radius * 2, DrawStyle::Lines);
+
+	currentStyle.drawBasicView(this);
+
+	drawRect(
+			_x + middleX - radius,
+			_y + middleY - radius
+			, radius * 2, radius * 2,
+			&currentStyle
+	);
+
 
 	if (_value > .5) {
-		drawRect(_x + middleX - radius / 2, _y + middleY - radius / 2, 0, radius, radius, DrawStyle::Filled);
+		indicatorStyle.fill.setColor(1,1,1);
+		indicatorStyle.drawRect(
+				_x + middleX - radius / 2,
+				_y + middleY - radius / 2,
+				radius,
+				radius);
 	}
 }
 

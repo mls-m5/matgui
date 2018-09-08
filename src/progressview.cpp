@@ -11,14 +11,24 @@
 namespace MatGui {
 
 ProgressView::ProgressView() {
+	indicatorStyle.fill.setColor(1, 1, 1, .5);
+
+	style.line.setColor(1, 1, 1, .3);
+	updateStyle();
+
 }
 
 ProgressView::~ProgressView() {
 }
 
 void ProgressView::draw() {
-	drawRect({_x, _y}, 0, _width, _height, DrawStyle::Lines);
-	drawRect({_x, _y}, 0, _width * (double)(_value - _min) / (_max - _min), _height, DrawStyle::Filled);
+	currentStyle.drawBasicView(this);
+	indicatorStyle.drawRect(
+			_x,
+			_y,
+			_width * (double)(_value - _min) / (_max - _min),
+			_height
+	);
 }
 
 } /* namespace MatGui */

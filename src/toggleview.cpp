@@ -12,6 +12,11 @@
 namespace MatGui {
 
 ToggleView::ToggleView() {
+	indicatorStyle.fill.setColor(1, 1, 1, .5);
+
+	hoverStyle.fill.setColor(1, 1, 1, .1);
+	style.line.setColor(1, 1, 1, .3);
+	updateStyle();
 }
 
 ToggleView::~ToggleView() {
@@ -41,13 +46,21 @@ void ToggleView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	drawRect(_x + middleX - radius, _y + middleY - radius, 0, radius * 2, radius * 2, DrawStyle::Lines);
-	if (_highlight) {
-		drawRect(_x + middleX - radius, _y + middleY - radius, 0, radius * 2, radius * 2, DrawStyle::Filled);
-	}
+
+	currentStyle.drawRect(
+			_x + middleX - radius,
+			_y + middleY - radius,
+			radius * 2,
+			radius * 2
+	);
 
 	if (_value > .5) {
-		drawRect(_x + middleX - radius / 2, _y + middleY - radius / 2, 0, radius, radius, DrawStyle::Filled);
+		indicatorStyle.drawRect(
+				_x + middleX - radius / 2,
+				_y + middleY - radius / 2,
+				radius,
+				radius
+		);
 	}
 }
 

@@ -51,6 +51,11 @@ static struct {
 
 	std::vector <GLfloat> ellipseVertices;
 
+	GLuint vertexArray = 0;
+	GLuint vertexBuffer = 0;//, vertexBufferCentered = 0;
+	GLuint ellipseVertexArray = 0;
+	GLuint ellipseBuffer = 0;
+
 	void init() {
 
 		int count = 20;
@@ -66,9 +71,41 @@ static struct {
 	    program->use();
 	    checkGlError("glUseProgram");
 
+
 		pPertices = program->getAttribute("vPosition");
 		pColor = program->getUniform("uColor");
 		pMvpMatrix = program->getUniform("mvp_matrix");
+
+	    { //Initialize square program
+
+			glGenVertexArrays(1, &vertexArray);
+			glBindVertexArray(vertexArray);
+	//		glGenBuffers(2, &vertexBuffer); //Note that i generate 2 buffers
+			glGenBuffers(1, &vertexBuffer); //Note that i generate 2 buffers
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+			glBufferData( //One buffer for both's content
+					GL_ARRAY_BUFFER,
+					sizeof(vertices) * 2, //Change this if start using std::vector
+					vertices,
+					GL_STATIC_DRAW);
+
+
+			glVertexAttribPointer(pPertices, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(pPertices);
+
+	    }
+
+
+	    { //Initialize square program
+
+			glGenVertexArrays(1, &ellipseVertexArray);
+			glBindVertexArray(ellipseVertexArray);
+
+			glGenBuffers(1, &ellipseBuffer);
+			glBindBuffer(GL_ARRAY_BUFFER, ellipseBuffer);
+	    }
+
+		glBindVertexArray(0);
 	}
 } squareProgram;
 

@@ -21,6 +21,8 @@ public:
 	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
 
 	void draw() override;
+
+	Paint indicatorStyle;
 };
 
 

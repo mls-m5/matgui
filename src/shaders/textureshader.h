@@ -47,6 +47,14 @@ static struct {
 	GLint texture;
 	unique_ptr<ShaderProgram> program;
 
+	enum {
+		OrdinaryArray,
+		CenderedArray,
+		arrayEnd
+	};
+	GLuint vertexArrays[arrayEnd];
+	GLuint vertexArrayCentered;
+
 
 	const GLfloat colors[4] = {1., 1., 1., 1.,	};
 
@@ -59,6 +67,40 @@ static struct {
 		color = program->getUniform("uColor");
 		mvpMatrix = program->getUniform("mvp_matrix");
 		texture = program->getUniform("texture1");
+
+		glGenVertexArrays(2, vertexArrays); //Generating both vertexArrays at thes ame time
+
+		auto &textureProgram = *this;
+
+		for (int i = 0; i < 2; ++i) {
+			glBindVertexArray(vertexArrays[i]);
+
+			textureProgram.program->use();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+		    glBindBuffer(GL_ARRAY_BUFFER, squareProgram.vertexBuffer);
+		    if (i) {
+		    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, (void*)sizeof(squareProgram.vertices));
+		    }
+		    else {
+		    	glVertexAttribPointer(textureProgram.vertices, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		    }
+		    glEnableVertexAttribArray(textureProgram.vertices);
+
+		    glVertexAttribPointer(textureProgram.texcoords, 2, GL_FLOAT, GL_FALSE, 0, 0); //Set the texture coordinates
+		    glEnableVertexAttribArray(textureProgram.texcoords);
+
+		    glUniform4fv(textureProgram.color, 1, textureProgram.colors);
+
+
+
+
+		}
+		glBindVertexArray(0);
+
+
 	}
 } textureProgram;
 

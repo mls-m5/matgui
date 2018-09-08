@@ -20,6 +20,8 @@ public:
 	virtual bool onPointerUp(pointerId id, double x, double y) override;
 
 	void draw() override;
+
+	Paint indicatorStyle;
 };
 
 

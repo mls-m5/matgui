@@ -12,6 +12,8 @@
 namespace MatGui {
 
 KnobView::KnobView() {
+	indicatorStyle.fill.setColor(1, 1, 1, .5);
+
 	hoverStyle.fill.setColor(1, 1, 1, .1);
 	style.line.setColor(1, 1, 1, .3);
 	updateStyle();
@@ -54,14 +56,23 @@ void KnobView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	drawElipse(_x + middleX - radius, _y + middleY - radius, radius * 2, radius * 2, &currentStyle);
+	currentStyle.drawElipse(
+			_x + middleX - radius,
+			_y + middleY - radius,
+			radius * 2,
+			radius * 2
+	);
 
 	const double v = (_value - _min) / (_max - _min);
 
 	auto smallR = radius *.1;
 	auto a = v * pi2;
-	drawElipse(vec(_x + middleX - radius * sin(a) - smallR, _y + middleY + radius * cos(a) - smallR),
-			0, smallR * 2, smallR * 2, DrawStyle::Filled);
+	indicatorStyle.drawElipse(
+		_x + middleX - radius * sin(a) - smallR,
+		_y + middleY + radius * cos(a) - smallR,
+		smallR * 2,
+		smallR * 2
+	);
 }
 
 }

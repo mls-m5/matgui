@@ -17,6 +17,8 @@ public:
 	virtual ~ProgressView();
 
 	void draw() override;
+
+	Paint indicatorStyle;
 };
 
 } /* namespace MatGui */

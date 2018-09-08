@@ -58,11 +58,9 @@ void setDepthEnabled(bool enabled);
 //Apply a transform to matrix at "pointer" in current shader program
 void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double scaleY);
 void resetTransform(unsigned int poniter);
-//Draw a rectangle with origin in the top left corner
-void drawRect(vec p, double a, double scaleX, double scaleY, DrawStyle_t);
+
 void drawRect(double x, double y, double width, double hegiht, class Paint*);
 
-void drawElipse(vec p, double a, double sx, double sy, DrawStyle_t);
 void drawElipse(double x, double y, double width, double height, class Paint*);
 
 //A texture with origo in the top left corner
@@ -76,13 +74,6 @@ void drawLine(double x1, double y1, double x2, double y2, class Paint *paint);
 
 void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, class Paint *paint);
 
-//Alternative syntax for functions (probably future syntax)
-inline void drawElipse(double x, double y, double a, double sx, double sy, DrawStyle_t drawStyle) {
-	drawElipse({x, y}, a, sx, sy, drawStyle);
-}
-inline void drawRect(double x, double y, double a, double scaleX, double scaleY, DrawStyle_t drawStyle){
-	drawRect({x, y}, a, scaleX, scaleY, drawStyle);
-}
 inline void drawTextureRect(double x, double y, double a, double sx, double sy, int textureId, DrawStyle_t style = 0) {
 	drawTextureRect({x, y}, a, sx, sy, textureId, style);
 }
