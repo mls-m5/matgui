@@ -84,6 +84,26 @@ void drawRect(double x, double y, double width, double hegiht, class Paint* pain
 	glBindVertexArray(0);
 }
 
+void drawRect(float *location, class Paint* paint) {
+	glBindVertexArray(squareProgram.vertexArray);
+	squareProgram.program->use();
+
+    glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, location);
+
+    if (paint->fill) {
+    	glUniform4fv(squareProgram.pColor, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    }
+    if (paint->line) {
+    	glLineWidth(paint->line.width());
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, 4);
+    	glLineWidth(1);
+    }
+
+	glBindVertexArray(0);
+}
+
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
 	int arrayIndex = (style & DrawStyle::CenterOrigo)? 1: 0;
 	glBindVertexArray(textureProgram.vertexArrays[arrayIndex]);
@@ -103,28 +123,12 @@ void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawS
 
 
 
-void drawElipse(double x, double y, double width, double height, class Paint* paint) {
+void drawEllipse(double x, double y, double width, double height, class Paint* paint) {
 	glBindVertexArray(squareProgram.ellipseVertexArray);
 
 	squareProgram.program->use();
 
 	modelTransform(squareProgram.pMvpMatrix, {x, y}, 0, width, height);
-
-	glBindBuffer(GL_ARRAY_BUFFER, squareProgram.ellipseBuffer);
-	glBufferData(
-			GL_ARRAY_BUFFER,
-			sizeof(GLfloat) * squareProgram.ellipseVertices.size(), //Change this if start using std::vector
-			&squareProgram.ellipseVertices[0],
-			GL_STATIC_DRAW);
-    glEnableVertexAttribArray(squareProgram.pPertices);
-    glVertexAttribPointer(
-    		squareProgram.pPertices,
-			2,
-			GL_FLOAT,
-			GL_FALSE,
-			0,
-			0
-    );
 
 
     if (paint->fill) {
@@ -135,12 +139,31 @@ void drawElipse(double x, double y, double width, double height, class Paint* pa
     	glLineWidth(paint->line.width());
     	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
     	glDrawArrays(GL_LINE_LOOP, 0, squareProgram.ellipseVertices.size() / 2);
-    	glLineWidth(1);
     }
 
-//    glDisableVertexAttribArray(squareProgram.pPertices);
+    glBindVertexArray(0);
 }
 
+
+void drawEllipse(float *location, class Paint* paint) {
+	glBindVertexArray(squareProgram.ellipseVertexArray);
+
+	squareProgram.program->use();
+
+    glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, location);
+
+    if (paint->fill) {
+    	glUniform4fv(squareProgram.pColor, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, squareProgram.ellipseVertices.size() / 2);
+    }
+    if (paint->line) {
+    	glLineWidth(paint->line.width());
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, squareProgram.ellipseVertices.size() / 2);
+    }
+
+    glBindVertexArray(0);
+}
 
 
 

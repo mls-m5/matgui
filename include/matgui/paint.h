@@ -127,7 +127,9 @@ public:
 
 	void drawLine(double x, double y, double x2, double y2);
 	void drawRect(double x, double y, double width, double height);
-	void drawElipse(double x, double y, double width, double height);
+	void drawRect(float *location);
+	void drawEllipse(double x, double y, double width, double height);
+	void drawEllipse(float *location);
 	void drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList);
 
 	void drawBasicView(View*);

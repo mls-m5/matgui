@@ -98,11 +98,32 @@ static struct {
 
 	    { //Initialize square program
 
+	    	auto &squareProgram = *this;
+
 			glGenVertexArrays(1, &ellipseVertexArray);
 			glBindVertexArray(ellipseVertexArray);
 
 			glGenBuffers(1, &ellipseBuffer);
 			glBindBuffer(GL_ARRAY_BUFFER, ellipseBuffer);
+
+			program->use();
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, squareProgram.ellipseBuffer);
+			glBufferData(
+					GL_ARRAY_BUFFER,
+					sizeof(GLfloat) * squareProgram.ellipseVertices.size(), //Change this if start using std::vector
+					&squareProgram.ellipseVertices[0],
+					GL_STATIC_DRAW);
+		    glEnableVertexAttribArray(squareProgram.pPertices);
+		    glVertexAttribPointer(
+		    		squareProgram.pPertices,
+					2,
+					GL_FLOAT,
+					GL_FALSE,
+					0,
+					0
+		    );
 	    }
 
 		glBindVertexArray(0);

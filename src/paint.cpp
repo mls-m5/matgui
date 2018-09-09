@@ -147,6 +147,10 @@ void MatGui::Paint::drawRect(double x, double y, double width, double height) {
 	MatGui::drawRect(x, y, width, height, this);
 }
 
+void MatGui::Paint::drawRect(float *location) {
+	MatGui::drawRect(location, this);
+}
+
 void MatGui::Paint::push(Paint& s) {
 	if (not s.enabled) {
 		return;
@@ -161,8 +165,12 @@ void MatGui::Paint::drawLine(double x, double y, double x2, double y2) {
 	}
 }
 
-void MatGui::Paint::drawElipse(double x, double y, double width, double height) {
-	MatGui::drawElipse(x, y, width, height, this);
+void MatGui::Paint::drawEllipse(double x, double y, double width, double height) {
+	MatGui::drawEllipse(x, y, width, height, this);
+}
+
+void MatGui::Paint::drawEllipse(float *location) {
+	MatGui::drawEllipse(location, this);
 }
 
 void MatGui::Paint::drawBasicView(View* view) {

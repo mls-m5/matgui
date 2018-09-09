@@ -56,7 +56,7 @@ void KnobView::draw() {
 		radius = _width;
 	}
 	radius *= (.8 / 2);
-	currentStyle.drawElipse(
+	currentStyle.drawEllipse(
 			_x + middleX - radius,
 			_y + middleY - radius,
 			radius * 2,
@@ -67,7 +67,7 @@ void KnobView::draw() {
 
 	auto smallR = radius *.1;
 	auto a = v * pi2;
-	indicatorStyle.drawElipse(
+	indicatorStyle.drawEllipse(
 		_x + middleX - radius * sin(a) - smallR,
 		_y + middleY + radius * cos(a) - smallR,
 		smallR * 2,

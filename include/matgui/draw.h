@@ -59,12 +59,15 @@ void setDepthEnabled(bool enabled);
 void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double scaleY);
 void resetTransform(unsigned int poniter);
 
-void drawRect(double x, double y, double width, double hegiht, class Paint*);
+void drawRect(double x, double y, double width, double height, class Paint*);
+void drawRect(float *locationMatrix, class Paint*);
 
-void drawElipse(double x, double y, double width, double height, class Paint*);
+void drawEllipse(double x, double y, double width, double height, class Paint*);
+void drawEllipse(float *locationMatrix, class Paint*);
 
 //A texture with origo in the top left corner
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t = 0);
+void drawTextureRect(float *locationMatrix, int textureId, DrawStyle_t = 0);
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
 
