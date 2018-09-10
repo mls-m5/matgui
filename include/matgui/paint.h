@@ -23,7 +23,7 @@ public:
 	bool inherit = true;
 
 	//set color and disable inherit flag
-	void setColor(float red, float green, float blue) {
+	void color(float red, float green, float blue) {
 		r = red;
 		g = green;
 		b = blue;
@@ -36,7 +36,7 @@ public:
 		inherit = false;
 	}
 
-	void setColor(float red, float green, float blue, float alpha) {
+	void color(float red, float green, float blue, float alpha) {
 		r = red;
 		g = green;
 		b = blue;

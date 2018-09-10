@@ -15,8 +15,8 @@ Button::Button(std::string label) {
 	_fontView.font(Font(30));
 	this->label(label);
 
-	hoverStyle.fill.setColor(1, 1, 1, .1);
-	style.line.setColor(1, 1, 1, .3);
+	hoverStyle.fill.color(1, 1, 1, .1);
+	style.line.color(1, 1, 1, .3);
 	updateStyle();
 }
 

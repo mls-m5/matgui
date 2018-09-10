@@ -55,7 +55,7 @@ void PushControlerView::draw() {
 
 
 	if (_value > .5) {
-		indicatorStyle.fill.setColor(1,1,1);
+		indicatorStyle.fill.color(1,1,1);
 		indicatorStyle.drawRect(
 				_x + middleX - radius / 2,
 				_y + middleY - radius / 2,

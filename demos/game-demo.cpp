@@ -22,7 +22,7 @@ public:
 	Game() {
 		texture.load("gfx/test.png");
 		clicked.connect(this, &Game::viewClicked);
-		rectStyle.fill.setColor(1,1,1);
+		rectStyle.fill.color(1,1,1);
 	}
 
 	~Game() {

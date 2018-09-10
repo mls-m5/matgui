@@ -12,10 +12,10 @@
 namespace MatGui {
 
 ToggleView::ToggleView() {
-	indicatorStyle.fill.setColor(1, 1, 1, .5);
+	indicatorStyle.fill.color(1, 1, 1, .5);
 
-	hoverStyle.fill.setColor(1, 1, 1, .1);
-	style.line.setColor(1, 1, 1, .3);
+	hoverStyle.fill.color(1, 1, 1, .1);
+	style.line.color(1, 1, 1, .3);
 	updateStyle();
 }
 

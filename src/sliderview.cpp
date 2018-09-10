@@ -16,7 +16,7 @@ static constexpr double middleWidth = .1;
 static constexpr double handleHeight = .1;
 
 SliderView::SliderView() {
-	indicatorStyle.fill.setColor(1,1,1, .5);
+	indicatorStyle.fill.color(1,1,1, .5);
 }
 
 SliderView::~SliderView() {
