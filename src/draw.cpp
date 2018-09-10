@@ -84,7 +84,7 @@ void drawRect(double x, double y, double width, double hegiht, class Paint* pain
 	glBindVertexArray(0);
 }
 
-void drawRect(float *location, class Paint* paint) {
+void drawRect(const float *location, class Paint* paint) {
 	glBindVertexArray(squareProgram.vertexArray);
 	squareProgram.program->use();
 
@@ -145,7 +145,7 @@ void drawEllipse(double x, double y, double width, double height, class Paint* p
 }
 
 
-void drawEllipse(float *location, class Paint* paint) {
+void drawEllipse(const float *location, class Paint* paint) {
 	glBindVertexArray(squareProgram.ellipseVertexArray);
 
 	squareProgram.program->use();

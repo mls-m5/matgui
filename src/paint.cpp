@@ -147,7 +147,7 @@ void MatGui::Paint::drawRect(double x, double y, double width, double height) {
 	MatGui::drawRect(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawRect(float *location) {
+void MatGui::Paint::drawRect(const float *location) {
 	MatGui::drawRect(location, this);
 }
 
@@ -169,7 +169,7 @@ void MatGui::Paint::drawEllipse(double x, double y, double width, double height)
 	MatGui::drawEllipse(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawEllipse(float *location) {
+void MatGui::Paint::drawEllipse(const float *location) {
 	MatGui::drawEllipse(location, this);
 }
 

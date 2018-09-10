@@ -60,10 +60,10 @@ void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double
 void resetTransform(unsigned int poniter);
 
 void drawRect(double x, double y, double width, double height, class Paint*);
-void drawRect(float *locationMatrix, class Paint*);
+void drawRect(const float *locationMatrix, class Paint*);
 
 void drawEllipse(double x, double y, double width, double height, class Paint*);
-void drawEllipse(float *locationMatrix, class Paint*);
+void drawEllipse(const float *locationMatrix, class Paint*);
 
 //A texture with origo in the top left corner
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t = 0);
