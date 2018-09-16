@@ -22,12 +22,12 @@ SliderView::SliderView() {
 SliderView::~SliderView() {
 }
 
-bool SliderView::onPointerDown(pointerId id, double x, double y) {
-	onPointerMove(id, x, y, 1);
+bool SliderView::onPointerDown(pointerId id, MouseButton button, double x, double y) {
+	onPointerMove(id, x, y, button);
 	return true;
 }
 
-bool SliderView::onPointerUp(pointerId id, double x, double y) {
+bool SliderView::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 	return true;
 }
 

@@ -59,15 +59,15 @@ bool View::isPointerInsideLocal(double x, double y) {
 	return false;
 }
 
-bool View::onPointerDown(pointerId id, double x, double y) {
-	pointerDown.emit( { id, x, y, 1 });
+bool View::onPointerDown(pointerId id, MouseButton button, double x, double y) {
+	pointerDown.emit( { id, x, y, button });
 	return true;
 }
 
-bool View::onPointerUp(pointerId id, double x, double y) {
+bool View::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 	pointerUp.emit( { id, x, y, 0 });
 	if (isPointerInsideLocal(x, y)) {
-		clicked.emit( { id, x, y, 1 });
+		clicked.emit( { id, x, y, button });
 	}
 	return true;
 }

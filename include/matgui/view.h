@@ -14,6 +14,15 @@
 
 namespace MatGui {
 
+enum MouseButton {
+	MOUSE_LEFT = 1,
+	MOUSE_MIDDLE = 1 << 1,
+	MOUSE_RIGHT = 1 << 2,
+	MOUSE_X1 = 1 << 3,
+	MOUSE_X2 = 1 << 4,
+};
+
+
 using MatSig::Signal;
 class View {
 public:
@@ -47,10 +56,9 @@ public:
 
 
 	//Callback functions return true to capture the mouse focus
-	virtual bool onPointerDown(pointerId id, double x, double y);
-	virtual bool onPointerUp(pointerId id, double x, double y);
-	virtual bool onPointerMove(pointerId id, double x, double y,
-			pointerState state);
+	virtual bool onPointerDown(pointerId id, MouseButton button, double x, double y);
+	virtual bool onPointerUp(pointerId id, MouseButton button, double x, double y);
+	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state);
 	virtual void onPointerEnter(pointerId id, double x, double y,
 			pointerState state);
 	virtual void onPointerLeave();

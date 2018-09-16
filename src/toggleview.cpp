@@ -22,15 +22,15 @@ ToggleView::ToggleView() {
 ToggleView::~ToggleView() {
 }
 
-bool ToggleView::onPointerDown(pointerId id, double x, double y) {
-	onPointerMove(id, x, y, 1);
+bool ToggleView::onPointerDown(pointerId id, MouseButton button, double x, double y) {
+	onPointerMove(id, x, y, button);
 	_value = not _value;
 	changed.emit(_value);
 	return true;
 }
 
-bool ToggleView::onPointerUp(pointerId id, double x, double y) {
-	onPointerMove(id, x, y, 1);
+bool ToggleView::onPointerUp(pointerId id, MouseButton button, double x, double y) {
+	onPointerMove(id, x, y, button);
 	return true;
 }
 

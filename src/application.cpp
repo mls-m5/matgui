@@ -122,15 +122,17 @@ bool Application::handleEvents() {
 				break;
 				case SDL_MOUSEBUTTONDOWN:
 				{
-					auto &e = event.motion;
-					window->onPointerDown(0, (double)e.x, (double)e.y);
+					auto &e = event.button;
+					auto button = MouseButton(1 << (e.button - 1)); //Make one bit for each button
+					window->onPointerDown(0, button, (double)e.x, (double)e.y);
 				}
 				break;
 
 				case SDL_MOUSEBUTTONUP:
 				{
-					auto &e = event.motion;
-					window->onPointerUp(0, (double)e.x, (double)e.y);
+					auto &e = event.button;
+					auto button = MouseButton(1 << (e.button - 1)); //Make one bit for each button
+					window->onPointerUp(0, button, (double)e.x, (double)e.y);
 				}
 				break;
 				case SDL_KEYDOWN:

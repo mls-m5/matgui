@@ -217,13 +217,13 @@ void Layout::replaceChild(int index, View* view) {
 	}
 }
 
-bool Layout::onPointerDown(pointerId id, double x, double y) {
+bool Layout::onPointerDown(pointerId id, MouseButton button, double x, double y) {
 	auto wx = x + _x;
 	auto wy = y + _y;
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerDown(id, wx - it->x(), wy - it->y())){
+			if (it->onPointerDown(id, button, wx - it->x(), wy - it->y())){
 				return true;
 			}
 		}
@@ -231,7 +231,7 @@ bool Layout::onPointerDown(pointerId id, double x, double y) {
 	return false;
 }
 
-bool Layout::onPointerUp(pointerId id, double x, double y) {
+bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 	auto wx = x + _x;
 	auto wy = y + _y;
 
@@ -245,7 +245,7 @@ bool Layout::onPointerUp(pointerId id, double x, double y) {
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it->onPointerUp(id, wx - it->x(), wy - it->y())){
+			if (it->onPointerUp(id, button, wx - it->x(), wy - it->y())){
 				return true;
 			}
 		}

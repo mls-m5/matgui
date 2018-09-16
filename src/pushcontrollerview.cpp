@@ -17,14 +17,14 @@ PushControlerView::PushControlerView() {
 PushControlerView::~PushControlerView() {
 }
 
-bool PushControlerView::onPointerDown(pointerId id, double x, double y) {
+bool PushControlerView::onPointerDown(pointerId id, MouseButton button, double x, double y) {
 	onPointerMove(id, x, y, 1);
 	_value = 1;
 	changed.emit(_value);
 	return true;
 }
 
-bool PushControlerView::onPointerUp(pointerId id, double x, double y) {
+bool PushControlerView::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 	onPointerMove(id, x, y, 1);
 	_value = 0;
 	changed.emit(_value);
