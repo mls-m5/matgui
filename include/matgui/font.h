@@ -58,8 +58,10 @@ public:
 	}
 
 	void text(std::string text) {
-		_text = text;
-		_needsUpdate = true;
+		if (_text != text) {
+			_text = text;
+			_needsUpdate = true;
+		}
 	}
 
 	const std::string &text() {
