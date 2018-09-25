@@ -143,11 +143,11 @@ MatGui::Paint::Paint() {
 MatGui::Paint::~Paint() {
 }
 
-void MatGui::Paint::drawRect(double x, double y, double width, double height) {
+void MatGui::Paint::drawRect(double x, double y, double width, double height) const {
 	MatGui::drawRect(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawRect(const float *location) {
+void MatGui::Paint::drawRect(const float *location) const {
 	MatGui::drawRect(location, this);
 }
 
@@ -159,26 +159,26 @@ void MatGui::Paint::push(Paint& s) {
 	line += s.line;
 }
 
-void MatGui::Paint::drawLine(double x, double y, double x2, double y2) {
+void MatGui::Paint::drawLine(double x, double y, double x2, double y2) const {
 	if (line.style()) {
 		MatGui::drawLine(x, y, x2, y2, this);
 	}
 }
 
-void MatGui::Paint::drawEllipse(double x, double y, double width, double height) {
+void MatGui::Paint::drawEllipse(double x, double y, double width, double height) const {
 	MatGui::drawEllipse(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawEllipse(const float *location) {
+void MatGui::Paint::drawEllipse(const float *location) const {
 	MatGui::drawEllipse(location, this);
 }
 
-void MatGui::Paint::drawBasicView(View* view) {
+void MatGui::Paint::drawBasicView(View* view) const {
 	drawRect(view->x(), view->y(), view->width(), view->height());
 }
 
 
-void MatGui::Paint::drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList) {
+void MatGui::Paint::drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList) const {
 	::MatGui::drawPolygon(x, y, angle, vecList, this);
 }
 

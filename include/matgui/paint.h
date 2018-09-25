@@ -55,14 +55,14 @@ public:
 		inherit = false;
 	}
 
-	operator bool() {
+	operator bool() const {
 		return _style != DrawStyle::None;
 	}
 
 	//shorthand notation
 	member_get(DrawStyle, style);
 
-	void operator += (ColorStyle &s) {
+	void operator += (const ColorStyle &s) {
 		if (not s.inherit) {
 			*this = s;
 		}
@@ -125,14 +125,14 @@ public:
 		push(s);
 	}
 
-	void drawLine(double x, double y, double x2, double y2);
-	void drawRect(double x, double y, double width, double height);
-	void drawRect(const float *location);
-	void drawEllipse(double x, double y, double width, double height);
-	void drawEllipse(const float *location);
-	void drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList);
+	void drawLine(double x, double y, double x2, double y2) const;
+	void drawRect(double x, double y, double width, double height) const;
+	void drawRect(const float *location) const;
+	void drawEllipse(double x, double y, double width, double height) const;
+	void drawEllipse(const float *location) const;
+	void drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList) const;
 
-	void drawBasicView(View*);
+	void drawBasicView(View*) const;
 };
 
 } /* namespace MatGui */

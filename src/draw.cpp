@@ -64,7 +64,7 @@ void resetTransform(unsigned int pointer){
 
 
 
-void drawRect(double x, double y, double width, double hegiht, class Paint* paint) {
+void drawRect(double x, double y, double width, double hegiht, const class Paint* paint) {
 	glBindVertexArray(squareProgram.vertexArray);
 	squareProgram.program->use();
 
@@ -84,7 +84,7 @@ void drawRect(double x, double y, double width, double hegiht, class Paint* pain
 	glBindVertexArray(0);
 }
 
-void drawRect(const float *location, class Paint* paint) {
+void drawRect(const float *location, const class Paint* paint) {
 	glBindVertexArray(squareProgram.vertexArray);
 	squareProgram.program->use();
 
@@ -123,7 +123,7 @@ void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawS
 
 
 
-void drawEllipse(double x, double y, double width, double height, class Paint* paint) {
+void drawEllipse(double x, double y, double width, double height, const class Paint* paint) {
 	glBindVertexArray(squareProgram.ellipseVertexArray);
 
 	squareProgram.program->use();
@@ -145,7 +145,7 @@ void drawEllipse(double x, double y, double width, double height, class Paint* p
 }
 
 
-void drawEllipse(const float *location, class Paint* paint) {
+void drawEllipse(const float *location, const class Paint* paint) {
 	glBindVertexArray(squareProgram.ellipseVertexArray);
 
 	squareProgram.program->use();
@@ -168,64 +168,65 @@ void drawEllipse(const float *location, class Paint* paint) {
 
 
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size){
-	glLineWidth(2);
-	graphProgram.program->use();
-
-	if (graphProgram.tmpFloat.size() < size){
-		graphProgram.tmpFloat.resize(size);
-		for (int i = 0; i < size; ++i){
-			graphProgram.tmpFloat[i] = i;
-		}
-	}
-
-	modelTransform(graphProgram.mvpMatrix, {x, y}, a, sx, sy);
-
-	glEnableVertexAttribArray(graphProgram.x);
-    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0, &graphProgram.tmpFloat[0]);
-	glEnableVertexAttribArray(graphProgram.y);
-    glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
-
-    glDrawArrays(GL_LINE_STRIP, 0, size);
-
-    glDisableVertexAttribArray(graphProgram.x);
-    glDisableVertexAttribArray(graphProgram.y);
-
-    glLineWidth(1);
+//	glLineWidth(2);
+//	graphProgram.program->use();
+//
+//	if (graphProgram.tmpFloat.size() < size){
+//		graphProgram.tmpFloat.resize(size);
+//		for (int i = 0; i < size; ++i){
+//			graphProgram.tmpFloat[i] = i;
+//		}
+//	}
+//
+//	modelTransform(graphProgram.mvpMatrix, {x, y}, a, sx, sy);
+//
+//	glEnableVertexAttribArray(graphProgram.x);
+//    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0, &graphProgram.tmpFloat[0]);
+//	glEnableVertexAttribArray(graphProgram.y);
+//    glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
+//
+//    glDrawArrays(GL_LINE_STRIP, 0, size);
+//
+//    glDisableVertexAttribArray(graphProgram.x);
+//    glDisableVertexAttribArray(graphProgram.y);
+//
+//    glLineWidth(1);
 }
 
 
 void drawLine(double x1, double y1, double x2, double y2, float width) {
-	glLineWidth(width);
-	graphProgram.program->use();
-
-#ifdef __ANDROID__
-	typedef float type;
-	constexpr int typeName = GL_FLOAT;
-#else
-	typedef double type;
-	constexpr int typeName = GL_DOUBLE;
-#endif
-
-	type tmpX[] = {x1, x2};
-	type tmpY[] = {y1, y2};
-
-	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
-
-	glEnableVertexAttribArray(graphProgram.x);
-    glVertexAttribPointer(graphProgram.x, 1, typeName, GL_FALSE, 0, tmpX);
-	glEnableVertexAttribArray(graphProgram.y);
-    glVertexAttribPointer(graphProgram.y, 1, typeName, GL_FALSE, 0, tmpY);
-
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-
-    glDisableVertexAttribArray(graphProgram.x);
-    glDisableVertexAttribArray(graphProgram.y);
-
-    glLineWidth(1);
+// TODO: Fix this functionality
+//	glLineWidth(width);
+//	graphProgram.program->use();
+//
+//#ifdef __ANDROID__
+//	typedef float type;
+//	constexpr int typeName = GL_FLOAT;
+//#else
+//	typedef double type;
+//	constexpr int typeName = GL_DOUBLE;
+//#endif
+//
+//	type tmpX[] = {x1, x2};
+//	type tmpY[] = {y1, y2};
+//
+//	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
+//
+//	glEnableVertexAttribArray(graphProgram.x);
+//    glVertexAttribPointer(graphProgram.x, 1, typeName, GL_FALSE, 0, tmpX);
+//	glEnableVertexAttribArray(graphProgram.y);
+//    glVertexAttribPointer(graphProgram.y, 1, typeName, GL_FALSE, 0, tmpY);
+//
+//    glDrawArrays(GL_LINE_STRIP, 0, 2);
+//
+//    glDisableVertexAttribArray(graphProgram.x);
+//    glDisableVertexAttribArray(graphProgram.y);
+//
+//    glLineWidth(1);
 }
 
 
-void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
+void drawLine(double x1, double y1, double x2, double y2, const class Paint* paint) {
 	glLineWidth(paint->line.width());
 	lineProgram.program->use();
 
@@ -255,7 +256,7 @@ void drawLine(double x1, double y1, double x2, double y2, class Paint* paint) {
 
 
 
-void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, class Paint *paint) {
+void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, const class Paint *paint) {
 	glLineWidth(paint->line.width());
 	lineProgram.program->use();
 
