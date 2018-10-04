@@ -193,21 +193,20 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
 //    glLineWidth(1);
 }
 
+//template <typename, typename> struct is_same { static const bool value = false;};
+//template <typename T> struct is_same<T,T> { static const bool value = true;};
 
-
-void drawLine(double x1, double y1, double x2, double y2, const class Paint* paint) {
-	typedef float T;
-	const T location[] = {
-		(T)((x2 - x1) / screenWidth * 2.), (T)(-(y2 - y1) / screenHeight * 2.), 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		(T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenWidth * 2. + 1.), 0, 1,
-	};
-
+template <class T>
+void drawLine(T * location, const Paint *paint) {
     glBindVertexArray(squareProgram.vertexArray);
 	squareProgram.program->use();
 
-    glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, location);
+//	if (is_same<T, float>::value) {
+		glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, (float*)location);
+//	}
+//	else if(is_same<T, double>::value) {
+//		glUniformMatrix4dv(squareProgram.pMvpMatrix, 1, GL_FALSE, (double*)location);
+//	}
 
     if (paint->line) {
     	glLineWidth(paint->line.width());
@@ -219,6 +218,32 @@ void drawLine(double x1, double y1, double x2, double y2, const class Paint* pai
 	glBindVertexArray(0);
 }
 
+void drawLine(double x1, double y1, double x2, double y2, const class Paint* paint) {
+	typedef float T;
+	const T location[] = {
+		(T)((x2 - x1) / screenWidth * 2.), (T)(-(y2 - y1) / screenHeight * 2.), 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		(T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenWidth * 2. + 1.), 0, 1,
+	};
+
+	drawLine(location, paint);
+}
+
+void drawLine(vec v1, vec v2, const class Paint *paint) {
+	typedef float T;
+	const T location[] = {
+		(T)((v2.x - v1.x) / screenWidth * 2.),
+		(T)(-(v2.y - v1.y) / screenHeight * 2.),
+		(T)(v2.z - v1.z), 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		(T)(v1.x / screenWidth * 2. - 1.),
+		(T)(-v1.y / screenWidth * 2. + 1.), (T)v1.z, 1,
+	};
+
+	drawLine(location, paint);
+}
 
 
 void setDimensions(double width, double height){

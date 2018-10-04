@@ -72,6 +72,7 @@ void drawTextureRect(float *locationMatrix, int textureId, DrawStyle_t = 0);
 void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
 
 void drawLine(double x1, double y1, double x2, double y2, const class Paint *paint);
+void drawLine(vec v1, vec v2, const class Paint *paint);
 
 inline void drawTextureRect(double x, double y, double a, double sx, double sy, int textureId, DrawStyle_t style = 0) {
 	drawTextureRect({x, y}, a, sx, sy, textureId, style);
