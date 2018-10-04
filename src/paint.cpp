@@ -178,8 +178,4 @@ void MatGui::Paint::drawBasicView(View* view) const {
 }
 
 
-void MatGui::Paint::drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList) const {
-	::MatGui::drawPolygon(x, y, angle, vecList, this);
-}
-
 //} /* namespace MatGui */

@@ -74,7 +74,7 @@ Here is some example flags
 CXXFLAGS = -std=c++11 -Iinclude/ -Imatgui/include/matgui
 LIBS = -lGL -lSDL2 -lSDL2_ttf -lSDL2_image
 
-CXXFLAGS += -DUSE_BITMAP_FONT //This flag will use the builtin bitmapfont instead of SDLs-to avoid dependencies
+CXXFLAGS += -DUSE_TTF_FONT //This flag will use libsdl2-ttf fonts instead of the built in bitmap fonts.
 ```
 
 It is currently in early development phase, please contact me if you want more information if how to use it

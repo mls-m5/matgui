@@ -8,7 +8,6 @@
 #pragma once
 #include "draw.h"
 #include "memberproperties.h"
-#include <ciso646> //or, and etc
 
 
 namespace MatGui {
@@ -130,7 +129,6 @@ public:
 	void drawRect(const float *location) const;
 	void drawEllipse(double x, double y, double width, double height) const;
 	void drawEllipse(const float *location) const;
-	void drawPolygon(double x, double y, double angle, const std::vector<vec2> &vecList) const;
 
 	void drawBasicView(View*) const;
 };

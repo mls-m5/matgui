@@ -5,6 +5,10 @@
  *      Author: Mattias Larsson Sköld
  */
 
+#ifndef USE_TTF_FONT
+#define USE_BITMAP_FONT
+#endif
+
 #include "font.h"
 
 #ifdef __ANDROID__

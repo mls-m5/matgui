@@ -194,91 +194,31 @@ void drawGraph(double x, double y, double a, double sx, double sy, float *v, int
 }
 
 
-void drawLine(double x1, double y1, double x2, double y2, float width) {
-// TODO: Fix this functionality
-//	glLineWidth(width);
-//	graphProgram.program->use();
-//
-//#ifdef __ANDROID__
-//	typedef float type;
-//	constexpr int typeName = GL_FLOAT;
-//#else
-//	typedef double type;
-//	constexpr int typeName = GL_DOUBLE;
-//#endif
-//
-//	type tmpX[] = {x1, x2};
-//	type tmpY[] = {y1, y2};
-//
-//	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
-//
-//	glEnableVertexAttribArray(graphProgram.x);
-//    glVertexAttribPointer(graphProgram.x, 1, typeName, GL_FALSE, 0, tmpX);
-//	glEnableVertexAttribArray(graphProgram.y);
-//    glVertexAttribPointer(graphProgram.y, 1, typeName, GL_FALSE, 0, tmpY);
-//
-//    glDrawArrays(GL_LINE_STRIP, 0, 2);
-//
-//    glDisableVertexAttribArray(graphProgram.x);
-//    glDisableVertexAttribArray(graphProgram.y);
-//
-//    glLineWidth(1);
-}
-
 
 void drawLine(double x1, double y1, double x2, double y2, const class Paint* paint) {
-	glLineWidth(paint->line.width());
-	lineProgram.program->use();
+	typedef float T;
+	const T location[] = {
+		(T)((x2 - x1) / screenWidth * 2.), (T)(-(y2 - y1) / screenHeight * 2.), 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		(T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenWidth * 2. + 1.), 0, 1,
+	};
 
-#ifdef __ANDROID__
-	typedef float type;
-	constexpr int typeName = GL_FLOAT;
-#else
-	typedef double type;
-	constexpr int typeName = GL_DOUBLE;
-#endif
+    glBindVertexArray(squareProgram.vertexArray);
+	squareProgram.program->use();
 
-	type tmpV[] = {x1, y1, x2, y2};
+    glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, location);
 
-	modelTransform(graphProgram.mvpMatrix, {0, 0}, 0, 1, 1);
+    if (paint->line) {
+    	glLineWidth(paint->line.width());
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, 2);
+    	glLineWidth(1);
+    }
 
-	glEnableVertexAttribArray(lineProgram.v);
-    glVertexAttribPointer(lineProgram.v, 2, typeName, GL_FALSE, 0, tmpV);
-
-    glUniform4fv(lineProgram.color, 1, &paint->line.r);
-
-    glDrawArrays(GL_LINE_STRIP, 0, 2);
-
-    glDisableVertexAttribArray(lineProgram.v);
-
-    glLineWidth(1);
+	glBindVertexArray(0);
 }
 
-
-
-void drawPolygon(double x, double y, double angle, std::vector<vec2> vectorList, const class Paint *paint) {
-	glLineWidth(paint->line.width());
-	lineProgram.program->use();
-
-	modelTransform(lineProgram.mvpMatrix, { x, y }, angle, 1, 1);
-
-	glEnableVertexAttribArray(lineProgram.v);
-	glVertexAttribPointer(lineProgram.v, 2, drawTypeName, GL_FALSE, 0, &vectorList.front().x);
-
-
-	if (paint->line) {
-		glUniform4fv(lineProgram.color, 1, &paint->line.r);
-		glDrawArrays(GL_LINE_LOOP, 0, vectorList.size());
-	}
-	if (paint->fill) {
-		glUniform4fv(lineProgram.color, 1, &paint->fill.r);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, vectorList.size());
-	}
-
-	glDisableVertexAttribArray(lineProgram.v);
-
-	glLineWidth(1);
-}
 
 
 void setDimensions(double width, double height){
