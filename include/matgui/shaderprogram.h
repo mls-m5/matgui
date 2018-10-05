@@ -51,11 +51,14 @@ public:
 
 
 static void printGLString(const char *name, GLenum s) {
+#ifndef NO_GRAPHICS
     const char *v = (const char *) glGetString(s);
     debug_print("GL %s = %s\n", name, v);
+#endif
 }
 
 static int checkGlError(const char* op, bool throwError = false) {
+#ifndef NO_GRAPHICS
 	bool ret = false;
     for (GLint error = glGetError(); error; error
             = glGetError()) {
@@ -96,6 +99,7 @@ static int checkGlError(const char* op, bool throwError = false) {
         }
     }
     return ret;
+#endif
 }
 
 #ifdef NDEBUG
