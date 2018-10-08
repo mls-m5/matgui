@@ -103,7 +103,10 @@ GLint ShaderProgram::getUniform(char const* name) {
 	GLint ret;
     ret = glGetUniformLocation(_program, name);
 
-    checkGlError(name);
+	if (ret < 0) {
+		debug_print("could not find attribute %s\n", name);
+	}
+//    checkGlError(name);
     return ret;
 }
 
@@ -111,7 +114,11 @@ GLint ShaderProgram::getAttribute(char const* name) {
 	GLint ret;
 	ret = glGetAttribLocation(_program, name);
 
-	checkGlError(name);
+	if (ret < 0) {
+		debug_print("could not find attribute %s\n", name);
+	}
+
+//	checkGlError(name);
 
 	return ret;
 }
