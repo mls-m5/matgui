@@ -4,7 +4,7 @@ GUIOBJECTS=view.o knobview.o button.o toggleview.o sliderview.o matsig.o linearl
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o bitmapfont.o paint.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
 #LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/matgui" -I.
+CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/matgui" -I. -fPIC
 LIB=../matgui-sdl.a
 
 all: .depend $(LIB)
