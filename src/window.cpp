@@ -110,6 +110,16 @@ void Window::cursorVisibility(bool value) {
 	SDL_ShowCursor(value);
 }
 
+void Window::setCursorPosition(int x, int y) {
+	SDL_WarpMouseInWindow(_windowData->window, x, y);
+}
+
+std::pair<int, int> Window::getCursorPosition() {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	return std::pair<int, int>(x, y);
+}
+
 bool Window::onResize(int width, int height) {
 	Layout::setLocation(0, 0, width, height);
 	return true;
