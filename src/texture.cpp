@@ -56,18 +56,51 @@ unsigned int createTextureFromFile(const std::string filename) {
 #endif
 }
 
+static unsigned int createTextureFromPixels(const std::vector<Texture::Pixel> &pixels, int width, int height) {
+#ifdef DISABLE_TEXTURES
+	return 0;
+#else
+	GLuint textureId = 0;
+
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+	int mode = GL_RGBA;
+
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, width, height, 0, mode, GL_UNSIGNED_BYTE, &pixels[0].r);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return textureId;
+#endif
+}
+
+void Texture::createBitmap(const std::vector<Pixel> &pixels, int width, int height, std::string name) {
+	if (!name.empty()) {
+		auto find = loadedTextures.find(name);
+		if (find == loadedTextures.end()){
+			_textureId = createTextureFromPixels(pixels, width, height);
+			if (_textureId) {
+				loadedTextures[name] = _textureId;
+			}
+		}
+		else {
+			_textureId = find->second;
+		}
+	}
+	else {
+		_textureId = createTextureFromPixels(pixels, width, height);
+	}
+}
 
 Texture::Texture() {
-//	glGenTextures(1, &_textureId);
-//	glBindTexture(GL_TEXTURE_2D, _textureId);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//
-
-
 }
 
 Texture::~Texture() {
+#ifndef DISABLE_TEXTURES
 	glDeleteTextures(1, &_textureId);
+#endif
 }
 
 Texture::Texture(const std::string filename) {
