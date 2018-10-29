@@ -80,17 +80,17 @@ void Texture::createBitmap(const std::vector<Pixel> &pixels, int width, int heig
 	if (!name.empty()) {
 		auto find = loadedTextures.find(name);
 		if (find == loadedTextures.end()){
-			_textureId = createTextureFromPixels(pixels, width, height);
+			texture(createTextureFromPixels(pixels, width, height), false);
 			if (_textureId) {
 				loadedTextures[name] = _textureId;
 			}
 		}
 		else {
-			_textureId = find->second;
+			texture(find->second, false);
 		}
 	}
 	else {
-		_textureId = createTextureFromPixels(pixels, width, height);
+		texture(createTextureFromPixels(pixels, width, height), true);
 	}
 }
 
@@ -98,8 +98,15 @@ Texture::Texture() {
 }
 
 Texture::~Texture() {
+	clear();
+}
+
+void Texture::clear() {
 #ifndef DISABLE_TEXTURES
-	glDeleteTextures(1, &_textureId);
+	if (_unique && _textureId) {
+		glDeleteTextures(1, &_textureId);
+		_textureId = 0;
+	}
 #endif
 }
 
@@ -110,13 +117,13 @@ Texture::Texture(const std::string filename) {
 void Texture::load(const std::string filename) {
 	auto find = loadedTextures.find(filename);
 	if (find == loadedTextures.end()){
-		_textureId = createTextureFromFile(filename);
+		texture(createTextureFromFile(filename), false);
 		if (_textureId) {
 			loadedTextures[filename] = _textureId;
 		}
 	}
 	else {
-		_textureId = find->second;
+		texture(find->second, false);
 	}
 }
 
