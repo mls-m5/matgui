@@ -2,9 +2,10 @@ CXX=g++
 RUNSTRING=./${TARGET}
 
 SRC_FILES=$(wildcard *-demo.cpp)
+ALL_FILES=${wildcard *.cpp *.h}
 OBJECTS=$(SRC_FILES:.cpp=.o);
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CXXFLAGS+=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/matgui" -I $(LIBS)
+CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/matgui" -I $(LIBS)
 DEMOS=$(SRC_FILES:.cpp= )
 
 TARGET=simple
@@ -13,12 +14,11 @@ LINKFLAGS=${FLAGS} ../matgui-sdl.a ${LIBS}
 all: ${DEMOS}
 
 #Calculating dependincies
-.depend: $(wildcard ./*.cpp ./*.h) Makefile
-	$(CXX) $(CXXFLAGS) -MM *.cpp > ./.dependtmp
-	cat ./.dependtmp | sed 's/h$$/h \n\t \$(CXX) -c $$(CFLAGS) $$< -o $$@/' > ./.depend
-	rm ./.dependtmp
+.depend: ${ALL_FILES} Makefile
+	@echo calculationg dependencies...
+	$(CXX) $(CXXFLAGS) -MM *.cpp > .depend
 
-%-demo: %-demo.cpp ../matgui-sdl.a
+%-demo: %-demo.o ../matgui-sdl.a
 	${CXX} -o $@ ${CXXFLAGS} $< ${LINKFLAGS}
 	
 -include .depend

@@ -17,13 +17,13 @@ public:
 	typedef double _valueType;
 
 	ControllerView():
-		elementId(-1),
-		controllerId(-1),
+		changed(true),
 		_value(0),
 		_min(0),
 		_max(1),
 		_step(0),
-		changed(true){
+		elementId(-1),
+		controllerId(-1){
 		changed.onlySaveLast(true);
 	}
 
