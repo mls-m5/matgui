@@ -20,6 +20,9 @@ public:
 	ImageView(std::string filename) {
 		loadImage(filename);
 	}
+	ImageView(Texture texture):
+		_texture(texture)
+		{}
 	virtual ~ImageView();
 
 	void draw() override;
