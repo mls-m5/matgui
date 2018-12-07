@@ -18,6 +18,10 @@ public:
 		unsigned char r=0,g=0,b=0,a=255;
 		Pixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a=255):
 			r(r), g(g), b(b), a(a) {}
+		Pixel(unsigned int c, unsigned char a):
+			Pixel(c & 0xFF, (c >> 8) & 0xFF, (c >>  8*2) & 0xFF, a) {}
+		Pixel(unsigned int c):
+			Pixel(c & 0xFF, (c >> 8) & 0xFF, (c >>  8*2) & 0xFF) {}
 		Pixel() = default;
 	};
 
@@ -31,7 +35,7 @@ public:
 	void createBitmap(const std::vector<Pixel> &pixels, int width = 1, int height = 1, std::string name="");
 	void clear();
 
-	unsigned int texture() {
+	unsigned int texture() const {
 		return _textureId;
 	}
 
@@ -41,11 +45,11 @@ public:
 		_unique = unique;
 	}
 
-	operator unsigned int() {
+	operator unsigned int() const {
 		return texture();
 	}
 
-	bool unique() {
+	bool unique() const {
 		return _unique;
 	}
 
