@@ -9,11 +9,18 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
+#include <memory>
 
 namespace MatGui {
 
 class Texture {
 public:
+	enum Interpolation {
+		Linear = 0,
+		Nearest = 1
+	};
+
 	struct Pixel {
 		unsigned char r=0,g=0,b=0,a=255;
 		Pixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a=255):
@@ -26,35 +33,40 @@ public:
 	};
 
 	Texture();
-	Texture(const std::string filename);
+	Texture(const std::string filename, bool addToLibrary = true);
+	Texture(const Texture & texture) = default;
+	Texture(Texture && texture) = default;
+
 	virtual ~Texture();
 
-	void render();
-
-	void load(const std::string filename);
+	void load(const std::string filename, bool addToLibrary = true);
 	void createBitmap(const std::vector<Pixel> &pixels, int width = 1, int height = 1, std::string name="");
-	void clear();
+	void createGrayscale(const std::vector<float> &grayScale, int width = 1, int height = 1, std::string name="");
+	void clear() {
+		_texturePtr == nullptr;
+	}
 
 	unsigned int texture() const {
-		return _textureId;
+		return (unsigned long)_texturePtr.get();
 	}
 
-	void texture(unsigned int textureId, bool unique = true) {
-		clear();
-		_textureId = textureId;
-		_unique = unique;
-	}
+	//Transfer ownership of raw reference to this object
+	//the reference is handled by the texture object
+	void texture(unsigned int texture);
 
 	operator unsigned int() const {
 		return texture();
 	}
 
 	bool unique() const {
-		return _unique;
+		return _texturePtr.unique();
 	}
 
-	unsigned int _textureId = 0;
-	bool _unique = false; //If the texture is to be deleted when the destructor is called
+	Texture &operator =(const Texture &) = default;
+
+	void setInterpolation(Interpolation);
+
+	std::shared_ptr<void> _texturePtr;
 };
 
 } /* namespace MatGui */
