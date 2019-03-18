@@ -10,11 +10,15 @@
 
 #include <vector>
 
+class Vec;
+
 namespace MatGui {
 
 struct vec {
 	vec(double x, double y, double z): x(x), y(y), z(z) {}
 	vec(double x, double y): x(x), y(y), z(0) {}
+	//This is to avoid declaring class Vec here:
+	vec(const Vec &v): x(((double*)&v)[0]), y(((double*)&v)[1]), z(((double*)&v)[2]) {}
 	double x, y, z;
 };
 
