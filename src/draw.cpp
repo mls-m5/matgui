@@ -224,7 +224,7 @@ void drawLine(double x1, double y1, double x2, double y2, const class Paint* pai
 		(T)((x2 - x1) / screenWidth * 2.), (T)(-(y2 - y1) / screenHeight * 2.), 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		(T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenWidth * 2. + 1.), 0, 1,
+		(T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenHeight * 2. + 1.), 0, 1,
 	};
 
 	drawLine(location, paint);
@@ -239,7 +239,7 @@ void drawLine(vec v1, vec v2, const class Paint *paint) {
 		0, 1, 0, 0,
 		0, 0, 1, 0,
 		(T)(v1.x / screenWidth * 2. - 1.),
-		(T)(-v1.y / screenWidth * 2. + 1.), (T)v1.z, 1,
+		(T)(-v1.y / screenHeight * 2. + 1.), (T)v1.z, 1,
 	};
 
 	drawLine(location, paint);
