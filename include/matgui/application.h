@@ -34,6 +34,11 @@ protected:
 	static void addWindow(class Window*);
 	static void removeWindow(class Window*);
 
+	// Scale is a global value that sets the scale for graphics.
+	// This is to enable same window size on hd screens
+	// Change by sending for example "--scale 2" as arguments on construction
+	static float Scale();
+
 	friend class Window;
 };
 

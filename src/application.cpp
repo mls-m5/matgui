@@ -23,10 +23,19 @@ namespace MatGui {
 static std::list<Window *> windows;
 static Window* activeWindow = nullptr;
 static Application *application = nullptr;
+static float scale = 1.f;
 
 Application::Application(int argc, char** argv) {
 	application = this;
 	MatSig::setMainThread();
+
+	for (int i = 0; i + 1 < argc; ++i) {
+		if (argv[i] == string("--scale")) {
+			++i;
+			scale = atof(argv[i]);
+		}
+	}
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) /* Initialize SDL's Video subsystem */
         sdldie("Unable to initialize SDL"); /* Or die on error */
 }
@@ -104,14 +113,14 @@ bool Application::handleEvents() {
 				case SDL_MOUSEMOTION:
 				{
 					auto &e = event.motion;
-					window->onPointerMove(0, (double)e.x, (double)e.y, e.state);
+					window->onPointerMove(0, (double)e.x / scale, (double)e.y / scale, e.state);
 				}
 				break;
 				case SDL_MOUSEBUTTONDOWN:
 				{
 					auto &e = event.button;
 					auto button = MouseButton(1 << (e.button - 1)); //Make one bit for each button
-					window->onPointerDown(0, button, (double)e.x, (double)e.y);
+					window->onPointerDown(0, button, (double)e.x / scale, (double)e.y / scale);
 				}
 				break;
 
@@ -119,7 +128,7 @@ bool Application::handleEvents() {
 				{
 					auto &e = event.button;
 					auto button = MouseButton(1 << (e.button - 1)); //Make one bit for each button
-					window->onPointerUp(0, button, (double)e.x, (double)e.y);
+					window->onPointerUp(0, button, (double)e.x / scale, (double)e.y / scale);
 				}
 				break;
 				case SDL_KEYDOWN:
@@ -130,7 +139,7 @@ bool Application::handleEvents() {
 				case SDL_MOUSEWHEEL:
 				{
 					auto &e = event.wheel;
-					window->onScroll(0, (double) e.x, (double) e.y);
+					window->onScroll(0, (double) e.x / scale, (double) e.y / scale);
 				}
 				break;
 				case SDL_KEYUP:
@@ -173,6 +182,10 @@ void Application::removeWindow(class Window* window) {
 	if (windows.empty()) {
 		application->quit();
 	}
+}
+
+float Application::Scale() {
+	return scale;
 }
 
 }  // namespace MatGui

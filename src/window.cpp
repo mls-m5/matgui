@@ -52,9 +52,10 @@ Window::Window(string title, int width, int height, bool resizable) {
 
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    // Create our window centered at 512x512 resolution
+    // Create our window centered
+    auto scale = Application::Scale();
     _windowData->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | (resizable? SDL_WINDOW_RESIZABLE : 0));
+        width * scale, height * scale, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | (resizable? SDL_WINDOW_RESIZABLE : 0));
 //    if (!windowData->mainwindow) /* Die if creation failed */
 //        sdldie("Unable to create window");
 //
@@ -125,17 +126,20 @@ void Window::cursorVisibility(bool value) {
 }
 
 void Window::setCursorPosition(int x, int y) {
-	SDL_WarpMouseInWindow(_windowData->window, x, y);
+	auto scale = Application::Scale();
+	SDL_WarpMouseInWindow(_windowData->window, x * scale, y * scale);
 }
 
 std::pair<int, int> Window::getCursorPosition() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	return std::pair<int, int>(x, y);
+	auto scale = Application::Scale();
+	return std::pair<int, int>(x / scale, y / scale);
 }
 
 bool Window::onResize(int width, int height) {
-	Layout::setLocation(0, 0, width, height);
+	auto scale = Application::Scale();
+	Layout::setLocation(0, 0, width / scale, height / scale);
 	return true;
 }
 
