@@ -758,6 +758,29 @@ l  x
 )tag",
 },{
 
+
+
+'w',
+R"tag(
+ x       x
+ x   x   x
+  x x x x
+l  x   x
+)tag",
+},{
+
+'W',
+R"tag(
+ x       x
+ x       x
+ x   x   x
+ x   x   x
+  x x x x
+l  x   x
+)tag",
+},{
+
+
 'x',
 R"tag(
  x   x 
