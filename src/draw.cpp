@@ -104,6 +104,43 @@ void drawRect(const float *location, const class Paint* paint) {
 	glBindVertexArray(0);
 }
 
+
+void drawTriangle(vec v1, vec v2, vec v3, Paint *paint) {
+	typedef float T;
+	const T location[] = {
+		(T)((v2.x - v1.x) / screenWidth * 2.),
+		(T)(-(v2.y - v1.y) / screenHeight * 2.),
+		(T)(v2.z - v1.z), 0,
+
+		(T)((v3.x - v1.x) / screenWidth * 2), (T)(-(v3.y - v1.y) / screenHeight * 2), 0, 0,
+		0, 0, 1, 0,
+		(T)(v1.x / screenWidth * 2. - 1.),
+		(T)(-v1.y / screenHeight * 2. + 1.), (T)v1.z, 1,
+	};
+
+	drawTriangle(location, paint);
+}
+
+void drawTriangle(const float *location, const class Paint* paint) {
+	glBindVertexArray(squareProgram.vertexArray);
+	squareProgram.program->use();
+
+    glUniformMatrix4fv(squareProgram.pMvpMatrix, 1, GL_FALSE, location);
+
+    if (paint->fill) {
+    	glUniform4fv(squareProgram.pColor, 1, &paint->fill.r);
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+    }
+    if (paint->line) {
+    	glLineWidth(paint->line.width());
+    	glUniform4fv(squareProgram.pColor, 1, &paint->line.r);
+    	glDrawArrays(GL_LINE_LOOP, 0, 3);
+    	glLineWidth(1);
+    }
+
+	glBindVertexArray(0);
+}
+
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
 	int arrayIndex = (style & DrawStyle::CenterOrigo)? 1: 0;
 	glBindVertexArray(textureProgram.vertexArrays[arrayIndex]);

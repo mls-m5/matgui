@@ -66,6 +66,9 @@ void resetTransform(unsigned int poniter);
 void drawRect(double x, double y, double width, double height, const class Paint*);
 void drawRect(const float *locationMatrix, const class Paint*);
 
+void drawTriangle(vec v1, vec v2, vec v3, Paint *paint);
+void drawTriangle(const float *location, const class Paint* paint);
+
 void drawEllipse(double x, double y, double width, double height, const class Paint*);
 void drawEllipse(const float *locationMatrix, const class Paint*);
 

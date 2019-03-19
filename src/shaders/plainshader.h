@@ -45,8 +45,18 @@ static struct {
 	unique_ptr<ShaderProgram> program;
 
 	//Square vertices
-	GLfloat vertices[8] = { 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f };
-	GLfloat centeredVertices[8] = { -.5f, -.5f, .5f, -.5f, .5f, .5f, -.5f, .5f };
+	GLfloat vertices[8] = {
+			1.f, 0.f,
+			0.f, 0.f,
+			0.f, 1.f,
+			1.f, 1.f,
+	};
+	GLfloat centeredVertices[8] = {
+			.5f, -.5f,
+			-.5f, -.5f,
+			-.5f, .5f,
+			.5f, .5f,
+	};
 	GLfloat colors[4] = {.8, .8, 1., .5,};
 
 	std::vector <GLfloat> ellipseVertices;
