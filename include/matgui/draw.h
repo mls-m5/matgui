@@ -35,7 +35,7 @@ struct vec2 {
 	template <typename T>
 	vec2(T v) : x(v.x), y(v.y) {}
 	vec2(DrawReal x, DrawReal y) : x(x), y(y) {}
-	DrawReal x; DrawReal y;
+	DrawReal x = 0; DrawReal y = 0;
 };
 
 enum DrawStyle : int {

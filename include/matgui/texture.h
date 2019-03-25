@@ -43,7 +43,7 @@ public:
 	void createBitmap(const std::vector<Pixel> &pixels, int width = 1, int height = 1, std::string name="");
 	void createGrayscale(const std::vector<float> &grayScale, int width = 1, int height = 1, std::string name="");
 	void clear() {
-		_texturePtr == nullptr;
+		_texturePtr = nullptr;
 	}
 
 	unsigned int texture() const {
