@@ -121,6 +121,14 @@ void Window::hide() {
 	Application::removeWindow(this);
 }
 
+bool Window::invalid() {
+	return _windowData->invalid;
+}
+
+void Window::invalid(bool state) {
+	_windowData->invalid = state;
+}
+
 void Window::cursorVisibility(bool value) {
 	SDL_ShowCursor(value);
 }

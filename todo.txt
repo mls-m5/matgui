@@ -1,5 +1,4 @@
 
 
-
 * add draw function that transform to local view coordinates
-* add functionality to only update gui when needed, for non game modes
+

@@ -27,6 +27,13 @@ public:
 	void show();
 	void hide();
 
+	// invalidate triggers a redraw of the window
+	inline void invalidate() { invalid(true); };
+
+	//check if the window needs redrawing
+	bool invalid();
+	void invalid(bool state);
+
 	void cursorVisibility(bool value);
 	void setCursorPosition(int x, int y);
 	std::pair<int, int> getCursorPosition();
@@ -34,7 +41,7 @@ public:
 	Signal<void *, bool> closeSignal;
 
 protected:
-	std::unique_ptr<class WindowData> _windowData;
+	std::unique_ptr<struct WindowData> _windowData;
 
 	friend class Application;
 };

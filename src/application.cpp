@@ -24,6 +24,8 @@ static std::list<Window *> windows;
 static Window* activeWindow = nullptr;
 static Application *application = nullptr;
 static float scale = 1.f;
+static bool continuousUpdates = true;
+static bool invalidateOnEvent = true;
 
 Application::Application(int argc, char** argv) {
 	application = this;
@@ -43,19 +45,35 @@ Application::Application(int argc, char** argv) {
 void Application::mainLoop() {
 	running = true;
 	auto oldTime = SDL_GetTicks();
-	while (running) { //todo: fix not constant updates
+	while (running) {
 		auto newTime = SDL_GetTicks();
 		auto passedTime = (double) (newTime - oldTime) / 1000.;
 		oldTime = newTime;
-		if (frameUpdate) {
+
+		auto shouldRedraw = continuousUpdates;
+
+		if (!shouldRedraw) {
+			for (auto it: windows){
+				if (it->invalid()) {
+					shouldRedraw = true;
+				}
+			}
+		}
+
+		if (shouldRedraw && frameUpdate) {
 			//Handle gives the developer the possibility to do things each frame
 			frameUpdate.directCall(passedTime);
 		}
 
+		if (!shouldRedraw) {
+			SDL_Delay(10); //Limit cpu usage on idle
+		}
 
 		for (auto it: windows) {
-			it->draw();
-			//Swap our back buffer to the front
+			if (it->invalid()) {
+				it->draw();
+				it->invalid(false);
+			}
 		}
 
 		if (handleEvents()) {
@@ -84,6 +102,7 @@ bool Application::handleEvents() {
 
 		auto window = getWindow(event.window.windowID);
 		if (window) {
+			auto redrawEvent = invalidateOnEvent; //If the event should trigger a redraw
 			if (event.type == SDL_WINDOWEVENT) {
 
 				switch (event.window.event) {
@@ -105,6 +124,9 @@ bool Application::handleEvents() {
 					if (activeWindow == window) {
 						activeWindow = nullptr;
 					}
+					break;
+				default:
+					redrawEvent = false;
 				}
 			}
 			else {
@@ -149,9 +171,11 @@ bool Application::handleEvents() {
 				break;
 
 				default:
+					redrawEvent = false;
 					break;
 				}
 			}
+			window->invalidate();
 		}
 	}
 	return false;
@@ -169,10 +193,6 @@ Application::~Application() {
     SDL_Quit();
 }
 
-void Application::quit() {
-	running = false;
-}
-
 void Application::addWindow(class Window* window) {
 	windows.push_back(window);
 }
@@ -186,6 +206,14 @@ void Application::removeWindow(class Window* window) {
 
 float Application::Scale() {
 	return scale;
+}
+
+void Application::ContinuousUpdates(bool state) {
+	continuousUpdates = state;
+}
+
+void Application::InvalidateOnEvent(bool state) {
+	invalidateOnEvent = state;
 }
 
 }  // namespace MatGui

@@ -17,6 +17,7 @@ struct WindowData {
 	SDL_Window *window = 0; //Handle to sdl window
     SDL_GLContext context = 0; //OpenGl context handle
     Uint32 windowId = 0;
+    bool invalid = true; //The window needs redrawing (when continuous updates = false)
 };
 
 }
