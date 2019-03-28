@@ -16,7 +16,7 @@ struct ColorType {
 
 
 
-class BitmapFontData getFontDataVector(std::string text);
+struct BitmapFontData getFontDataVector(std::string text);
 
 struct BitmapFontData : public std::vector<char> {
 	BitmapFontData() {

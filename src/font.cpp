@@ -52,7 +52,8 @@ struct FontDescriptionStruct {
 	FontType *font;
 };
 
-struct FontData {
+class FontData {
+public:
 	FontType *font = nullptr;
 };
 
@@ -61,7 +62,8 @@ struct FontData {
 void renderText(const FontType *font, GLubyte r, GLubyte g, GLubyte b,
                 double x, double y, double z, const std::string& text, bool centered);
 
-struct FontViewData {
+class FontViewData {
+public:
 	~FontViewData () {
 		if (texture) {
 			glDeleteTextures(1, &texture);
@@ -116,7 +118,7 @@ struct FontViewData {
 	}
 
 	unsigned texture = 0;
-	ColorType color = {255, 255, 255};
+	ColorType color = {255, 255, 255, 1};
 	bool centered = true;
 };
 

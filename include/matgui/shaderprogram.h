@@ -57,7 +57,7 @@ static void printGLString(const char *name, GLenum s) {
 #endif
 }
 
-static int checkGlError(const char* op, bool throwError = false) {
+inline int checkGlError(const char* op, bool throwError = false) {
 #ifndef NO_GRAPHICS
 	bool ret = false;
     for (GLint error = glGetError(); error; error

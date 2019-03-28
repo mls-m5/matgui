@@ -917,7 +917,48 @@ R"tag(
 
 lx
 )tag",
-}
+},
+
+
+{
+'/',
+R"tag(
+   x
+   x
+  x
+  x
+ x
+lx
+)tag",
+},
+
+
+{
+'|',
+R"tag(
+ x
+ x
+ x
+ x
+ x
+lx
+)tag",
+},
+
+
+{
+'\\',
+R"tag(
+ x
+ x
+  x
+  x
+   x
+l  x
+)tag",
+},
+
+
 };
 
 
