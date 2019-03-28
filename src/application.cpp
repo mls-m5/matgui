@@ -70,7 +70,7 @@ void Application::mainLoop() {
 		}
 
 		for (auto it: windows) {
-			if (it->invalid()) {
+			if (continuousUpdates || it->invalid()) {
 				it->draw();
 				it->invalid(false);
 			}

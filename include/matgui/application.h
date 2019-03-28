@@ -28,7 +28,7 @@ public:
 	// the argument is the time since the last time the signal was called
 	// Note: the functions is called directly so it is okay to connect
 	// render code to this signal
-	MatSig::Signal<double> frameUpdate;
+	MatSig::Signal<double> frameUpdate; //Todo: Move this to Window
 
 	// Scale is a global value that sets the scale for graphics.
 	// This is to enable same window size on hd screens
