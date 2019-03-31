@@ -72,9 +72,9 @@ public:
 	virtual bool onKeyUp(KeySym sym, KeyScanCode scancode, KeyModifiers modifiers, int repeat);
 
 	struct PointerArgument {
-		pointerId id;
+		pointerId id; //Always 0 for mouse
 		double x, y;
-		pointerState state;
+		pointerState state; //A bit representing which buttons pressed 1 for left, 2 for middle 4 for right etc.
 	};
 
 	struct ScrollArgument {
