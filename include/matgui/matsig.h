@@ -24,7 +24,7 @@ class SignalBase {
 public:
 	//Signals can only be created and deleted on the main thread
 	SignalBase();
-	virtual ~SignalBase();
+	virtual ~SignalBase() noexcept(false);
 
 	virtual void flush() = 0;
 
@@ -281,7 +281,7 @@ public:
 		while (!_queue.empty()) {
 			//removes element from que so that a new element can be added directly
 			//in case it is a sigle element list
-			auto arg = _queue.front();
+//			auto arg = _queue.front();
 			_queue.pop();
 			for (auto &connection: *this) {
 				connection.call();

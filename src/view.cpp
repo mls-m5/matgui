@@ -65,7 +65,7 @@ bool View::onPointerDown(pointerId id, MouseButton button, double x, double y) {
 }
 
 bool View::onPointerUp(pointerId id, MouseButton button, double x, double y) {
-	pointerUp.emit( { id, x, y, 0 });
+	pointerUp.emit( { id, x, y, button });
 	if (isPointerInsideLocal(x, y)) {
 		clicked.emit( { id, x, y, button });
 	}

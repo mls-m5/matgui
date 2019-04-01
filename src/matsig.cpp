@@ -66,7 +66,7 @@ void assertMainThread() {
 }
 
 //Todo: implement delete later method
-SignalBase::~SignalBase() {
+SignalBase::~SignalBase() noexcept(false) {
 #ifndef __ANDROID__
 	if (std::this_thread::get_id() != mainThreadId) {
 		std::cerr << "Error! Signals (and views) must be created and removed from the same thread" << std::endl;
