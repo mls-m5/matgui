@@ -125,6 +125,7 @@ public:
 	}
 
 	void drawLine(double x, double y, double x2, double y2) const;
+	void drawLine(vec v1, vec v2) const;
 	void drawRect(double x, double y, double width, double height) const;
 	void drawRect(const float *location) const;
 	void drawEllipse(double x, double y, double width, double height) const;

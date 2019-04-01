@@ -138,8 +138,6 @@ MatGui::Paint::Paint() {
 	fill._style = DrawStyle::None;
 }
 
-
-
 MatGui::Paint::~Paint() {
 }
 
@@ -162,6 +160,12 @@ void MatGui::Paint::push(Paint& s) {
 void MatGui::Paint::drawLine(double x, double y, double x2, double y2) const {
 	if (line.style()) {
 		MatGui::drawLine(x, y, x2, y2, this);
+	}
+}
+
+void MatGui::Paint::drawLine(vec v1, vec v2) const {
+	if (line.style()) {
+		MatGui::drawLine(v1, v2, this);
 	}
 }
 
