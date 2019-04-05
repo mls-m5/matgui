@@ -105,7 +105,7 @@ void drawRect(const float *location, const class Paint* paint) {
 }
 
 
-void drawTriangle(vec v1, vec v2, vec v3, Paint *paint) {
+void drawTriangle(vec v1, vec v2, vec v3, const Paint *paint) {
 	typedef float T;
 	const T location[] = {
 		(T)((v2.x - v1.x) / screenWidth * 2.),

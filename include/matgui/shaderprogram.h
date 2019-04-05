@@ -50,7 +50,7 @@ public:
 };
 
 
-static void printGLString(const char *name, GLenum s) {
+inline void printGLString(const char *name, GLenum s) {
 #ifndef NO_GRAPHICS
     const char *v = (const char *) glGetString(s);
     debug_print("GL %s = %s\n", name, v);
@@ -99,6 +99,8 @@ inline int checkGlError(const char* op, bool throwError = false) {
         }
     }
     return ret;
+#else
+    return false;
 #endif
 }
 

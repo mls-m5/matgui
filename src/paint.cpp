@@ -181,5 +181,9 @@ void MatGui::Paint::drawBasicView(View* view) const {
 	drawRect(view->x(), view->y(), view->width(), view->height());
 }
 
+void MatGui::Paint::drawTriangle(vec v1, vec v2, vec v3) const {
+	MatGui::drawTriangle(v1, v2, v3, this);
+}
+
 
 //} /* namespace MatGui */
