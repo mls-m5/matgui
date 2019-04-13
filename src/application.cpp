@@ -175,7 +175,9 @@ bool Application::handleEvents() {
 					break;
 				}
 			}
-			window->invalidate();
+			if (redrawEvent) {
+				window->invalidate();
+			}
 		}
 	}
 	return false;
