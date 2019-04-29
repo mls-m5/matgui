@@ -65,7 +65,7 @@ void Application::mainLoop() {
 			frameUpdate.directCall(passedTime);
 		}
 
-		if (!shouldRedraw) {
+		if (!shouldRedraw && !continuousUpdates) {
 			SDL_Delay(10); //Limit cpu usage on idle
 		}
 
