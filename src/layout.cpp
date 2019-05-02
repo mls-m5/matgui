@@ -228,7 +228,7 @@ bool Layout::onPointerDown(pointerId id, MouseButton button, double x, double y)
 			}
 		}
 	}
-	return false;
+	return View::onPointerDown(id, button, x, y);
 }
 
 bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
@@ -250,7 +250,7 @@ bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 			}
 		}
 	}
-	return false;
+	return View::onPointerUp(id, button, x, y);
 }
 
 bool Layout::onPointerMove(pointerId id, double x, double y,
@@ -285,7 +285,7 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 			pointerFocusedChild = nullptr;
 		}
 	}
-	return false;
+	return View::onPointerMove(id, x, y, state);
 }
 
 void Layout::onPointerEnter(pointerId id, double x, double y,

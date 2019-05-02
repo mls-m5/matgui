@@ -19,6 +19,11 @@ public:
 	virtual ~Window();
 
 	void draw() override;
+
+	// Functions to be called before and after draw() for window
+	void clear();
+	void swap();
+
 	bool onRequestClose();
 
 	//Does not work... you need to recreate the open gl context each time
@@ -38,7 +43,10 @@ public:
 	void setCursorPosition(int x, int y);
 	std::pair<int, int> getCursorPosition();
 
-	Signal<void *, bool> closeSignal;
+	// A direct call signal
+	// if a function returns true closing of the window is aborted
+	// if true is returned, the window is closed as usual
+	Signal<void, bool> closeSignal;
 
 protected:
 	std::unique_ptr<struct WindowData> _windowData;

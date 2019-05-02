@@ -71,7 +71,9 @@ void Application::mainLoop() {
 
 		for (auto it: windows) {
 			if (continuousUpdates || it->invalid()) {
+				it->clear();
 				it->draw();
+				it->swap();
 				it->invalid(false);
 			}
 		}

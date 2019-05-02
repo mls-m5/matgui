@@ -96,13 +96,19 @@ Window::~Window() {
     Application::removeWindow(this);
 }
 
-void Window::draw() {
+
+void Window::clear() {
 	SDL_GL_MakeCurrent(_windowData->window, _windowData->context);
-//	setDimensions(_width, _height);
 	auto &color = currentStyle.fill;
 	glClearColor(color.r, color.g, color.b, color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::draw() {
 	Layout::draw();
+}
+
+void Window::swap() {
 	SDL_GL_SwapWindow(_windowData->window);
 }
 
