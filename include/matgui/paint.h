@@ -48,6 +48,19 @@ public:
 		inherit = false;
 	}
 
+	void color(long longColor, float alpha = 1) {
+		r = (float)((longColor & 0xFF000000) >> 24) / 255.;
+		g = (float)((longColor & 0x00FF0000) >> 16) / 255.;
+		b = (float)((longColor & 0x0000FF00) >> 8) / 255.;
+		a = alpha;
+
+		if (_style == DrawStyle::None) {
+			_style = DrawStyle::Filled;
+		}
+
+		inherit = false;
+	}
+
 	//set style and disable inherit flag
 	void style(DrawStyle value) {
 		_style = value;
