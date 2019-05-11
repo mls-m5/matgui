@@ -13,13 +13,14 @@
 
 class ShaderProgram {
 public:
-	ShaderProgram(ShaderProgram &s){
+	ShaderProgram(ShaderProgram &&s){
 		this->_program = s._program;
+		s._program = 0;
 	}
 	ShaderProgram();
-	ShaderProgram(std::string vertexCode, std::string fragmentCode);
-	void initProgram(std::string vertexCode, std::string fragmentCode);
-	void loadShaderFromFile(std::string vertexFile, std::string fragmentFile);
+	ShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");
+	void initProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");
+	void loadShaderFromFile(const std::string &vertexFile, const std::string &fragmentFile);
 
 	void use();
 	void unuse();
@@ -45,7 +46,7 @@ public:
 	GLuint colorPointer;
 	GLuint mvpMatrixPointer;
 
-	StandardShaderProgram(std::string vertexCode, std::string fragmentCode);
+	StandardShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");
 	void disable();
 };
 
