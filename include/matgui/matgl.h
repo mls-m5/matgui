@@ -165,14 +165,14 @@ public:
 	// Set attribute pointer
 	// and enable it if it is not GL_ELEMENT_ARRAY_BUFFER
 	// Index is the index in the shader program
-	// size is the total number of bytes for each element eg. 3 for a 3d position
+	// size is the total number of variables for each element eg. 3 for a 3d position
 	// type is the data type eg. GL_FLOAT or GL_DOUBLE
 	// stride is if you have some other format like and needs the size of each element to be bigger
 	// pointer is the offset of the first element, probably used in combination with stride
 	void attribPointer(
 			GLuint index,
 			GLint size,
-			GLenum type,
+			GLenum type = GL_FLOAT,
 			GLboolean normalized = false,
 			GLsizei stride = 0,
 			const void *pointer = nullptr
