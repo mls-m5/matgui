@@ -44,6 +44,15 @@ public:
 	// Sets if windows should be invalidated on input events
 	// if false window::invalidate needs to be called to redraw
 	static void InvalidateOnEvent(bool state);
+
+	// Functions to convert between key and description string
+	std::string getKeyNameFromScancode(int scancod);
+	std::string getKeyNameFromKey(int scancode);
+	int getKeyFromName(const std::string &name);
+	int getScancodeFromName(const std::string &name);
+	int getScancodeFromKey(int key);
+	int getKeyFromScancode(int scancode);
+
 protected:
 
 	//Functions used internally to handle windows

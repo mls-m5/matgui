@@ -220,6 +220,35 @@ void Application::InvalidateOnEvent(bool state) {
 	invalidateOnEvent = state;
 }
 
+
+std::string Application::getKeyNameFromScancode(int scancode) {
+	return SDL_GetScancodeName((SDL_Scancode)scancode);
+}
+
+
+std::string Application::getKeyNameFromKey(int key) {
+	return SDL_GetKeyName(key);
+}
+
+
+int Application::getKeyFromName(const std::string &name) {
+	return SDL_GetKeyFromName(name.c_str());
+}
+
+
+int Application::getScancodeFromName(const std::string &name) {
+	return SDL_GetScancodeFromName(name.c_str());
+}
+
+int Application::getScancodeFromKey(int key) {
+	return SDL_GetScancodeFromKey(key);
+}
+
+int Application::getKeyFromScancode(int scancode) {
+	return SDL_GetKeyFromScancode((SDL_Scancode)scancode);
+}
+
+
 }  // namespace MatGui
 
 #endif //__ANDROID__ block
