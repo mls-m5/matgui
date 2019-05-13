@@ -336,31 +336,24 @@ public:
 	//Shorthand function
 	//Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
 	template <typename T>
-	Texture(std::vector<T> data, int width, int height, GLenum format = GL_RGB, bool generateMipmap = true, bool linearInterpolation = true): Texture() {
-		setData(data, width, height, format);
+	Texture(std::vector<T> data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR, bool generateMipmap = true): Texture() {
+		setData(data, width, height, format, interpolationType);
 		if (generateMipmap) {
 			this->generateMipmap();
-		}
-		if (linearInterpolation) {
-			setParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			setParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		}
-		else {
-			setParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			setParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
 		setWrap();
 	}
 
 	// Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
 	template <typename T>
-	void setData(std::vector<T> data, int width, int height, GLenum format = GL_RGB) {
+	void setData(std::vector<T> data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR) {
 		bind();
 		glCall(glTexImage2D(
 				GL_TEXTURE_2D, 0, format,
 				width, height, 0, format,
 				getType<T>(), &data.front()
 		));
+		setInterpolationType(interpolationType);
 	}
 
 	void generateMipmap() {
@@ -387,8 +380,11 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
-	void unbind() {
-		glBindTexture(GL_TEXTURE_2D, 0);
+
+	// GL_LINEAR GL_NEAREST_MIPMAP_NEAREST GL_LINEAR_MIPMAP_NEAREST GL_NEAREST_MIPMAP_LINEAR GL_LINEAR_MIPMAP_LINEAR
+	static void setInterpolationType(GLenum type) {
+		setParameteri(GL_TEXTURE_MIN_FILTER, type);
+		setParameteri(GL_TEXTURE_MAG_FILTER, type);
 	}
 
 	~Texture() {

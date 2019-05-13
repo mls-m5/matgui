@@ -14,6 +14,9 @@
 
 namespace MatGui {
 
+// The texture class is supposed to be used by value
+// Because the textureId is kept in a shared_ptr the background texture is freed
+// when needed
 class Texture {
 public:
 	enum Interpolation {
@@ -45,6 +48,7 @@ public:
 	void clear() {
 		_texturePtr = nullptr;
 	}
+	void bind();
 
 	unsigned int texture() const {
 		return (unsigned long)_texturePtr.get();

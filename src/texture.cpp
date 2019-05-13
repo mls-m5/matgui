@@ -36,6 +36,7 @@ unsigned int createTextureFromFile(const std::string filename) {
 	std::unique_ptr<SDL_Surface, void (*)(SDL_Surface*)> surface(IMG_Load(filename.c_str()), SDL_FreeSurface);
 
 	if (surface == NULL) {
+		debug_print("could not load file %s\n", filename.c_str());
 		return 0;
 	}
 
@@ -195,5 +196,8 @@ void Texture::load(const std::string filename, bool addToLibrary) {
 	}
 }
 
+void Texture::bind() {
+	glBindTexture(GL_TEXTURE_2D, *this);
+}
 } /* namespace MatGui */
 
