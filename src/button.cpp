@@ -6,8 +6,8 @@
  */
 
 
-#include "button.h"
-#include "draw.h"
+#include "matgui/button.h"
+#include "matgui/draw.h"
 
 namespace MatGui {
 

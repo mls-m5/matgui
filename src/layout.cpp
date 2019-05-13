@@ -5,7 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "layout.h"
+#include "matgui/layout.h"
 
 #include <iostream>
 using std::cout; using std::endl;

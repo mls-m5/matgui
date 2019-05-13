@@ -5,7 +5,7 @@
  *      Author: mattias
  */
 
-#include "shaderprogram.h"
+#include "matgui/shaderprogram.h"
 #include <fstream>
 #include <iostream>
 

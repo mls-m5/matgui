@@ -5,14 +5,14 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "window.h"
-#include "draw.h"
-#include "windowdata.h"
+#include "matgui/window.h"
+#include "matgui/draw.h"
+#include "matgui/windowdata.h"
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "common-gl.h"
+#include "matgui/common-gl.h"
 
-#include "application.h"
+#include "matgui/application.h"
 using std::cout; using std::endl;
 using std::string;
 

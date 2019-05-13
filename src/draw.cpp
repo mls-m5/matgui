@@ -1,10 +1,10 @@
-#include "draw.h"
-#include "paint.h"
+#include "matgui/draw.h"
+#include "matgui/paint.h"
 #include <math.h>
 #include <vector>
 #include <memory>
 
-#include "shaderprogram.h"
+#include "matgui/shaderprogram.h"
 
 using std::unique_ptr;
 

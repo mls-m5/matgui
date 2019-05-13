@@ -9,12 +9,12 @@
 #define USE_BITMAP_FONT
 #endif
 
-#include "font.h"
+#include "matgui/font.h"
 
 #ifdef __ANDROID__
 #define USE_BITMAP_FONT //Define this variable to have bitmap fonts instead
 
-#include "common-gl.h"
+#include "matgui/common-gl.h"
 
 #define internal_format GL_BGRA
 
@@ -26,7 +26,7 @@
 #endif
 
 #ifdef USE_BITMAP_FONT
-#include "bitmapfont.h"
+#include "matgui/bitmapfont.h"
 
 typedef void FontType;
 
@@ -39,8 +39,8 @@ typedef SDL_Color ColorType;
 #endif
 
 #include <list>
-#include "shaderprogram.h"
-#include "draw.h"
+#include "matgui/shaderprogram.h"
+#include "matgui/draw.h"
 
 
 namespace MatGui {

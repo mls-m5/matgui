@@ -5,7 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "linearlayout.h"
+#include "matgui/linearlayout.h"
 
 namespace MatGui {
 

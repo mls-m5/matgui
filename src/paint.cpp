@@ -6,9 +6,9 @@
  */
 
 //#include "paint.h"
-#include "view.h"
-#include "draw.h"
-#include "memberproperties.h"
+#include "matgui/view.h"
+#include "matgui/draw.h"
+#include "matgui/memberproperties.h"
 #include <ciso646>
 
 //

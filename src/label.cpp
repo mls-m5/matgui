@@ -6,7 +6,7 @@
  */
 
 
-#include "label.h"
+#include "matgui/label.h"
 
 namespace MatGui {
 

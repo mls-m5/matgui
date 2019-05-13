@@ -5,8 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "imageview.h"
-#include "draw.h"
+#include "matgui/imageview.h"
+#include "matgui/draw.h"
 
 namespace MatGui {
 

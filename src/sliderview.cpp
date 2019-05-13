@@ -5,8 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "sliderview.h"
-#include "draw.h"
+#include "matgui/sliderview.h"
+#include "matgui/draw.h"
 #include "math.h"
 
 namespace MatGui {

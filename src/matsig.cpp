@@ -6,7 +6,7 @@
  */
 
 
-#include "matsig.h"
+#include "matgui/matsig.h"
 #include <thread>
 #include <iostream>
 #include <ciso646>

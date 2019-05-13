@@ -5,14 +5,14 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "texture.h"
+#include "matgui/texture.h"
 
-#include "common-gl.h"
+#include "matgui/common-gl.h"
 //#include "SDL2/SDL_opengl.h"
 #ifndef DISABLE_TEXTURES
 #include "SDL2/SDL_image.h"
 #endif // DISABLE_TEXTURES
-#include "draw.h"
+#include "matgui/draw.h"
 #include <map>
 
 namespace MatGui {

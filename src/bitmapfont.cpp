@@ -1,4 +1,4 @@
-#include "bitmapfont.h"
+#include "matgui/bitmapfont.h"
 
 #include <map>
 #include <string>

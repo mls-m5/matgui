@@ -5,8 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "knobview.h"
-#include "draw.h"
+#include "matgui/knobview.h"
+#include "matgui/draw.h"
 #include "math.h"
 
 namespace MatGui {

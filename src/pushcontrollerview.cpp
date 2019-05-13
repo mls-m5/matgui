@@ -5,8 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "pushcontrollerview.h"
-#include "draw.h"
+#include "matgui/pushcontrollerview.h"
+#include "matgui/draw.h"
 #include "math.h"
 
 namespace MatGui {

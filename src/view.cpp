@@ -5,8 +5,8 @@
  *      Author: mattias
  */
 
-#include "view.h"
-#include "layout.h"
+#include "matgui/view.h"
+#include "matgui/layout.h"
 
 namespace MatGui {
 

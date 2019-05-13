@@ -5,8 +5,8 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "progressview.h"
-#include "draw.h"
+#include "matgui/progressview.h"
+#include "matgui/draw.h"
 
 namespace MatGui {
 

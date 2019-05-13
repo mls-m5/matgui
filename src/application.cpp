@@ -9,12 +9,12 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "application.h"
-#include "commonsdl.h"
+#include "matgui/application.h"
+#include "matgui/commonsdl.h"
 #include "signal.h"
-#include "window.h"
-#include "draw.h"
-#include "windowdata.h"
+#include "matgui/window.h"
+#include "matgui/draw.h"
+#include "matgui/windowdata.h"
 
 using namespace std;
 
