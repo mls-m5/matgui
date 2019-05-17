@@ -387,7 +387,7 @@ public:
 		setParameteri(GL_TEXTURE_MAG_FILTER, type);
 	}
 
-	~Texture() {
+	~Texture() noexcept {
 		if (id) {
 			glDeleteTextures(1, &id);
 		}

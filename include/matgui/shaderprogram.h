@@ -17,6 +17,7 @@ public:
 		this->_program = s._program;
 		s._program = 0;
 	}
+	ShaderProgram(const ShaderProgram &s) = delete;
 	ShaderProgram();
 	ShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");
 	void initProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");

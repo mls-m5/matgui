@@ -22,7 +22,7 @@ static std::map<std::string, Texture> loadedTextures;
 static bool isInitialized = false;
 
 
-unsigned int createTextureFromFile(const std::string filename) {
+static unsigned int createTextureFromFile(const std::string filename) {
 #ifdef DISABLE_TEXTURES
 	return 0;
 #else
