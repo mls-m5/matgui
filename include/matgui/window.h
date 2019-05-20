@@ -32,6 +32,9 @@ public:
 	void show();
 	void hide();
 
+	// Set title of the window
+	void title(std::string title);
+
 	// invalidate triggers a redraw of the window
 	inline void invalidate() { invalid(true); };
 

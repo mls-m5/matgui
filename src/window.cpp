@@ -34,6 +34,10 @@ void checkSDLError(int line = -1)
 #endif
 }
 
+void Window::title(string title) {
+	SDL_SetWindowTitle(_windowData->window, title.c_str());
+}
+
 
 Window::Window(string title, int width, int height, bool resizable) {
 	_windowData.reset(new WindowData);
