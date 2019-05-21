@@ -29,6 +29,11 @@ public:
 	virtual void flush() = 0;
 
 	static void flushAll();
+
+protected:
+	typedef std::lock_guard<std::mutex> LockGuard;
+	std::mutex _mutex;
+	bool _onlySaveLast = false;
 };
 
 
@@ -78,6 +83,16 @@ struct StdFunctionConnection {
 		function();
 	}
 
+	// Checks if the connection is still valid
+	operator bool() {
+		return function? true: false;
+	}
+
+	// Make the function ponter invalid
+	void clear() {
+		function = 0;
+	}
+
 
 	//Pointer to function to be called
 	std::function<_functionType> function;
@@ -86,15 +101,29 @@ struct StdFunctionConnection {
 };
 
 
-
+// The loop used to flush signals
+// Defined once to avoid maintenance in multiple places
+// The macro iterates over all connections and removes invalid ones
+#define matsig_flush_loop(callStatement) \
+for (auto it = this->begin(); it != this->end(); ) { \
+	if (*it) { \
+		callStatement; \
+		++it; \
+	} \
+	else { \
+		LockGuard guard(_mutex); \
+		it = this->erase(it); \
+	} \
+}
 
 
 template <typename _argument = void, typename _returnValue = void>
 class Signal: SignalBase, protected std::list<StdFunctionConnection<_returnValue(_argument), _returnValue>> {
 public:
-	typedef std::lock_guard<std::mutex> LockGuard;
 	typedef std::function<_returnValue(_argument)> _functionType;
-	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
+	Signal(bool onlySaveLast = false) {
+		_onlySaveLast = onlySaveLast;
+	}
 
 	//Put a call on the queue
 	void emit(_argument arg) {
@@ -127,9 +156,7 @@ public:
 			//in case it is a sigle element list
 			auto arg = _queue.front();
 			_queue.pop();
-			for (auto &connection: *this) {
-				connection.call(arg.data);
-			}
+			matsig_flush_loop(it->call(arg.data));
 		}
 	}
 
@@ -140,9 +167,7 @@ public:
 	typename std::enable_if<std::is_void<T>::value>::type //This checks if the return value is void
 	directCall(_argument arg = 0) {
 		if (!this->empty()) {
-			for (auto &connection: *this) {
-				connection.call(arg);
-			}
+			matsig_flush_loop(it->call(arg));
 		}
 	}
 
@@ -153,9 +178,7 @@ public:
 	directCall(_argument arg = 0) {
 		if (!this->empty()) {
 			_returnValue ret = 0;
-			for (auto &connection: *this) {
-				ret = connection.callReturn(arg);
-			}
+			matsig_flush_loop(ret = it->callReturn(arg));
 			return ret;
 		}
 		return 0;
@@ -203,19 +226,19 @@ public:
 	template <typename T>
 	void disconnect(T *reference) {
 		LockGuard guard(_mutex);
-		for (auto it = this->begin(); it != this->end();) {
-			if (*it == (void*)reference) {
-				it = this->erase(it);
-			}
-			else {
-				++it;
+		for (auto &connection: *this) {
+			if (connection.reference == reference) {
+				connection.clear(); // Clears connection to be removed later
 			}
 		}
 	}
 
+	// Remove all connections
 	void disconnectAll() {
 		LockGuard guard(_mutex);
-		this->clear();
+		for (auto &connection: *this) {
+			connection.clear();
+		}
 	}
 
 
@@ -236,9 +259,7 @@ public:
 	}
 
 protected:
-	std::mutex _mutex;
 	std::queue<ArgumentClass<_argument>> _queue;
-	bool _onlySaveLast = false;
 };
 
 
@@ -248,9 +269,10 @@ template <class _returnValue>
 class Signal<void, _returnValue>: SignalBase, protected std::list<StdFunctionConnection<_returnValue(void), _returnValue>>{
 public:
 	typedef void *_argument;
-	typedef std::lock_guard<std::mutex> LockGuard;
 	typedef std::function<_returnValue(void)> _functionType;
-	Signal(bool onlySaveLast = false): _onlySaveLast(onlySaveLast) {}
+	Signal(bool onlySaveLast = false){
+		_onlySaveLast = onlySaveLast;
+	}
 
 	//Put a call on the queue
 	void emit() {
@@ -281,11 +303,8 @@ public:
 		while (!_queue.empty()) {
 			//removes element from que so that a new element can be added directly
 			//in case it is a sigle element list
-//			auto arg = _queue.front();
 			_queue.pop();
-			for (auto &connection: *this) {
-				connection.call();
-			}
+			matsig_flush_loop(it->call());
 		}
 	}
 
@@ -296,9 +315,7 @@ public:
 	typename std::enable_if<std::is_void<T>::value>::type //This checks if the return value is void
 	directCall() {
 		if (!this->empty()) {
-			for (auto &connection: *this) {
-				connection.call();
-			}
+			matsig_flush_loop(it->call());
 		}
 	}
 
@@ -309,9 +326,7 @@ public:
 	directCall() {
 		if (!this->empty()) {
 			_returnValue ret = 0;
-			for (auto &connection: *this) {
-				ret = connection.callReturn();
-			}
+			matsig_flush_loop(ret = it->callReturn());
 			return ret;
 		}
 		return 0;
@@ -350,19 +365,16 @@ public:
 	template <typename T>
 	void disconnect(T *reference) {
 		LockGuard guard(_mutex);
-		for (auto it = this->begin(); it != this->end();) {
-			if (*it == (void*)reference) {
-				it = this->erase(it);
-			}
-			else {
-				++it;
-			}
+		for (auto &connection: *this) {
+			connection.clear();
 		}
 	}
 
 	void disconnectAll() {
 		LockGuard guard(_mutex);
-		this->clear();
+		for (auto &connection: *this) {
+			connection.clear();
+		}
 	}
 
 
@@ -383,9 +395,7 @@ public:
 	}
 
 protected:
-	std::mutex _mutex;
 	std::queue<_argument> _queue;
-	bool _onlySaveLast = false;
 };
 
 

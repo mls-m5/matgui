@@ -5,6 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
+//#define DO_NOT_CATCH_ERRORS
 
 #include "unittest.h"
 #include "matsig.h"
@@ -210,7 +211,7 @@ TEST_CASE("standard function with arguments") {
 	Signal<int> signal;
 	functionIsCalled = false;
 
-	signal.connect(globalArgumentFunction);
+	signal.connect(globalArgumentFunction, (void*)globalArgumentFunction);
 
 	signal.emit(1);
 	flushSignals();
@@ -274,6 +275,28 @@ TEST_CASE("return value from direct call") {
 
 		ASSERT_EQ(signal.directCall(25), 25);
 	}
+}
+
+TEST_CASE("disconnect inside flush") {
+	Signal<int> signal;
+
+	void *ref = (void*)1;
+	int count = 0;
+
+	signal.connect([&] (int x) {
+		signal.disconnect(ref);
+		++count;
+	}, ref);
+
+	signal.emit(1);
+	flushSignals();
+
+	ASSERT_EQ(count, 1);
+
+	signal.emit(1);
+	flushSignals();
+
+	ASSERT_EQ(count, 1);
 }
 
 
