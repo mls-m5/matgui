@@ -221,30 +221,30 @@ void Application::InvalidateOnEvent(bool state) {
 }
 
 
-std::string Application::getKeyNameFromScancode(int scancode) {
+std::string Application::GetKeyNameFromScancode(int scancode) {
 	return SDL_GetScancodeName((SDL_Scancode)scancode);
 }
 
 
-std::string Application::getKeyNameFromKey(int key) {
+std::string Application::GetKeyNameFromKey(int key) {
 	return SDL_GetKeyName(key);
 }
 
 
-int Application::getKeyFromName(const std::string &name) {
+int Application::GetKeyFromName(const std::string &name) {
 	return SDL_GetKeyFromName(name.c_str());
 }
 
 
-int Application::getScancodeFromName(const std::string &name) {
+int Application::GetScancodeFromName(const std::string &name) {
 	return SDL_GetScancodeFromName(name.c_str());
 }
 
-int Application::getScancodeFromKey(int key) {
+int Application::GetScancodeFromKey(int key) {
 	return SDL_GetScancodeFromKey(key);
 }
 
-int Application::getKeyFromScancode(int scancode) {
+int Application::GetKeyFromScancode(int scancode) {
 	return SDL_GetKeyFromScancode((SDL_Scancode)scancode);
 }
 

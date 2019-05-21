@@ -46,12 +46,12 @@ public:
 	static void InvalidateOnEvent(bool state);
 
 	// Functions to convert between key and description string
-	std::string getKeyNameFromScancode(int scancod);
-	std::string getKeyNameFromKey(int scancode);
-	int getKeyFromName(const std::string &name);
-	int getScancodeFromName(const std::string &name);
-	int getScancodeFromKey(int key);
-	int getKeyFromScancode(int scancode);
+	static std::string GetKeyNameFromScancode(int scancode);
+	static std::string GetKeyNameFromKey(int scancode);
+	static int GetKeyFromName(const std::string &name);
+	static int GetScancodeFromName(const std::string &name);
+	static int GetScancodeFromKey(int key);
+	static int GetKeyFromScancode(int scancode);
 
 protected:
 
