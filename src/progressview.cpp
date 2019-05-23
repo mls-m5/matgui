@@ -23,12 +23,23 @@ ProgressView::~ProgressView() {
 
 void ProgressView::draw() {
 	currentStyle.drawBasicView(this);
-	indicatorStyle.drawRect(
-			_x,
-			_y,
-			_width * (double)(_value - _min) / (_max - _min),
-			_height
-	);
+	if (_orientation == Orientation::Horizontal) {
+		indicatorStyle.drawRect(
+				_x,
+				_y,
+				_width * (double)(_value - _min) / (_max - _min),
+				_height
+		);
+	}
+	else {
+		auto value = (double)(_value - _min) / (_max - _min);
+		indicatorStyle.drawRect(
+				_x,
+				_y + _height * (1 - value),
+				_width,
+				_height * value
+		);
+	}
 }
 
 } /* namespace MatGui */

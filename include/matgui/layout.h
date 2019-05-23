@@ -32,7 +32,7 @@ public:
 
 	virtual void refresh() override;
 	virtual void setLocation(double x, double y, double w, double h, double weight = 0) override;
-	void setOrientation(int orientation);
+	void setOrientation(LayoutOrientation orientation);
 
 	virtual void addChild(View *view);
 	virtual void addChildAfter(View *view, View* after);
@@ -55,7 +55,7 @@ protected:
 	std::list<View *> children;
 	View *pointerFocusedChild = nullptr;
 
-	int orientation;
+	LayoutOrientation orientation;
 	double margin;
 };
 

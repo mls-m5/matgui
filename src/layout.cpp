@@ -64,7 +64,7 @@ void Layout::addChildAfter(View* view, View* after) {
 	children.push_back(view);
 }
 
-void Layout::setOrientation(int orientation) {
+void Layout::setOrientation(LayoutOrientation orientation) {
 	if (orientation != this->orientation) {
 		this->orientation = orientation;
 		refresh();
