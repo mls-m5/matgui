@@ -336,7 +336,7 @@ public:
 	//Shorthand function
 	//Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
 	template <typename T>
-	Texture(std::vector<T> data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR, bool generateMipmap = true): Texture() {
+	Texture(const std::vector<T> &data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR, bool generateMipmap = true): Texture() {
 		setData(data, width, height, format, interpolationType);
 		if (generateMipmap) {
 			this->generateMipmap();
@@ -357,14 +357,8 @@ public:
 
 	// Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
 	template <typename T>
-	void setData(std::vector<T> data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR) {
-		bind();
-		glCall(glTexImage2D(
-				GL_TEXTURE_2D, 0, format,
-				width, height, 0, format,
-				getType<T>(), &data.front()
-		));
-		setInterpolationType(interpolationType);
+	void setData(const std::vector<T> &data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR) {
+		setData(&data.front(), width, height, format, interpolationType);
 	}
 
 	// Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
@@ -378,6 +372,20 @@ public:
 		));
 		setInterpolationType(interpolationType);
 	}
+
+	// Calls glTexSubImage
+	template <typename T>
+	void updateData(const T *data, int xoffset, int yoffset, int width, int height, GLenum format = GL_RGB) {
+		bind();
+		glCall(glTexSubImage2D(GL_TEXTURE_2D, 0, xoffset, yoffset, width, height, format, getType<T>(), data));
+	}
+
+	template <typename T>
+	void updateData(const std::vector<T> &data, int xoffset, int yoffset, int width, int height, GLenum format = GL_RGB) {
+		updateData(&data.front(), xoffset, yoffset, width, height, format);
+	}
+
+
 
 	void generateMipmap() {
 		bind();
