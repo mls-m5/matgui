@@ -131,6 +131,20 @@ void Window::hide() {
 	Application::removeWindow(this);
 }
 
+bool Window::setFullscreen(bool state, bool changeVideoMode) {
+	if (state) {
+		if (changeVideoMode) {
+			return SDL_SetWindowFullscreen(_windowData->window, SDL_WINDOW_FULLSCREEN);
+		}
+		else {
+			return SDL_SetWindowFullscreen(_windowData->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		}
+	}
+	else {
+		return SDL_SetWindowFullscreen(_windowData->window, 0);
+	}
+}
+
 bool Window::invalid() {
 	return _windowData->invalid;
 }
@@ -157,6 +171,7 @@ std::pair<int, int> Window::getCursorPosition() {
 
 bool Window::onResize(int width, int height) {
 	auto scale = Application::Scale();
+	setDimensions(width / scale, height / scale);
 	Layout::setLocation(0, 0, width / scale, height / scale);
 	return true;
 }

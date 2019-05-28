@@ -286,6 +286,7 @@ void drawLine(vec v1, vec v2, const class Paint *paint) {
 void setDimensions(double width, double height){
 	screenWidth = width;
 	screenHeight = height;
+	glViewport(0, 0, width, height);
 }
 
 bool initDrawModule(double width, double height) {

@@ -237,7 +237,6 @@ FontView::~FontView() {
 }
 
 void FontView::draw(double x, double y) {
-	//Todo implement
 	_data->render(*this, x, y);
 }
 

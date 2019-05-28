@@ -26,11 +26,15 @@ public:
 
 	bool onRequestClose();
 
-	//Does not work... you need to recreate the open gl context each time
 	bool onResize(int width, int height);
 
 	void show();
 	void hide();
+
+	// Set fullscreen if state is true or disable with state = false
+	// if changeVideoMode is set, the display changes resolution to the windows size
+	// return false on success and true on error
+	bool setFullscreen(bool state = true, bool changeVideoMode = false);
 
 	// Set title of the window
 	void title(std::string title);
