@@ -70,11 +70,23 @@ Buildflags
 --------
 
 Here is some example flags
+
 ```
+
 CXXFLAGS = -std=c++11 -Iinclude/ -Imatgui/include/matgui
 LIBS = -lGL -lSDL2 -lSDL2_ttf -lSDL2_image
 
 CXXFLAGS += -DUSE_TTF_FONT //This flag will use libsdl2-ttf fonts instead of the built in bitmap fonts.
+```
+
+
+For compilation with emscripten, to compile to javascript these flags are needed.
+
+```
+-s USE_SDL=2 -s FULL_ES2=1 -s USE_WEBGL2=1
+
+-s USE_SDL_IMAGE=2 // needed if using sdl2-image
+
 ```
 
 It is currently in early development phase, please contact me if you want more information if how to use it

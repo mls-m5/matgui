@@ -16,6 +16,10 @@
 #include "matgui/draw.h"
 #include "matgui/windowdata.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 using namespace std;
 
 namespace MatGui {
@@ -42,48 +46,66 @@ Application::Application(int argc, char** argv) {
         sdldie("Unable to initialize SDL"); /* Or die on error */
 }
 
+// This separation is to make it possible to run on single threaded platforms
+// such as javascript with emscripten
+void innerLoopPublic(void *application) {
+	((Application*)application)->innerLoop();
+}
+
+inline void Application::innerLoop() {
+	auto newTime = SDL_GetTicks();
+	auto passedTime = (double) (newTime - lastTick) / 1000.;
+	lastTick = newTime;
+
+	auto shouldRedraw = continuousUpdates;
+
+	if (!shouldRedraw) {
+		for (auto it: windows){
+			if (it->invalid()) {
+				shouldRedraw = true;
+			}
+		}
+	}
+
+	if (shouldRedraw && frameUpdate) {
+		//Handle gives the developer the possibility to do things each frame
+		frameUpdate.directCall(passedTime);
+	}
+
+	if (!shouldRedraw && !continuousUpdates) {
+		SDL_Delay(10); //Limit cpu usage on idle
+	}
+
+	for (auto it: windows) {
+		if (continuousUpdates || it->invalid()) {
+			it->clear();
+			it->draw();
+			it->swap();
+			it->invalid(false);
+		}
+	}
+
+	if (handleEvents()) {
+		running = false;
+		return;
+#ifdef __EMSCRIPTEN__
+		emscripten_cancel_main_loop();
+#endif
+	}
+
+	MatSig::flushSignals();
+}
+
 void Application::mainLoop() {
 	running = true;
-	auto oldTime = SDL_GetTicks();
+	lastTick = SDL_GetTicks();
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg(innerLoopPublic, this, 0, 1);
+#else
 	while (running) {
-		auto newTime = SDL_GetTicks();
-		auto passedTime = (double) (newTime - oldTime) / 1000.;
-		oldTime = newTime;
-
-		auto shouldRedraw = continuousUpdates;
-
-		if (!shouldRedraw) {
-			for (auto it: windows){
-				if (it->invalid()) {
-					shouldRedraw = true;
-				}
-			}
-		}
-
-		if (shouldRedraw && frameUpdate) {
-			//Handle gives the developer the possibility to do things each frame
-			frameUpdate.directCall(passedTime);
-		}
-
-		if (!shouldRedraw && !continuousUpdates) {
-			SDL_Delay(10); //Limit cpu usage on idle
-		}
-
-		for (auto it: windows) {
-			if (continuousUpdates || it->invalid()) {
-				it->clear();
-				it->draw();
-				it->swap();
-				it->invalid(false);
-			}
-		}
-
-		if (handleEvents()) {
-			break;
-		}
-
-		MatSig::flushSignals();
+		innerLoopPublic(this);
 	}
+#endif
 }
 
 Window *Application::getWindow(unsigned int w) {
@@ -186,6 +208,7 @@ bool Application::handleEvents() {
 }
 
 Application::~Application() {
+#ifndef __EMSCRIPTEN__
     QuitDrawModule();
 
     auto tmpWindowList = windows; //windows will start removing themselves from list
@@ -195,6 +218,7 @@ Application::~Application() {
     windows.clear();
 
     SDL_Quit();
+#endif
 }
 
 void Application::addWindow(class Window* window) {
@@ -210,6 +234,10 @@ void Application::removeWindow(class Window* window) {
 
 float Application::Scale() {
 	return scale;
+}
+
+void Application::Scale(float s) {
+	scale = s;
 }
 
 void Application::ContinuousUpdates(bool state) {

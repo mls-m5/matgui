@@ -14,8 +14,11 @@ namespace MatGui {
 
 class Application {
 public:
-
+	// Constructor sets up environment
 	Application(int argc, char **argv);
+
+	// Destructor tears down environment
+	// Exception is for emscripten when the destructor does nothing
 	virtual ~Application();
 	void mainLoop();
 	bool handleEvents();
@@ -34,6 +37,10 @@ public:
 	// This is to enable same window size on hd screens
 	// Change by sending for example "--scale 2" as arguments on construction
 	static float Scale();
+
+	// Used to set scale
+	// If used after crating any window the result is undefined
+	static void Scale(float scale);
 
 	// Continuous updates is when the screen updates as fast as possible
 	// (in sync with the screen updates
@@ -58,9 +65,12 @@ protected:
 	//Functions used internally to handle windows
 	static void addWindow(class Window*);
 	static void removeWindow(class Window*);
+	inline void innerLoop();
 
 	bool running = false;
+	uint32_t lastTick = 0; // used to keep track of framerate
 	friend class Window;
+	friend void innerLoopPublic(void *application);
 };
 
 }  // namespace MatGui

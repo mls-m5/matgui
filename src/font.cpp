@@ -87,6 +87,9 @@ public:
 				/*Generate an OpenGL 2D texture from the SDL_Surface*.*/
 				glGenTextures(1, &texture);
 				glBindTexture(GL_TEXTURE_2D, texture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // This is important for webgl otherwhise only a black box is drawn
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // for non pow2 size textures
+
 #ifdef USE_BITMAP_FONT
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -99,7 +102,7 @@ public:
 				glBindTexture(GL_TEXTURE_2D, texture); //the texture name is already created
 			}
 
-			glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+			glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_RGBA,
 					GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 			view._width = messageSurface->w;
@@ -155,7 +158,10 @@ void renderText(const FontType *font, GLubyte r, GLubyte g, GLubyte b,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_BGRA,
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // This is important for webgl otherwhise only a black box is drawn
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // for non pow2 size textures
+
+	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, messageSurface->w, messageSurface->h, 0, GL_RGBA,
 	             GL_UNSIGNED_BYTE, messageSurface->pixels);
 
 	drawTextureRect({x, y}, 0, messageSurface->w, messageSurface->h, Texture, centered ? DrawStyle::CenterOrigo : DrawStyle::OrigoTopLeft);

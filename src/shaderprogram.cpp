@@ -8,14 +8,37 @@
 #include "matgui/shaderprogram.h"
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 
 using std::cout; using std::endl;
 
-GLuint loadShader(GLenum shaderType, const char* pSource) {
+// Used when using for example opengl es 3.0
+std::string translate(const std::string &fromSource, GLenum shaderType, int fromVersion, int toVersion) {
+	std::string ret;
+
+	ret = "precision mediump float;\n";
+	ret += fromSource;
+	return ret;
+}
+
+static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
     GLuint shader = glCreateShader(shaderType);
     if (shader) {
-        glShaderSource(shader, 1, &pSource, 0);
+#ifdef USING_GL2
+    	if (shaderType == GL_FRAGMENT_SHADER) {
+    		auto translated = translate(pSource, shaderType, 330, 300);
+    		const auto ptr = translated.c_str();
+    		glShaderSource(shader, 1, &ptr, 0);
+    	}
+    	else {
+    		const auto ptr = pSource.c_str();
+    		glShaderSource(shader, 1, &ptr, 0);
+    	}
+#else
+    	const auto ptr = pSource.c_str();
+    	glShaderSource(shader, 1, &ptr, 0);
+#endif
         glCompileShader(shader);
         GLint compiled = 0;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -23,14 +46,11 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
             GLint infoLen = 0;
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen) {
-            	char *buf = new char[infoLen];
-                if (buf) {
-                    glGetShaderInfoLog(shader, infoLen, 0, buf);
-                    debug_print("Could not compile shader %d:\n%s\n",
-                            shaderType, buf);
-                    debug_print("Shader code: \n%s\n", pSource);
-                    delete [] buf;
-                }
+            	std::vector<char> buffer(infoLen);
+            	glGetShaderInfoLog(shader, infoLen, 0, &buffer[0]);
+            	debug_print("Could not compile shader %d:\n%s\n",
+            			shaderType, &buffer[0]);
+            	debug_print("Shader code: \n%s\n", pSource.c_str());
                 glDeleteShader(shader);
                 shader = 0;
             }
@@ -41,29 +61,33 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
 
 
 GLuint createProgram(std::string pVertexSource, std::string pFragmentSource, const std::string &geometryCode) {
-    GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource.c_str());
+    GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
     if (!vertexShader) {
     	debug_print("Shader program: failed creating vertex shader");
         return 0;
     }
 
-    GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource.c_str());
-    if (!pixelShader) {
+    GLuint fragmentShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
+    if (!fragmentShader) {
     	debug_print("Shader program: failed creating fragment shader");
         return 0;
     }
 
+#ifndef USING_GL2
     GLuint geometryShader = 0;
     if (!geometryCode.empty()) {
     	geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryCode.c_str());
     }
+#endif
 
     GLuint program = glCreateProgram();
     if (program) {
         glCall(glAttachShader(program, vertexShader));
-        glCall(glAttachShader(program, pixelShader));
+        glCall(glAttachShader(program, fragmentShader));
         if (!geometryCode.empty()) {
+#ifndef USING_GL2
         	glCall(glAttachShader(program, geometryShader));
+#endif
         }
         glLinkProgram(program);
         GLint linkStatus = GL_FALSE;
@@ -72,12 +96,9 @@ GLuint createProgram(std::string pVertexSource, std::string pFragmentSource, con
             GLint bufLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
             if (bufLength) {
-            	char *buf = new char[bufLength];
-                if (buf) {
-                    glGetProgramInfoLog(program, bufLength, 0, buf);
-                    debug_print("Could not link program:\n%s\n", buf);
-                    delete buf;
-                }
+            	std::vector<char> buffer(bufLength);
+            	glGetProgramInfoLog(program, bufLength, 0, &buffer[0]);
+            	debug_print("Could not link program:\n%s\n", &buffer[0]);
             }
             else {
             	debug_print("Shader program linking failed, but with no error log");
