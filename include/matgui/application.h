@@ -20,18 +20,15 @@ public:
 	// Destructor tears down environment
 	// Exception is for emscripten when the destructor does nothing
 	virtual ~Application();
-	void mainLoop();
-	bool handleEvents();
+	static void mainLoop();
+	static bool handleEvents();
 
-	class Window *getWindow(unsigned int w);
+	static class Window *getWindow(unsigned int w);
 
-	void quit() { running = false; }
+	// Stops the main loop
+	static void quit();
 
-	// Signal called when the main loop take a step
-	// the argument is the time since the last time the signal was called
-	// Note: the functions is called directly so it is okay to connect
-	// render code to this signal
-	MatSig::Signal<double> frameUpdate; //Todo: Move this to Window
+	// note: frameUpdate signal is moved to window
 
 	// Scale is a global value that sets the scale for graphics.
 	// This is to enable same window size on hd screens
@@ -65,12 +62,9 @@ protected:
 	//Functions used internally to handle windows
 	static void addWindow(class Window*);
 	static void removeWindow(class Window*);
-	inline void innerLoop();
+	static inline void innerLoop();
 
-	bool running = false;
-	uint32_t lastTick = 0; // used to keep track of framerate
 	friend class Window;
-	friend void innerLoopPublic(void *application);
 };
 
 }  // namespace MatGui

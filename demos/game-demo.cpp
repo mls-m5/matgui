@@ -77,7 +77,7 @@ int main(int argc, char**argv) {
 	window->addChild(button);
 	window->addChild(game);
 
-	app.frameUpdate.connect(game, &Game::frameCallback);
+	window->frameUpdate.connect(game, &Game::frameCallback);
 	button->clicked.connect(game, &Game::buttonClicked);
 
 	app.mainLoop();

@@ -1,14 +1,15 @@
 #matgui
 
 Matgui is a simple gui that aims to
-* Be platform independent (linux, windows, mac, android, iphone/ipad)
+* Be platform independent (linux, windows, mac, android, iphone/ipad, web)
 * Have a minimal set of dependencies
 * Easy to import in project
 * Implement signals and slots to do callback
 * Thread safe
 * Super easy to build and used (compared to gtk, qt, ect)
+* Easy to add opengl-graphics to program
 
-Matgui is for the moment based on SDL2
+Matgui is for the moment based on SDL2 and opengl 3 or 2 (depending on platform)
 
 Design
 -------
@@ -46,23 +47,29 @@ int main(int argc, char *argv[])
 
 	auto button = new Button("button");
 	auto button2 = new Button;
+	auto button3 = new Button("button 3");
 	auto knob = new KnobView;
 
 	window.addChild(button);
 	window.addChild(knob);
 	window.addChild(button2);
+	window.addChild(button3);
 	
-	window.style.fill.setColor(1, 1, 1); //Change the window style
+	window.style.fill.color(1, 1, 1); //Change the window style
 	window.updateStyle();
 
 	button->clicked.connect(callback); //callback to a function
 	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+	button3->clicked.connect([] (PointerArgument arg) {
+		cout << "button 3 clicked" << endl;
+	});
 
 	app.mainLoop();
 	
-	//All views are automatically deleted when the containers are deleted
+	// All views are automatically deleted when the containers are deleted
 
     return 0;
+    // Program is teared down when Application runs out of scope, except for when using emscripten ( compiled to javascript )
 }
 ```
 

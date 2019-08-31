@@ -55,6 +55,12 @@ public:
 	// if true is returned, the window is closed as usual
 	Signal<void, bool> closeSignal;
 
+	// Signal called when the main loop take a step
+	// the argument is the time since the last time the signal was called
+	// Note: the functions is called directly so it is okay to connect
+	// render code to this signal
+	MatSig::Signal<double> frameUpdate;
+
 protected:
 	std::unique_ptr<struct WindowData> _windowData;
 

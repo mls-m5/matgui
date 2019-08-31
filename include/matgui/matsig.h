@@ -117,6 +117,7 @@ for (auto it = this->begin(); it != this->end(); ) { \
 }
 
 
+// Standard case of signal _with_ arguments
 template <typename _argument = void, typename _returnValue = void>
 class Signal: SignalBase, protected std::list<StdFunctionConnection<_returnValue(_argument), _returnValue>> {
 public:
@@ -222,6 +223,16 @@ public:
 	}
 
 
+	// Connect a function with void arguments
+	void connect(std::function<_returnValue()> f, void *reference = 0) {
+		LockGuard guard(_mutex);
+		this->push_back({[f](_argument arg) {
+			// Just ignoring argument
+			return f();
+		}, reference});
+	}
+
+
 	//Disconnect connection by reference
 	template <typename T>
 	void disconnect(T *reference) {
@@ -265,6 +276,7 @@ protected:
 
 
 
+// Signal specialization _without_ arguments
 template <class _returnValue>
 class Signal<void, _returnValue>: SignalBase, protected std::list<StdFunctionConnection<_returnValue(void), _returnValue>>{
 public:

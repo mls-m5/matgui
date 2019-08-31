@@ -63,12 +63,18 @@ int main(int argc, char *argv[])
 	window.addChild(&layout2);
 
 	button.clicked.connect(callback); //callback to a function
-	button2.clicked.connect(&app, &Application::quit); //A demo just to show how signals work
+	button2.clicked.connect(Application::quit); //A demo just to show how signals work
 
 	knob.changed.connect(knobCallback);
-	knob.changed.connect([] (double) {
-		cout << "lambda function called from signal" << endl;
+	// To specify argument is optional
+	// as can be seen from these two examples
+	knob.changed.connect([] (double value) {
+		cout << "lambda function called from signal with value " << value << endl;
 	});
+	knob.changed.connect([] () {
+		cout << "lambda function called to function without specified arguments" << endl;
+	});
+
 	window.keyDown.connect(keyDownCallback);
 
 	knob.value(.3);

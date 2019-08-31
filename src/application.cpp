@@ -31,9 +31,16 @@ static float scale = 1.f;
 static bool continuousUpdates = true;
 static bool invalidateOnEvent = true;
 
+static bool running = false;
+static uint32_t lastTick = 0; // used to keep track of framerate
+
 Application::Application(int argc, char** argv) {
 	application = this;
 	MatSig::setMainThread();
+
+	if (running == true) {
+		throw std::runtime_error("Application already created in other part of program");
+	}
 
 	for (int i = 0; i + 1 < argc; ++i) {
 		if (argv[i] == string("--scale")) {
@@ -46,11 +53,15 @@ Application::Application(int argc, char** argv) {
         sdldie("Unable to initialize SDL"); /* Or die on error */
 }
 
-// This separation is to make it possible to run on single threaded platforms
-// such as javascript with emscripten
-void innerLoopPublic(void *application) {
-	((Application*)application)->innerLoop();
+void Application::quit() {
+	running = false;
 }
+
+//// This separation is to make it possible to run on single threaded platforms
+//// such as javascript with emscripten
+//void innerLoopPublic(void *application) {
+//	((Application*)application)->innerLoop();
+//}
 
 inline void Application::innerLoop() {
 	auto newTime = SDL_GetTicks();
@@ -67,18 +78,21 @@ inline void Application::innerLoop() {
 		}
 	}
 
-	if (shouldRedraw && frameUpdate) {
-		//Handle gives the developer the possibility to do things each frame
-		frameUpdate.directCall(passedTime);
-	}
+//	if (shouldRedraw && frameUpdate) {
+//		//Handle gives the developer the possibility to do things each frame
+//		frameUpdate.directCall(passedTime);
+//	}
 
+#ifndef __EMSCRIPTEN__
 	if (!shouldRedraw && !continuousUpdates) {
 		SDL_Delay(10); //Limit cpu usage on idle
 	}
+#endif
 
 	for (auto it: windows) {
 		if (continuousUpdates || it->invalid()) {
 			it->clear();
+			it->frameUpdate.directCall(passedTime);
 			it->draw();
 			it->swap();
 			it->invalid(false);
@@ -100,10 +114,10 @@ void Application::mainLoop() {
 	running = true;
 	lastTick = SDL_GetTicks();
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop_arg(innerLoopPublic, this, 0, 1);
+    emscripten_set_main_loop(innerLoop, 60, 1);
 #else
 	while (running) {
-		innerLoopPublic(this);
+		innerLoop();
 	}
 #endif
 }
