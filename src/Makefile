@@ -3,32 +3,36 @@ COMPILER=g++
 GUIOBJECTS=view.o knobview.o button.o toggleview.o sliderview.o matsig.o linearlayout.o layout.o progressview.o imageview.o label.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o bitmapfont.o paint.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
-#LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/" -I. -fPIC
+CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies
 LIB=../matgui-sdl.a
+SHARED=../libmatgui.so
 
-all: .depend $(LIB)
+LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 
-#Calculating dependincies
-.depend: $(wildcard ./*.cpp ./*.h) Makefile
-	$(CXX) $(CXXFLAGS) -MM *.cpp > ./.dependtmp
-	cat ./.dependtmp | sed 's/h$$/h \n\t \$(CXX) -c $$(CXXFLAGS) $$< -o $$@/' > ./.depend
-	rm ./.dependtmp
+all: $(LIB) ${SHARED}
 
-${TARGET}: ${OBJECTS} $(LIB) #cleancpp
+${TARGET}: ${OBJECTS} $(LIB) 
 	${COMPILER} ${FLAGS} -o ${TARGET} ${PROGOBJECS} $(LIB) ${LIBS}
 	
 ../matgui.a: ${GUIOBJECTS} #without sdl-dependencies
-	ar rvs ../matgui.a ${GUIOBJECTS}
+	ar rs ../matgui.a ${GUIOBJECTS}
 	
-$(LIB): ${BACKENDOBJECTS} ${GUIOBJECTS}
-	ar rvs ../matgui-sdl.a ${BACKENDOBJECTS} ${GUIOBJECTS}
+${LIB}: ${BACKENDOBJECTS} ${GUIOBJECTS}
+	ar rs ../matgui-sdl.a ${BACKENDOBJECTS} ${GUIOBJECTS}
 
-include .depend
+${SHARED}: ${BACKENDOBJECTS} ${GUIOBJECTS}
+	${CXX} -shared -o  ${SHARED} ${BACKENDOBJECTS} ${GUIOBJECTS} ${LIBS}
+
+-include *.d
 
 clean:
-	rm -f $(LIB)
 	rm -f *.o
-	rm -f .depend
+	rm -f *.d
+	rm -f ${LIB} ${SHARED}
 
 rebuild: clean ${TARGET}
+
+
+
+.SECONDARY: ${BACKENDOBJECTS} ${GUIOBJECTS} # Prevent make from removing them
