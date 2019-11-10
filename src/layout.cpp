@@ -192,8 +192,8 @@ void Layout::deleteAll() {
 	refresh();
 }
 
-View *Layout::getChild(int index) {
-	int i = 0;
+View *Layout::getChild(size_t index) {
+	size_t i = 0;
 	if (index >= children.size()){
 		return 0;
 	}
@@ -205,8 +205,8 @@ View *Layout::getChild(int index) {
 	return 0;
 }
 
-void Layout::replaceChild(int index, View* view) {
-	int i = 0;
+void Layout::replaceChild(size_t index, View* view) {
+	size_t i = 0;
 	if (index >= children.size()){
 		return;
 	}

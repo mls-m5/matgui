@@ -3,7 +3,7 @@ COMPILER=g++
 GUIOBJECTS=view.o knobview.o button.o toggleview.o sliderview.o matsig.o linearlayout.o layout.o progressview.o imageview.o label.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o bitmapfont.o paint.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
-CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/" -I. -fPIC
+CXXFLAGS=-std=c++11 `sdl2-config --cflags` -I"../include/" -I. -fPIC
 CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies
 LIB=../matgui-sdl.a
 SHARED=../libmatgui.so
@@ -11,6 +11,9 @@ SHARED=../libmatgui.so
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
 
 all: $(LIB) ${SHARED}
+
+debug: CXXFLAGS+=-g -O0 -Wall
+debug: all
 
 ${TARGET}: ${OBJECTS} $(LIB) 
 	${COMPILER} ${FLAGS} -o ${TARGET} ${PROGOBJECS} $(LIB) ${LIBS}

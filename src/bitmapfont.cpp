@@ -41,7 +41,7 @@ BitmapFontData getFontDataVector(string text) {
 	letter.reserve(6);
 	std::list<BitmapFontData*> letterList;
 
-	int lineHeight = 1;
+	unsigned lineHeight = 1;
 	int lineDepth = 0;
 
 	for (int i = 0; i < textSize; ++i) {
@@ -98,8 +98,8 @@ BitmapFontData getFontDataVector(string text) {
 	int offsetY = 0;
 	for (auto letter: letterList) {
 		offsetY = lineHeight - letter->lineHeight;
-		for (int y = 0; y < letter->height; ++y) {
-			for (int x = 0; x < letter->width; ++x) {
+		for (unsigned y = 0; y < letter->height; ++y) {
+			for (unsigned x = 0; x < letter->width; ++x) {
 				assert(x + y * width + rasterX < fontData.size());
 				assert(x + y * letter->width < letter->size());
 

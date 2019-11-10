@@ -43,9 +43,9 @@ private:
 class StandardShaderProgram: public ShaderProgram {
 public:
 
-	GLuint vertexPointer;
-	GLuint colorPointer;
-	GLuint mvpMatrixPointer;
+	GLint vertexPointer;
+	GLint colorPointer;
+	GLint mvpMatrixPointer;
 
 	StandardShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode = "");
 	void disable();

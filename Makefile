@@ -1,12 +1,12 @@
 .PHONY: all lib demos tests clean
 
-all:
-	make -C src/
-	make -C demos/
-	make -C tests/
+all: lib demos tests
+	
+debug: target=debug
+debug: all
 
 lib:
-	make -C src/
+	make -C src/ ${target}
 
 demos:
 	make -C demos/

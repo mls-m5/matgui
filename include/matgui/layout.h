@@ -39,9 +39,9 @@ public:
 	virtual void removeChild(View *view);
 	virtual void deleteChild(View *view);
 	virtual void deleteAll();
-	virtual View *getChild(int index);
+	virtual View *getChild(size_t index);
 	virtual View *getChild(std::string name);
-	virtual void replaceChild(int index, View *view);
+	virtual void replaceChild(size_t index, View *view);
 	void setPadding(double p){
 		margin = p;
 		refresh();

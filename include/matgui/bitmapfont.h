@@ -39,9 +39,9 @@ struct BitmapFontData : public std::vector<char> {
 		std::fill(begin(), end(), ' ');
 	}
 
-	int width = 0;
-	int height = 0;
-	int lineHeight = 0;
+	unsigned width = 0;
+	unsigned height = 0;
+	unsigned lineHeight = 0;
 	int lineDepth = 0;
 	int linePos = 0;
 };
@@ -110,8 +110,8 @@ struct BitmapFont {
 
 
 inline BitmapFontData::BitmapFontData(const char* data) {
-	int h = 1;
-	int w = 0;
+	unsigned h = 1;
+	unsigned w = 0;
 	//get the dimensions of the letter
 	for (int i = 0; data[i] != 0; ++i) {
 		auto &c = data[i];
