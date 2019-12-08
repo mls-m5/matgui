@@ -24,8 +24,8 @@ ToggleView::~ToggleView() {
 
 bool ToggleView::onPointerDown(pointerId id, MouseButton button, double x, double y) {
 	onPointerMove(id, x, y, button);
-	_value = not _value;
-	changed.emit(_value);
+	value(not value());
+	changed.emit(value());
 	return true;
 }
 
@@ -35,29 +35,29 @@ bool ToggleView::onPointerUp(pointerId id, MouseButton button, double x, double 
 }
 
 void ToggleView::draw() {
-	auto middleX = _width / 2.;
-	auto middleY = _height / 2.;
+	auto middleX = width() / 2.;
+	auto middleY = height() / 2.;
 
 	double radius;
-	if (_width > _height){
-		radius = _height;
+	if (width() > height()){
+		radius = height();
 	}
 	else{
-		radius = _width;
+		radius = width();
 	}
 	radius *= (.8 / 2);
 
 	currentStyle.drawRect(
-			_x + middleX - radius,
-			_y + middleY - radius,
+			x() + middleX - radius,
+			y() + middleY - radius,
 			radius * 2,
 			radius * 2
 	);
 
-	if (_value > .5) {
+	if (value() > .5) {
 		indicatorStyle.drawRect(
-				_x + middleX - radius / 2,
-				_y + middleY - radius / 2,
+				x() + middleX - radius / 2,
+				y() + middleY - radius / 2,
 				radius,
 				radius
 		);

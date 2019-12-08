@@ -61,7 +61,7 @@ public:
 	// render code to this signal
 	MatSig::Signal<double> frameUpdate;
 
-protected:
+private:
 	std::unique_ptr<struct WindowData> _windowData;
 
 	friend class Application;

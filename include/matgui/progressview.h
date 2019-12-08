@@ -8,6 +8,7 @@
 #pragma once
 
 #include "controllerview.h"
+#include "paint.h"
 
 namespace MatGui {
 

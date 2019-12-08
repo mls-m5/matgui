@@ -7,12 +7,13 @@
 
 #include "matgui/window.h"
 #include "matgui/draw.h"
-#include "matgui/windowdata.h"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "matgui/common-gl.h"
 
 #include "matgui/application.h"
+
+#include "windowdata.h"
 using std::cout; using std::endl;
 using std::string;
 
@@ -94,8 +95,8 @@ Window::Window(string title, int width, int height, bool resizable) {
 	}
 	#endif
 
-    setLocation(0,0, width, height);
-    initDrawModule(_width, _height); //Init the drawmodule for the CURRENT CONTEXT
+    location(0,0, width, height);
+    initDrawModule(this->width(), this->height()); //Init the drawmodule for the CURRENT CONTEXT
 
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
@@ -181,7 +182,7 @@ std::pair<int, int> Window::getCursorPosition() {
 bool Window::onResize(int width, int height) {
 	auto scale = Application::Scale();
 	setDimensions(width / scale, height / scale);
-	Layout::setLocation(0, 0, width / scale, height / scale);
+	Layout::location(0, 0, width / scale, height / scale);
 	return true;
 }
 

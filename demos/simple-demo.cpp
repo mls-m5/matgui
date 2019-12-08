@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	window.addChild(&progress);
 
 	LinearLayout layout2;
-	layout2.setOrientation(LAYOUT_HORIZONTAL);
+	layout2.orientation(LAYOUT_HORIZONTAL);
 	layout2.addChild(new Label("etikett")); //You can also use pointers
 	layout2.addChild(new ImageView("gfx/test.png"));
 	layout2.addChild(new ToggleView());

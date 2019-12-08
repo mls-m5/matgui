@@ -13,7 +13,7 @@ namespace MatGui {
 View::View():
 _weight(1)
 {
-	setLocation(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
+	location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
 	hoverStyle.enabled = false;
 }
 
@@ -23,7 +23,7 @@ View::~View() {
 	}
 }
 
-void View::setLocation(double x, double y, double w, double h, double weight) {
+void View::location(double x, double y, double w, double h, double weight) {
 	_x = x;
 	_y = y;
 	_width = w;

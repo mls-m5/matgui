@@ -57,15 +57,21 @@ public:
 		}
 	}
 
+	[[deprecated ("use value(...) instead")]]
 	void setValue(_valueType v) {
 		value(v);
 	}
 
-	_valueType value() {
+	_valueType value() const {
 		return _value;
 	}
 
+	[[deprecated ("use linear(...) instead")]]
 	void setLinear(_valueType min, _valueType max, _valueType step){
+		linear(min, max, step);
+	}
+
+	void linear(_valueType min, _valueType max, _valueType step){
 		this->_min = min;
 		this->_max = max;
 		this->_step = step;
@@ -79,9 +85,13 @@ public:
 		value(v);
 	}
 
+	member_property(_valueType, min);
+	member_property(_valueType, max);
+	member_property(_valueType, step);
+
 	Signal<_valueType> changed;
 
-protected:
+private:
 	_valueType _value;
 	_valueType _min, _max, _step;
 	int elementId, controllerId;

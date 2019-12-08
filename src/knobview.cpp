@@ -35,41 +35,41 @@ bool KnobView::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
 	if (state) {
 		//Todo: make this nicer, like that the control does not go all the way round or something like that
-		double v = atan2(x - _width / 2, -y + _height / 2) / pi2 + .5;
-		v *= (1. + _step / (_max - _min)); //Adding a bit extra to make it possible to get the highest value
+		double v = atan2(x - width() / 2, -y + height() / 2) / pi2 + .5;
+		v *= (1. + step() / (max() - min())); //Adding a bit extra to make it possible to get the highest value
 		amount(v);
-		changed.emit(_value);
+		changed.emit(value());
 		return true;
 	}
 	return false;
 }
 
 void KnobView::draw() {
-	auto middleX = _width / 2.;
-	auto middleY = _height / 2.;
+	auto middleX = width() / 2.;
+	auto middleY = height() / 2.;
 
 	double radius;
-	if (_width > _height){
-		radius = _height;
+	if (width() > height()){
+		radius = height();
 	}
 	else{
-		radius = _width;
+		radius = width();
 	}
 	radius *= (.8 / 2);
 	currentStyle.drawEllipse(
-			_x + middleX - radius,
-			_y + middleY - radius,
+			x() + middleX - radius,
+			y() + middleY - radius,
 			radius * 2,
 			radius * 2
 	);
 
-	const double v = (_value - _min) / (_max - _min);
+	const double v = (value() - min()) / (max() - min());
 
 	auto smallR = radius *.1;
 	auto a = v * pi2;
 	indicatorStyle.drawEllipse(
-		_x + middleX - radius * sin(a) - smallR,
-		_y + middleY + radius * cos(a) - smallR,
+		x() + middleX - radius * sin(a) - smallR,
+		y() + middleY + radius * cos(a) - smallR,
 		smallR * 2,
 		smallR * 2
 	);

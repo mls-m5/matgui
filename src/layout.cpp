@@ -13,8 +13,8 @@ using std::cout; using std::endl;
 namespace MatGui {
 
 Layout::Layout():
-orientation(LAYOUT_VERTICAL),
-margin(4){
+_orientation(LAYOUT_VERTICAL),
+_padding(4){
 
 }
 
@@ -64,9 +64,9 @@ void Layout::addChildAfter(View* view, View* after) {
 	children.push_back(view);
 }
 
-void Layout::setOrientation(LayoutOrientation orientation) {
-	if (orientation != this->orientation) {
-		this->orientation = orientation;
+void Layout::orientation(LayoutOrientation orientation) {
+	if (orientation != this->_orientation) {
+		this->_orientation = orientation;
 		refresh();
 
 		refreshChildren();
@@ -74,8 +74,8 @@ void Layout::setOrientation(LayoutOrientation orientation) {
 }
 
 void Layout::calculateWeights() {
-	auto restWidth = _width;
-	auto restHeight = _height;
+	auto restWidth = width();
+	auto restHeight = height();
 	double totalXWeight = 0;
 	double totalYWeight = 0;
 	for (auto it : children) {
@@ -92,25 +92,25 @@ void Layout::calculateWeights() {
 			restHeight -= it->height();
 		}
 	}
-	auto paddingCorrection = margin * (children.size() + 1);
+	auto paddingCorrection = _padding * (children.size() + 1);
 	restHeight -= paddingCorrection;
 	restWidth -= paddingCorrection;
 	for (auto it : children) {
-		if (orientation == LAYOUT_HORIZONTAL){
+		if (_orientation == LAYOUT_HORIZONTAL){
 			if (it->widthFlags() == VIEW_WEIGHTED) {
 				it->width(restWidth * it->weight() / totalXWeight);
 			}
 		}
 		else{
-			it->width(_width - margin * 2);
+			it->width(width() - _padding * 2);
 		}
-		if (orientation == LAYOUT_VERTICAL){
+		if (_orientation == LAYOUT_VERTICAL){
 			if (it->heightFlags() == VIEW_WEIGHTED) {
 				it->height(restHeight * it->weight() / totalYWeight);
 			}
 		}
 		else{
-			it->height(_height - margin * 2);
+			it->height(height() - _padding * 2);
 		}
 	}
 }
@@ -120,7 +120,7 @@ void Layout::refresh() {
 	for (auto it: children){
 		switch(it->widthFlags()){
 		case VIEW_MATCH_PARENT:
-			it->width(_width);
+			it->width(width());
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -133,7 +133,7 @@ void Layout::refresh() {
 		}
 		switch(it->heightFlags()){
 		case VIEW_MATCH_PARENT:
-			it->height(_height);
+			it->height(height());
 			break;
 		case VIEW_WRAP_CONTENT:
 			//TODO: fix this
@@ -151,8 +151,8 @@ void Layout::refresh() {
 	}
 }
 
-void Layout::setLocation(double x, double y, double w, double h, double weight) {
-	View::setLocation(x, y, w, h, weight);
+void Layout::location(double x, double y, double w, double h, double weight) {
+	View::location(x, y, w, h, weight);
 
 	refresh();
 
@@ -218,8 +218,8 @@ void Layout::replaceChild(size_t index, View* view) {
 }
 
 bool Layout::onPointerDown(pointerId id, MouseButton button, double x, double y) {
-	auto wx = x + _x;
-	auto wy = y + _y;
+	auto wx = x + this->x();
+	auto wy = y + this->y();
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){
@@ -232,8 +232,8 @@ bool Layout::onPointerDown(pointerId id, MouseButton button, double x, double y)
 }
 
 bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
-	auto wx = x + _x;
-	auto wy = y + _y;
+	auto wx = x + this->x();
+	auto wy = y + this->y();
 
 	if (pointerFocusedChild) {
 		if (not pointerFocusedChild->isPointerInside(wx, wy)) {
@@ -255,8 +255,8 @@ bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 
 bool Layout::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
-	auto wx = x + _x;
-	auto wy = y + _y;
+	auto wx = x + this->x();
+	auto wy = y + this->y();
 
 	if (state) {
 		if (pointerFocusedChild) {
@@ -290,8 +290,8 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 
 void Layout::onPointerEnter(pointerId id, double x, double y,
 		pointerState state) {
-	auto wx = x + _x;
-	auto wy = y + _y;
+	auto wx = x + this->x();
+	auto wy = y + this->y();
 
 	for (auto it: children){
 		if (it->isPointerInside(wx, wy)){

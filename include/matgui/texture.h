@@ -68,7 +68,11 @@ public:
 
 	Texture &operator =(const Texture &) = default;
 
-	void setInterpolation(Interpolation);
+	[[deprecated]] void setInterpolation(Interpolation i) {
+		interpolation(i);
+	}
+
+	void interpolation(Interpolation);
 
 	std::shared_ptr<void> _texturePtr;
 };

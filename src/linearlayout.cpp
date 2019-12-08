@@ -18,21 +18,21 @@ LinearLayout::~LinearLayout() {
 
 void LinearLayout::refresh() {
 	Layout::refresh();
-	if (orientation == LAYOUT_HORIZONTAL){
-		double tX = _x + margin;
+	if (_orientation == LAYOUT_HORIZONTAL){
+		double tX = x() + _padding;
 		for (auto it: children){
 			it->x(tX);
-			tX += it->width() + margin;
-			it->y( _y + margin);
+			tX += it->width() + _padding;
+			it->y( y() + _padding);
 			it->refresh();
 		}
 	}
 	else{
-		double tY = _y + margin;
+		double tY = y() + _padding;
 		for (auto it: children){
 			it->y(tY);
-			tY += it->height() + margin;
-			it->x(_x + margin);
+			tY += it->height() + _padding;
+			it->x(x() + _padding);
 			it->refresh();
 		}
 	}

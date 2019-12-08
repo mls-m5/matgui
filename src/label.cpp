@@ -22,7 +22,7 @@ Label::~Label() {
 void Label::draw() {
 	currentStyle.drawBasicView(this);
 	if (_fontView) {
-		_fontView.draw(_x + _width / 2., _y + _height / 2.);
+		_fontView.draw(x() + width() / 2., y() + height() / 2.);
 	}
 }
 

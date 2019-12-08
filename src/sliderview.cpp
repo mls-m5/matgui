@@ -34,9 +34,9 @@ bool SliderView::onPointerUp(pointerId id, MouseButton button, double x, double 
 bool SliderView::onPointerMove(pointerId id, double x, double y,
 		pointerState state) {
 	if (state) {
-		double v = 1 - (y - _height * handleHeight / 2.) / (_height * (1 - handleHeight));;
+		double v = 1 - (y - height() * handleHeight / 2.) / (height() * (1 - handleHeight));;
 		amount(v);
-		changed.emit(_value);
+		changed.emit(value());
 		return true;
 	}
 	return false;
@@ -46,18 +46,18 @@ void SliderView::draw() {
 	currentStyle.drawBasicView(this);
 
 	indicatorStyle.drawRect(
-			_x + _width * (1 - middleWidth) / 2.,
-			_y,
-			_width * middleWidth,
-			_height);
+			x() + width() * (1 - middleWidth) / 2.,
+			y(),
+			width() * middleWidth,
+			height());
 
-	const double v = 1 - (_value - _min) / (_max - _min);
+	const double v = 1 - (value() - min()) / (max() - min());
 
 	indicatorStyle.drawRect(
-			_x,
-			_y + _height * (1 - handleHeight) * v,
-			_width,
-			_height * handleHeight
+			x(),
+			y() + height() * (1 - handleHeight) * v,
+			width(),
+			height() * handleHeight
 	);
 }
 

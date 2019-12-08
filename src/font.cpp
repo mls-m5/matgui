@@ -127,11 +127,13 @@ public:
 
 
 
-static std::list<FontDescriptionStruct> loadedFonts;
-static bool isInitialized = false;
-static std::string defaultFontPath = "font/Ubuntu-R.ttf";
+namespace {
 
+std::list<FontDescriptionStruct> loadedFonts;
+bool isInitialized = false;
+std::string defaultFontPath = "font/Ubuntu-R.ttf";
 
+}
 
 
 void renderText(const FontType *font, GLubyte r, GLubyte g, GLubyte b,
@@ -223,7 +225,7 @@ void Font::draw(double x, double y, const std::string& text, bool centered) {
 	renderText(_data->font, 255, 255, 255, x, y, 0, text, centered);
 }
 
-void Font::setDefaultFontPath(std::string path) {
+void Font::DefaultFontPath(std::string path) {
 	defaultFontPath = path;
 }
 

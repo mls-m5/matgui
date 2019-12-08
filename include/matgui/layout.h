@@ -24,15 +24,21 @@ public:
 
 	void draw() override;
 
-	virtual bool onPointerDown(pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerUp(pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
-	virtual void onPointerEnter(pointerId id, double x, double y, pointerState state) override;
-	virtual void onPointerLeave() override;
+	bool onPointerDown(pointerId id, MouseButton button, double x, double y) override;
+	bool onPointerUp(pointerId id, MouseButton button, double x, double y) override;
+	bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
+	void onPointerEnter(pointerId id, double x, double y, pointerState state) override;
+	void onPointerLeave() override;
 
-	virtual void refresh() override;
-	virtual void setLocation(double x, double y, double w, double h, double weight = 0) override;
-	void setOrientation(LayoutOrientation orientation);
+	void refresh() override;
+	void location(double x, double y, double w, double h, double weight = 0) override;
+
+	[[deprecated ("use orientation(...) instead")]]
+	 void setOrientation(LayoutOrientation o) {
+		orientation(o);
+	}
+
+	void orientation(LayoutOrientation orientation);
 
 	virtual void addChild(View *view);
 	virtual void addChildAfter(View *view, View* after);
@@ -42,8 +48,8 @@ public:
 	virtual View *getChild(size_t index);
 	virtual View *getChild(std::string name);
 	virtual void replaceChild(size_t index, View *view);
-	void setPadding(double p){
-		margin = p;
+	void padding(double p){
+		_padding = p;
 		refresh();
 	}
 
@@ -55,8 +61,8 @@ protected:
 	std::list<View *> children;
 	View *pointerFocusedChild = nullptr;
 
-	LayoutOrientation orientation;
-	double margin;
+	LayoutOrientation _orientation;
+	double _padding;
 };
 
 } //namespace MatGui

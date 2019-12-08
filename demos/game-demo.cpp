@@ -31,12 +31,12 @@ public:
 
 	void draw() override {
 		rectStyle.drawRect(
-				_x + _width / 2.,
-				_y + _height / 2.,
+				x() + width() / 2.,
+				y() + height() / 2.,
 				20,
 				20
 		);
-		drawTextureRect(_x + _textureX, _y + _textureY, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
+		drawTextureRect(x() + _textureX, y() + _textureY, _angle / 2 + 3, 60, 30, texture, DrawStyle::CenterOrigo);
 	}
 
 	void frameCallback(double t){
@@ -55,8 +55,8 @@ public:
 
 	//Called from layout
 	void refresh() override {
-		_textureX = _width / 2;
-		_textureY = _height / 2;
+		_textureX = width() / 2;
+		_textureY = height() / 2;
 	}
 
 	double _textureX = 0, _textureY = 0;
@@ -69,7 +69,7 @@ public:
 int main(int argc, char**argv) {
 	Application app(argc, argv);
 
-	Window *window = new Window("mattias");
+	Window *window = new Window("matgui game-demo");
 	Button *button = new Button("turn rotation");
 	button->weight(.3);
 	auto game = new Game;

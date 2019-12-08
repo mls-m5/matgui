@@ -49,7 +49,14 @@ public:
 		currentStyle += hoverStyle;
 
 	}
+
+	[[deprecated]]
 	virtual void setLocation(double x, double y, double w, double h,
+			double weight = 1) {
+		location(x, y, w, h, weight);
+	}
+
+	virtual void location(double x, double y, double w, double h,
 			double weight = 1);
 	virtual bool isPointerInside(double x, double y);
 	virtual bool isPointerInsideLocal(double localx, double localy);
@@ -143,7 +150,7 @@ public:
 	//This is the style of the view with no changes to it
 	Paint style;
 
-protected:
+private:
 	double _x, _y;
 	double _width, _height;
 	int _widthFlags, _heightFlags;

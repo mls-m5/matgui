@@ -25,19 +25,19 @@ void ProgressView::draw() {
 	currentStyle.drawBasicView(this);
 	if (_orientation == Orientation::Horizontal) {
 		indicatorStyle.drawRect(
-				_x,
-				_y,
-				_width * (double)(_value - _min) / (_max - _min),
-				_height
+				x(),
+				y(),
+				width() * (double)(value() - min()) / (max() - min()),
+				height()
 		);
 	}
 	else {
-		auto value = (double)(_value - _min) / (_max - _min);
+		auto value = (double)(this->value() - min()) / (max() - min());
 		indicatorStyle.drawRect(
-				_x,
-				_y + _height * (1 - value),
-				_width,
-				_height * value
+				x(),
+				y() + height() * (1 - value),
+				width(),
+				height() * value
 		);
 	}
 }

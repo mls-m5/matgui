@@ -26,7 +26,8 @@ public:
 	void use();
 	void unuse();
 
-	inline void useProgram() __attribute__ ((deprecated)) {
+	[[deprecated]]
+	inline void useProgram() {
 		use();
 	}
 

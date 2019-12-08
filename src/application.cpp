@@ -14,7 +14,7 @@
 #include "signal.h"
 #include "matgui/window.h"
 #include "matgui/draw.h"
-#include "matgui/windowdata.h"
+#include "windowdata.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>

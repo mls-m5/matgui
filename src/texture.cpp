@@ -106,7 +106,7 @@ static unsigned int createGrayscaleFromPixels(const std::vector<float> &intensit
 #endif
 }
 
-void Texture::setInterpolation(Interpolation interpolation) {
+void Texture::interpolation(Interpolation interpolation) {
 #ifndef DISABLE_TEXTURES
 	glBindTexture(GL_TEXTURE_2D, *this);
 	switch(interpolation) {
