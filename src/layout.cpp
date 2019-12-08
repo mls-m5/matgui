@@ -8,6 +8,7 @@
 #include "matgui/layout.h"
 
 #include <iostream>
+#include <algorithm>
 using std::cout; using std::endl;
 
 namespace MatGui {
@@ -23,7 +24,7 @@ Layout::~Layout() {
 }
 
 void Layout::draw() {
-	for (auto it: children){
+	for (auto &it: children){
 		it->draw();
 	}
 }
@@ -34,34 +35,38 @@ void Layout::deleteChild(View* view) {
 }
 
 void Layout::refreshChildren() {
-	for (auto it : children) {
+	for (auto &it :children) {
 		it->refresh();
 	}
 }
 
-void Layout::addChild(View* view) {
+void Layout::addChild(std::unique_ptr<View> &&view) {
 	if (not view) {
 		return;
 	}
-	children.push_back(view);
 	view->parent(this);
+	children.push_back(std::move(view));
 
 	refresh();
 
 	refreshChildren();
 }
 
+void Layout::addChild(View* view) {
+	addChild(std::unique_ptr<View>(view));
+}
+
 
 void Layout::addChildAfter(View* view, View* after) {
 	view->parent(this);
 	for (auto it = children.begin(); it != children.end(); ++it){
-		if (*it == after){
+		if (it->get() == after){
 			++it;
-			children.insert(it, view);
+			children.insert(it, std::unique_ptr<View>(view));
 			return;
 		}
 	}
-	children.push_back(view);
+	children.push_back(std::unique_ptr<View>(view));
 }
 
 void Layout::orientation(LayoutOrientation orientation) {
@@ -78,7 +83,7 @@ void Layout::calculateWeights() {
 	auto restHeight = height();
 	double totalXWeight = 0;
 	double totalYWeight = 0;
-	for (auto it : children) {
+	for (auto &it : children) {
 		if (it->widthFlags() == VIEW_WEIGHTED) {
 			totalXWeight += it->weight();
 		}
@@ -95,7 +100,7 @@ void Layout::calculateWeights() {
 	auto paddingCorrection = _padding * (children.size() + 1);
 	restHeight -= paddingCorrection;
 	restWidth -= paddingCorrection;
-	for (auto it : children) {
+	for (auto &it : children) {
 		if (_orientation == LAYOUT_HORIZONTAL){
 			if (it->widthFlags() == VIEW_WEIGHTED) {
 				it->width(restWidth * it->weight() / totalXWeight);
@@ -117,7 +122,7 @@ void Layout::calculateWeights() {
 
 void Layout::refresh() {
 	bool weighted = false;
-	for (auto it: children){
+	for (auto &it: children){
 		switch(it->widthFlags()){
 		case VIEW_MATCH_PARENT:
 			it->width(width());
@@ -168,22 +173,27 @@ void Layout::removeChild(View* view) {
 		pointerFocusedChild = nullptr;
 	}
 
-	children.remove(view);
-	if (view->parent() == this) {
-		view->parent(nullptr);
+	for (auto it = children.begin(); it != children.end(); ++it) {
+		if (it->get() == view) {
+			if (view->parent() == this) {
+				view->parent(nullptr);
+			}
+			children.erase(it);
+
+			refresh();
+
+			refreshChildren();
+
+			return;
+		}
 	}
-
-	refresh();
-
-	refreshChildren();
 }
 
 void Layout::deleteAll() {
-	for (auto it : children) {
+	for (auto &it : children) {
 		if (it->parent() == this) {
 			it->parent(nullptr);
 		}
-		delete it;
 	}
 
 	children.clear();
@@ -197,9 +207,9 @@ View *Layout::getChild(size_t index) {
 	if (index >= children.size()){
 		return 0;
 	}
-	for (auto it: children){
+	for (auto &it: children){
 		if (i++ == index){
-			return it;
+			return it.get();
 		}
 	}
 	return 0;
@@ -212,7 +222,7 @@ void Layout::replaceChild(size_t index, View* view) {
 	}
 	for (auto &it: children){
 		if (i++ == index){
-			it = view;
+			it.reset(view);
 		}
 	}
 }
@@ -221,7 +231,7 @@ bool Layout::onPointerDown(pointerId id, MouseButton button, double x, double y)
 	auto wx = x + this->x();
 	auto wy = y + this->y();
 
-	for (auto it: children){
+	for (auto &it: children){
 		if (it->isPointerInside(wx, wy)){
 			if (it->onPointerDown(id, button, wx - it->x(), wy - it->y())){
 				return true;
@@ -243,7 +253,7 @@ bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
 		}
 	}
 
-	for (auto it: children){
+	for (auto &it: children){
 		if (it->isPointerInside(wx, wy)){
 			if (it->onPointerUp(id, button, wx - it->x(), wy - it->y())){
 				return true;
@@ -265,13 +275,13 @@ bool Layout::onPointerMove(pointerId id, double x, double y,
 		}
 	}
 
-	for (auto it: children){
+	for (auto &it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it != pointerFocusedChild) {
+			if (it.get() != pointerFocusedChild) {
 				if (pointerFocusedChild) {
 					pointerFocusedChild->onPointerLeave();
 				}
-				pointerFocusedChild = it;
+				pointerFocusedChild = it.get();
 				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
 			}
 			if (it->onPointerMove(id, wx - it->x(), wy - it->y(), state)){
@@ -293,13 +303,13 @@ void Layout::onPointerEnter(pointerId id, double x, double y,
 	auto wx = x + this->x();
 	auto wy = y + this->y();
 
-	for (auto it: children){
+	for (auto &it: children){
 		if (it->isPointerInside(wx, wy)){
-			if (it != pointerFocusedChild) {
+			if (it.get() != pointerFocusedChild) {
 				if (pointerFocusedChild) {
 					pointerFocusedChild->onPointerLeave();
 				}
-				pointerFocusedChild = it;
+				pointerFocusedChild = it.get();
 				it->onPointerEnter(id, wx - it->x(), wy - it->y(), state);
 				return;
 			}
@@ -317,14 +327,14 @@ void Layout::onPointerLeave() {
 }
 
 View* Layout::getChild(std::string name) {
-	for (auto it: children) {
+	for (auto &it: children) {
 		if (not it->name().empty() and it->name() == name) {
-			return it;
+			return it.get();
 		}
 	}
 	//If none is found iterate through all children
-	for (auto it: children) {
-		if (auto child = dynamic_cast<Layout*>(it)){
+	for (auto &it: children) {
+		if (auto child = dynamic_cast<Layout*>(it.get())){
 			auto res = child->getChild(name);
 			if (res) {
 				return res;

@@ -7,8 +7,10 @@
 
 #pragma once
 
-#include <list>
 #include "view.h"
+
+#include <vector>
+#include <memory>
 
 namespace MatGui {
 
@@ -40,7 +42,9 @@ public:
 
 	void orientation(LayoutOrientation orientation);
 
+	//! Take ownership over a view pointer and adds it to the layout
 	virtual void addChild(View *view);
+	virtual void addChild(std::unique_ptr<View> &&view);
 	virtual void addChildAfter(View *view, View* after);
 	virtual void removeChild(View *view);
 	virtual void deleteChild(View *view);
@@ -58,7 +62,7 @@ protected:
 	void calculateWeights();
 	void refreshChildren();
 
-	std::list<View *> children;
+	std::vector<std::unique_ptr<View>> children;
 	View *pointerFocusedChild = nullptr;
 
 	LayoutOrientation _orientation;
