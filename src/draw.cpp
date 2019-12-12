@@ -141,6 +141,22 @@ void drawTriangle(const float *location, const class Paint* paint) {
 	glBindVertexArray(0);
 }
 
+void drawTextureRect(float *locationMatrix, int textureId, DrawStyle_t style) {
+	int arrayIndex = (style & DrawStyle::CenterOrigo)? 1: 0;
+	glBindVertexArray(textureProgram.vertexArrays[arrayIndex]);
+
+	textureProgram.program->use();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glUniform1i(textureProgram.texture, 0); //GL_TEXTURE0 equals 0
+
+    glUniformMatrix4fv(textureProgram.mvpMatrix, 1, GL_FALSE, locationMatrix);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glBindVertexArray(0);
+}
+
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t style) {
 	int arrayIndex = (style & DrawStyle::CenterOrigo)? 1: 0;
 	glBindVertexArray(textureProgram.vertexArrays[arrayIndex]);
