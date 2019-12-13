@@ -17,12 +17,11 @@
 using std::cout; using std::endl;
 using std::string;
 
-namespace MatGui {
-
-
+namespace {
 
 void checkSDLError(int line = -1)
 {
+
 #ifndef NDEBUG
 	const char *error = SDL_GetError();
 	if (*error != '\0')
@@ -35,10 +34,17 @@ void checkSDLError(int line = -1)
 #endif
 }
 
+}
+
+namespace MatGui {
+
 void Window::title(string title) {
 	SDL_SetWindowTitle(_windowData->window, title.c_str());
 }
 
+void Window::bordered(bool state) {
+	SDL_SetWindowBordered(_windowData->window, static_cast<SDL_bool>(state));
+}
 
 Window::Window(string title, int width, int height, bool resizable) {
 	_windowData.reset(new WindowData);
@@ -83,7 +89,7 @@ Window::Window(string title, int width, int height, bool resizable) {
 
 	//Windows needs to make the context current
 	if (SDL_GL_MakeCurrent(_windowData->window, _windowData->context)) {
-		throw 10000000; //Throw random error message if failed
+		throw std::runtime_error("could not make SDL GL context active");
 	}
 
 	cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) << endl;
@@ -98,7 +104,7 @@ Window::Window(string title, int width, int height, bool resizable) {
     location(0,0, width, height);
     initDrawModule(this->width(), this->height()); //Init the drawmodule for the CURRENT CONTEXT
 
-    // This makes our buffer swap syncronized with the monitor's vertical refresh
+    // This makes our buffer swap synchronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
 
     Application::addWindow(this);
@@ -130,7 +136,6 @@ bool Window::onRequestClose() {
 	return closeSignal.directCall();
 }
 
-
 void Window::show() {
 	SDL_ShowWindow(_windowData->window);
 	Application::addWindow(this);
@@ -141,7 +146,7 @@ void Window::hide() {
 	Application::removeWindow(this);
 }
 
-bool Window::setFullscreen(bool state, bool changeVideoMode) {
+bool Window::fullscreen(bool state, bool changeVideoMode) {
 	if (state) {
 		if (changeVideoMode) {
 			return SDL_SetWindowFullscreen(_windowData->window, SDL_WINDOW_FULLSCREEN);
@@ -167,12 +172,12 @@ void Window::cursorVisibility(bool value) {
 	SDL_ShowCursor(value);
 }
 
-void Window::setCursorPosition(int x, int y) {
+void Window::cursorPosition(int x, int y) {
 	auto scale = Application::Scale();
 	SDL_WarpMouseInWindow(_windowData->window, x * scale, y * scale);
 }
 
-std::pair<int, int> Window::getCursorPosition() {
+std::pair<int, int> Window::cursorPosition() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	auto scale = Application::Scale();

@@ -24,9 +24,9 @@ public:
 	void clear();
 	void swap();
 
-	bool onRequestClose();
+	virtual bool onRequestClose();
 
-	bool onResize(int width, int height);
+	virtual bool onResize(int width, int height);
 
 	void show();
 	void hide();
@@ -34,10 +34,13 @@ public:
 	// Set fullscreen if state is true or disable with state = false
 	// if changeVideoMode is set, the display changes resolution to the windows size
 	// return false on success and true on error
-	bool setFullscreen(bool state = true, bool changeVideoMode = false);
+	bool fullscreen(bool state = true, bool changeVideoMode = false);
 
 	// Set title of the window
 	void title(std::string title);
+
+	// set if the window should have borders or not
+	void bordered(bool state);
 
 	// invalidate triggers a redraw of the window
 	inline void invalidate() { invalid(true); };
@@ -46,9 +49,11 @@ public:
 	bool invalid();
 	void invalid(bool state);
 
+	// Set if the cursor should be visible over the window
 	void cursorVisibility(bool value);
-	void setCursorPosition(int x, int y);
-	std::pair<int, int> getCursorPosition();
+
+	void cursorPosition(int x, int y);
+	std::pair<int, int> cursorPosition();
 
 	// A direct call signal
 	// if a function returns true closing of the window is aborted
@@ -60,6 +65,22 @@ public:
 	// Note: the functions is called directly so it is okay to connect
 	// render code to this signal
 	MatSig::Signal<double> frameUpdate;
+
+
+	[[deprecated ("use fullscreen(...)")]]
+	bool setFullscreen(bool state = true, bool changeVideoMode = false) {
+		return fullscreen(state, changeVideoMode);
+	}
+
+	[[deprecated ("use cursorPosition(...)")]]
+	void setCursorPosition(int x, int y) {
+		cursorPosition(x, y);
+	}
+
+	[[deprecated ("use cursorPosition()")]]
+	std::pair<int, int> getCursorPosition() {
+		return cursorPosition();
+	}
 
 private:
 	std::unique_ptr<struct WindowData> _windowData;
