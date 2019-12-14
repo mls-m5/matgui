@@ -42,6 +42,9 @@ public:
 
 	virtual ~Texture();
 
+	// Load a texture by filename.
+	// If addToLibrary is true the texture is buffered and only loaded
+	// from disk once
 	void load(const std::string filename, bool addToLibrary = true);
 	void createBitmap(const std::vector<Pixel> &pixels, int width = 1, int height = 1, std::string name="");
 	void createGrayscale(const std::vector<float> &grayScale, int width = 1, int height = 1, std::string name="");
@@ -62,11 +65,13 @@ public:
 		return texture();
 	}
 
+	// Check if this is the only instance pointing at the current texture
 	bool unique() const {
 		return _texturePtr.unique();
 	}
 
 	Texture &operator =(const Texture &) = default;
+	Texture &operator =(Texture &&) = default;
 
 	[[deprecated]] void setInterpolation(Interpolation i) {
 		interpolation(i);

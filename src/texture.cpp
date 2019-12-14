@@ -29,13 +29,14 @@ static unsigned int createTextureFromFile(const std::string filename) {
 
 	GLuint textureId = 0;
 
-	if (not isInitialized) {
+	if (!isInitialized) {
 		IMG_Init(IMG_INIT_PNG);
+		isInitialized = true;
 	}
 
 	std::unique_ptr<SDL_Surface, void (*)(SDL_Surface*)> surface(IMG_Load(filename.c_str()), SDL_FreeSurface);
 
-	if (surface == NULL) {
+	if (!surface) {
 		debug_print("could not load file %s\n", filename.c_str());
 		return 0;
 	}
