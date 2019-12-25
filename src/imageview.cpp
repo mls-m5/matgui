@@ -17,7 +17,7 @@ ImageView::~ImageView() {
 }
 
 void ImageView::draw() {
-	drawTextureRect({x(), y()}, 0, width(), height(), _texture);
+	drawTextureRect({x(), y()}, 0, width(), height(), _texture, DrawStyle::OrigoTopLeft);
 }
 
 void ImageView::loadImage(std::string filename) {
