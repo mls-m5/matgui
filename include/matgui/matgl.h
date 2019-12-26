@@ -56,6 +56,7 @@ inline GLenum getType<GLbyte>() {
 
 class VertexArrayObject  {
 public:
+	// Create a VAO _and_ bind it
 	VertexArrayObject() {
 		init();
 	}

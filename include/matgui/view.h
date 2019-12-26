@@ -82,11 +82,17 @@ public:
 		pointerId id; //Always 0 for mouse
 		double x, y;
 		pointerState state; //A bit representing which buttons pressed 1 for left, 2 for middle 4 for right etc.
+		operator std::tuple<double&, double&>() {
+			return {x, y};
+		}
 	};
 
 	struct ScrollArgument {
 		pointerId id;
 		double x, y;
+		operator std::tuple<double&, double&>() {
+			return {x, y};
+		}
 	};
 
 	struct KeyArgument {
