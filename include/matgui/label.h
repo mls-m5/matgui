@@ -5,43 +5,38 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
-#include "view.h"
+
 #include "font.h"
+#include "view.h"
+
 #include <memory>
 #include <string>
 
-
 namespace MatGui {
 
-//A simple label
+// A simple label
 class Label : public View {
 public:
-	Label(std::string label = "");
-	virtual ~Label();
+    Label(std::string label = "");
+    virtual ~Label();
 
-	void draw() override;
+    void draw() override;
 
-	void label(const std::string text) {
-		_fontView.text(text);
-	}
+    void label(const std::string text) {
+        _fontView.text(text);
+    }
 
-	const std::string &label() {
-		return _fontView.text();
-	}
+    const std::string &label() {
+        return _fontView.text();
+    }
 
-	void font(Font font) {
-		_fontView.font(font);
-	}
+    void font(Font font) {
+        _fontView.font(font);
+    }
 
-
-	protected:
-	FontView _fontView;
+private:
+    FontView _fontView;
 };
 
-}
-
-
-
-
+} // namespace MatGui

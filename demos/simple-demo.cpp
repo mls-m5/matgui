@@ -6,83 +6,84 @@
  */
 #include <iostream>
 
-#include "application.h" //for the application to start
-#include "window.h"  //for windows view
-#include "button.h"  //for button view
+#include "application.h"
+#include "button.h"
 #include "imageview.h"
 #include "knobview.h"
-#include "progressview.h"
 #include "label.h"
-#include "toggleview.h"
+#include "progressview.h"
 #include "sliderview.h"
+#include "toggleview.h"
+#include "window.h"
 
 using namespace MatGui;
 using namespace std;
 
-
-//Example callback function
+// Example callback function
 ProgressView *progressView;
 void callback(View::PointerArgument arg) {
-	cout << "callback... x = " << arg.x << endl;
+    cout << "callback... x = " << arg.x << endl;
 }
 
-//Another callback example
+// Another callback example
 void knobCallback(double value) {
-	progressView->value(value);
+    progressView->value(value);
 }
 
 void keyDownCallback(View::KeyArgument arg) {
-	cout << "keypress " << (char)arg.symbol << endl;
+    cout << "keypress " << (char)arg.symbol << endl;
 }
 
-int main(int argc, char *argv[])
-{
-	Application app(argc, argv); //Initialize stuff
+int main(int argc, char *argv[]) {
+    Application app(argc, argv); // Initialize stuff
 
-	Window window("matgui-demo"); //create the window
+    Window window("matgui-demo"); // create the window
 
-	Button button("knapp 1");
-	Button button2("stäng");
-	KnobView knob;
-	ProgressView progress;
+    Button button("knapp 1");
+    Button button2("stäng");
+    KnobView knob;
+    ProgressView progress;
 
-	progressView = &progress;
+    progressView = &progress;
 
-	window.addChild(&button);
-	window.addChild(&knob);
-	window.addChild(&button2);
-	window.addChild(&progress);
+    window.addChild(&button);
+    window.addChild(&knob);
+    window.addChild(&button2);
+    window.addChild(&progress);
 
-	LinearLayout layout2;
-	layout2.orientation(LAYOUT_HORIZONTAL);
-	layout2.addChild(new Label("etikett")); //You can also use pointers
-	layout2.addChild(new ImageView("gfx/test.png"));
-	layout2.addChild(new ToggleView());
-	layout2.addChild(new SliderView());
+    LinearLayout layout2;
+    layout2.orientation(LAYOUT_HORIZONTAL);
+    layout2.addChild(new Label("etikett")); // You can also use pointers
+    layout2.addChild(new ImageView("gfx/test.png"));
+    layout2.addChild(new ToggleView());
+    layout2.addChild(new SliderView());
 
-	window.addChild(&layout2);
+    window.addChild(&layout2);
 
-	button.clicked.connect(callback); //callback to a function
-	button2.clicked.connect(Application::quit); //A demo just to show how signals work
+    button.clicked.connect(callback); // callback to a function
+    button2.clicked.connect(
+        Application::quit); // A demo just to show how signals work
 
-	knob.changed.connect(knobCallback);
-	// To specify argument is optional
-	// as can be seen from these two examples
-	knob.changed.connect([] (double value) {
-		cout << "lambda function called from signal with value " << value << endl;
-	});
-	knob.changed.connect([] () {
-		cout << "lambda function called to function without specified arguments" << endl;
-	});
+    knob.changed.connect(knobCallback);
+    // To specify argument is optional
+    // as can be seen from these two examples
+    knob.changed.connect([](double value) {
+        cout << "lambda function called from signal with value " << value
+             << endl;
+    });
+    knob.changed.connect([]() {
+        cout << "lambda function called to function without specified arguments"
+             << endl;
+    });
 
-	window.keyDown.connect(keyDownCallback);
+    window.keyDown.connect(keyDownCallback);
 
-	knob.value(.3);
+    knob.value(.3);
 
-	app.mainLoop();
+    app.mainLoop();
 
-	//Application will delete all remaining windows
-	//The windows delete all views that is attached to it
+    // Application will delete all remaining windows
+    // The windows delete all views that is attached to it
 
     return 0;
 }
