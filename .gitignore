@@ -6,3 +6,7 @@
 *-test
 *.d
 *.so
+
+.cproject
+.project
+.settings
