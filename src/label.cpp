@@ -20,7 +20,9 @@ Label::~Label() {
 void Label::draw() {
     currentStyle.drawBasicView(this);
     if (_fontView) {
-        _fontView.draw(x() + width() / 2., y() + height() / 2.);
+        auto halfWidth = width() / 2.;
+        _fontView.draw(x() + halfWidth * (1. + -_fontView.alignment()),
+                       y() + height() / 2.);
     }
 }
 

@@ -31,7 +31,7 @@ public:
 
     static void DefaultFontPath(std::string path);
 
-    operator bool();
+    operator bool() const;
 
 protected:
     std::unique_ptr<class FontData> _data;
@@ -54,11 +54,11 @@ public:
         return _font;
     }
 
-    int width() {
+    int width() const {
         return _width;
     }
 
-    int height() {
+    int height() const {
         return _height;
     }
 
@@ -69,13 +69,22 @@ public:
         }
     }
 
-    const std::string &text() {
+    const std::string &text() const {
         return _text;
     }
 
-    operator bool() {
+    operator bool() const {
         return bool(_font);
     }
+
+    enum Alignment {
+        Right = -1,
+        Center = 0,
+        Left = 1,
+    };
+
+    void alignment(Alignment value);
+    Alignment alignment();
 
     void draw(double x, double y);
 

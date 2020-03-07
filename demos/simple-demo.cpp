@@ -13,6 +13,7 @@
 #include "label.h"
 #include "progressview.h"
 #include "sliderview.h"
+#include "textentry.h"
 #include "toggleview.h"
 #include "window.h"
 
@@ -37,48 +38,60 @@ void keyDownCallback(View::KeyArgument arg) {
 int main(int argc, char *argv[]) {
     Application app(argc, argv); // Initialize stuff
 
-    Window window("matgui-demo"); // create the window
+    Window window("matgui-demo");
 
-    Button button("knapp 1");
-    Button button2("stäng");
-    KnobView knob;
-    ProgressView progress;
+    auto button = new Button("knapp 1");
+    auto button2 = new Button("stäng");
+    auto knob = new KnobView;
+    auto progress = new ProgressView;
 
-    progressView = &progress;
+    progressView = progress;
 
-    window.addChild(&button);
-    window.addChild(&knob);
-    window.addChild(&button2);
-    window.addChild(&progress);
+    window.addChild(button);
+    window.addChild(knob);
+    window.addChild(button2);
+    window.addChild(progress);
 
-    LinearLayout layout2;
-    layout2.orientation(LAYOUT_HORIZONTAL);
-    layout2.addChild(new Label("etikett")); // You can also use pointers
-    layout2.addChild(new ImageView("gfx/test.png"));
-    layout2.addChild(new ToggleView());
-    layout2.addChild(new SliderView());
+    auto leftLabel = new Label("left aligned");
+    leftLabel->alignment(FontView::Left);
+    window.addChild(leftLabel);
 
-    window.addChild(&layout2);
+    auto rightLabel = new Label("right aligned");
+    rightLabel->alignment(FontView::Right);
+    window.addChild(rightLabel);
 
-    button.clicked.connect(callback); // callback to a function
-    button2.clicked.connect(
+    auto textEntry = new TextEntry;
+    textEntry->text("hej");
+    window.addChild(textEntry);
+
+    auto layout2 = new LinearLayout;
+    layout2->orientation(LAYOUT_HORIZONTAL);
+    layout2->addChild(new Label("standard label"));
+    layout2->addChild(new ImageView("gfx/test.png"));
+    layout2->addChild(new ToggleView());
+    layout2->addChild(new SliderView());
+
+    window.addChild(layout2);
+
+    button->clicked.connect(callback); // callback to a function
+    button2->clicked.connect(
         Application::quit); // A demo just to show how signals work
 
-    knob.changed.connect(knobCallback);
+    knob->changed.connect(knobCallback);
     // To specify argument is optional
     // as can be seen from these two examples
-    knob.changed.connect([](double value) {
+    knob->changed.connect([](double value) {
         cout << "lambda function called from signal with value " << value
              << endl;
     });
-    knob.changed.connect([]() {
+    knob->changed.connect([]() {
         cout << "lambda function called to function without specified arguments"
              << endl;
     });
 
     window.keyDown.connect(keyDownCallback);
 
-    knob.value(.3);
+    knob->value(.3);
 
     app.mainLoop();
 
