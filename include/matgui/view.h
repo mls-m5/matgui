@@ -48,24 +48,32 @@ public:
         currentStyle += hoverStyle;
     }
 
-    [[deprecated]] virtual void setLocation(double x, double y, double w,
-                                            double h, double weight = 1) {
+    [[deprecated]] virtual void setLocation(
+        double x, double y, double w, double h, double weight = 1) {
         location(x, y, w, h, weight);
     }
 
-    virtual void location(double x, double y, double w, double h,
-                          double weight = 1);
+    virtual void location(
+        double x, double y, double w, double h, double weight = 1);
     virtual bool isPointerInside(double x, double y);
     virtual bool isPointerInsideLocal(double localx, double localy);
 
     // Callback functions return true to capture the mouse focus
-    virtual bool onPointerDown(pointerId id, MouseButton button, double x,
+    virtual bool onPointerDown(pointerId id,
+                               MouseButton button,
+                               double x,
                                double y);
-    virtual bool onPointerUp(pointerId id, MouseButton button, double x,
+    virtual bool onPointerUp(pointerId id,
+                             MouseButton button,
+                             double x,
                              double y);
-    virtual bool onPointerMove(pointerId id, double x, double y,
+    virtual bool onPointerMove(pointerId id,
+                               double x,
+                               double y,
                                pointerState state);
-    virtual void onPointerEnter(pointerId id, double x, double y,
+    virtual void onPointerEnter(pointerId id,
+                                double x,
+                                double y,
                                 pointerState state);
     virtual void onPointerLeave();
     virtual void onScroll(pointerId id, double x, double y);
@@ -76,10 +84,14 @@ public:
 
     //! Handle key events
     //! Returns true if handled and false otherwise
-    virtual bool onKeyDown(KeySym sym, KeyScanCode scancode,
-                           KeyModifiers modifiers, int repeat);
-    virtual bool onKeyUp(KeySym sym, KeyScanCode scancode,
-                         KeyModifiers modifiers, int repeat);
+    virtual bool onKeyDown(KeySym sym,
+                           KeyScanCode scancode,
+                           KeyModifiers modifiers,
+                           int repeat);
+    virtual bool onKeyUp(KeySym sym,
+                         KeyScanCode scancode,
+                         KeyModifiers modifiers,
+                         int repeat);
 
     struct PointerArgument {
         pointerId id; // Always 0 for mouse

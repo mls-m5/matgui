@@ -7,85 +7,92 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
 #include "linearlayout.h"
+#include <memory>
+#include <string>
 
 namespace MatGui {
 
-class Window: public LinearLayout {
+class Window : public LinearLayout {
 public:
-	Window(std::string title, int width = 512, int height = 512, bool resizable = false);
-	virtual ~Window();
+    Window(std::string title,
+           int width = 512,
+           int height = 512,
+           bool resizable = false);
+    virtual ~Window();
 
-	void draw() override;
+    void draw() override;
 
-	// Functions to be called before and after draw() for window
-	void clear();
-	void swap();
+    // Functions to be called before and after draw() for window
+    void clear();
+    void swap();
 
-	virtual bool onRequestClose();
+    virtual bool onRequestClose();
 
-	virtual bool onResize(int width, int height);
+    virtual bool onResize(int width, int height);
 
-	void show();
-	void hide();
+    void show();
+    void hide();
 
-	// Set fullscreen if state is true or disable with state = false
-	// if changeVideoMode is set, the display changes resolution to the windows size
-	// return false on success and true on error
-	bool fullscreen(bool state = true, bool changeVideoMode = false);
+    // Set fullscreen if state is true or disable with state = false
+    // if changeVideoMode is set, the display changes resolution to the windows
+    // size return false on success and true on error
+    bool fullscreen(bool state = true, bool changeVideoMode = false);
 
-	// Set title of the window
-	void title(std::string title);
+    // Set title of the window
+    void title(std::string title);
 
-	// set if the window should have borders or not
-	void bordered(bool state);
+    // set if the window should have borders or not
+    void bordered(bool state);
 
-	// invalidate triggers a redraw of the window
-	inline void invalidate() { invalid(true); };
+    // invalidate triggers a redraw of the window
+    inline void invalidate() {
+        invalid(true);
+    };
 
-	//check if the window needs redrawing
-	bool invalid();
-	void invalid(bool state);
+    // check if the window needs redrawing
+    bool invalid();
+    void invalid(bool state);
 
-	// Set if the cursor should be visible over the window
-	void cursorVisibility(bool value);
+    // Set if the cursor should be visible over the window
+    void cursorVisibility(bool value);
 
-	void cursorPosition(int x, int y);
-	std::pair<int, int> cursorPosition();
+    void cursorPosition(int x, int y);
+    std::pair<int, int> cursorPosition();
 
-	// A direct call signal
-	// if a function returns true closing of the window is aborted
-	// if true is returned, the window is closed as usual
-	Signal<void, bool> closeSignal;
+    // A direct call signal
+    // if a function returns true closing of the window is aborted
+    // if true is returned, the window is closed as usual
+    Signal<void, bool> closeSignal;
 
-	// Signal called when the main loop take a step
-	// the argument is the time since the last time the signal was called
-	// Note: the functions is called directly so it is okay to connect
-	// render code to this signal
-	MatSig::Signal<double> frameUpdate;
+    // Signal called when the main loop take a step
+    // the argument is the time since the last time the signal was called
+    // Note: the functions is called directly so it is okay to connect
+    // render code to this signal
+    MatSig::Signal<double> frameUpdate;
 
+    [[deprecated("use fullscreen(...)")]] //
+    bool
+    setFullscreen(bool state = true, bool changeVideoMode = false) {
+        return fullscreen(state, changeVideoMode);
+    }
 
-	[[deprecated ("use fullscreen(...)")]]
-	bool setFullscreen(bool state = true, bool changeVideoMode = false) {
-		return fullscreen(state, changeVideoMode);
-	}
+    [[deprecated("use cursorPosition(...)")]] //
+    void
+    setCursorPosition(int x, int y) {
+        cursorPosition(x, y);
+    }
 
-	[[deprecated ("use cursorPosition(...)")]]
-	void setCursorPosition(int x, int y) {
-		cursorPosition(x, y);
-	}
-
-	[[deprecated ("use cursorPosition()")]]
-	std::pair<int, int> getCursorPosition() {
-		return cursorPosition();
-	}
+    [[deprecated("use cursorPosition()")]] //
+    std::pair<int, int>
+    getCursorPosition() {
+        return cursorPosition();
+    }
 
 private:
-	std::unique_ptr<struct WindowData> _windowData;
+    std::unique_ptr<struct WindowData> _windowData;
 
-	friend class Application;
+    friend class Application;
 };
 
 } /* namespace MatGui */
