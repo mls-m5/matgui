@@ -15,6 +15,7 @@ using std::endl;
 namespace MatGui {
 
 Layout::Layout() : _orientation(LAYOUT_VERTICAL), _padding(4) {
+    focusable(false);
 }
 
 Layout::~Layout() {

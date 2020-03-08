@@ -23,6 +23,20 @@ public:
 
     void draw() override;
 
+    Window *root() override {
+        return this;
+    }
+
+    bool onKeyDown(KeySym sym,
+                   KeyScanCode scancode,
+                   KeyModifiers modifiers,
+                   int repeat) override;
+
+    bool onKeyUp(KeySym sym,
+                 KeyScanCode scancode,
+                 KeyModifiers modifiers,
+                 int repeat) override;
+
     // Functions to be called before and after draw() for window
     void clear();
     void swap();
@@ -53,6 +67,10 @@ public:
     // check if the window needs redrawing
     bool invalid();
     void invalid(bool state);
+
+    // Make a object focused, or clear focus by sending in nullptr
+    void focus(View *view);
+    View *focused();
 
     // Set if the cursor should be visible over the window
     void cursorVisibility(bool value);
@@ -90,7 +108,8 @@ public:
     }
 
 private:
-    std::unique_ptr<struct WindowData> _windowData;
+    struct WindowData;
+    std::unique_ptr<WindowData> _windowData;
 
     friend class Application;
 };

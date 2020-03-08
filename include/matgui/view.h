@@ -93,6 +93,9 @@ public:
                          KeyModifiers modifiers,
                          int repeat);
 
+    //! Return the root window for the layout
+    virtual class Window *root();
+
     struct PointerArgument {
         pointerId id; // Always 0 for mouse
         double x, y;
@@ -140,6 +143,7 @@ public:
     member_property(int, heightFlags);
     member_property(std::string, name);
     member_property(class Layout *, parent);
+    member_property(bool, focusable);
 
     void highlight(bool value) {
         if (_highlight == value) {
@@ -180,6 +184,7 @@ private:
     bool _highlight = false;
     std::string _name;
     class Layout *_parent = nullptr;
+    bool _focusable = true;
 };
 
 } // namespace MatGui

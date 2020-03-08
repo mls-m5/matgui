@@ -178,6 +178,14 @@ void Window::invalid(bool state) {
     _windowData->invalid = state;
 }
 
+void Window::focus(View *view) {
+    _windowData->_focused = view;
+}
+
+View *Window::focused() {
+    return _windowData->_focused;
+}
+
 void Window::cursorVisibility(bool value) {
     SDL_ShowCursor(value);
 }
@@ -199,6 +207,30 @@ bool Window::onResize(int width, int height) {
     setDimensions(width / scale, height / scale);
     Layout::location(0, 0, width / scale, height / scale);
     return true;
+}
+
+bool Window::onKeyDown(KeySym sym,
+                       KeyScanCode scancode,
+                       KeyModifiers modifiers,
+                       int repeat) {
+    if (focused()) {
+        if (focused()->onKeyDown(sym, scancode, modifiers, repeat)) {
+            return true;
+        }
+    }
+    return View::onKeyDown(sym, scancode, modifiers, repeat);
+}
+
+bool Window::onKeyUp(KeySym sym,
+                     KeyScanCode scancode,
+                     KeyModifiers modifiers,
+                     int repeat) {
+    if (focused()) {
+        if (focused()->onKeyDown(sym, scancode, modifiers, repeat)) {
+            return true;
+        }
+    }
+    return View::onKeyUp(sym, scancode, modifiers, repeat);
 }
 
 } /* namespace MatGui */

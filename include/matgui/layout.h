@@ -27,8 +27,10 @@ public:
                        MouseButton button,
                        double x,
                        double y) override;
-    bool
-    onPointerUp(pointerId id, MouseButton button, double x, double y) override;
+    bool onPointerUp(pointerId id,
+                     MouseButton button,
+                     double x,
+                     double y) override;
     bool onPointerMove(pointerId id,
                        double x,
                        double y,
@@ -43,7 +45,8 @@ public:
     void location(
         double x, double y, double w, double h, double weight = 0) override;
 
-    [[deprecated("use orientation(...) instead")]] void
+    [[deprecated("use orientation(...) instead")]] //
+    void
     setOrientation(LayoutOrientation o) {
         orientation(o);
     }
@@ -64,6 +67,14 @@ public:
         _padding = p;
         refresh();
     }
+
+#if __cplusplus >= 201402L
+    //! Create and add a child to to the layout
+    template <class T, class... Types>
+    void createChild(Types... args) {
+        addChild(std::move(std::make_unique<T>(args...)));
+    }
+#endif
 
 protected:
     void calculateWeights();

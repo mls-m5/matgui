@@ -5,7 +5,6 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
 
 #include <SDL2/SDL.h>
@@ -13,12 +12,13 @@
 
 namespace MatGui {
 
-struct WindowData {
-	SDL_Window *window = 0; //Handle to sdl window
-    SDL_GLContext context = 0; //OpenGl context handle
+struct Window::WindowData {
+    SDL_Window *window = 0;    // Handle to sdl window
+    SDL_GLContext context = 0; // OpenGl context handle
     Uint32 windowId = 0;
-    bool invalid = true; //The window needs redrawing (when continuous updates = false)
+    //! Invalid: The window needs redrawing (when continuous updates = false)
+    bool invalid = true;
+    View *_focused = nullptr;
 };
 
-}
-
+} // namespace MatGui

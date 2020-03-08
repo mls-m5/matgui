@@ -18,6 +18,12 @@ View::View() : _weight(1) {
 
 View::~View() {
     if (_parent) {
+        Window *root = this->root();
+        if (root) {
+            if (root->focused() == this) {
+                root->focus(nullptr);
+            }
+        }
         _parent->removeChild(this);
     }
 }
@@ -120,6 +126,10 @@ bool View::onKeyUp(KeySym sym,
     else {
         return false;
     }
+}
+
+class Window *View::root() {
+    return parent() ? parent()->root() : nullptr;
 }
 
 } // namespace MatGui
