@@ -49,14 +49,6 @@ public:
     // if false window::invalidate needs to be called to redraw
     static void InvalidateOnEvent(bool state);
 
-    // Functions to convert between key and description string
-    static std::string GetKeyNameFromScancode(int scancode);
-    static std::string GetKeyNameFromKey(int scancode);
-    static int GetKeyFromName(const std::string &name);
-    static int GetScancodeFromName(const std::string &name);
-    static int GetScancodeFromKey(int key);
-    static int GetKeyFromScancode(int scancode);
-
 private:
     // Functions used internally to handle windows
     static void addWindow(class Window *);

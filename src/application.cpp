@@ -13,7 +13,7 @@
 #include "signal.h"
 #include "windowdata.h"
 
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <iostream>
 
 #ifdef __EMSCRIPTEN__
@@ -129,6 +129,89 @@ Window *Application::getWindow(unsigned int w) {
     return nullptr;
 }
 
+static void handleWindowEvents(Window *window,
+                               const SDL_Event &event,
+                               bool &redrawEvent) {
+    switch (event.window.event) {
+    case SDL_WINDOWEVENT_CLOSE:
+        if (not window->onRequestClose()) {
+            window->hide();
+        }
+        break;
+    case SDL_WINDOWEVENT_LEAVE:
+        window->onPointerLeave();
+        break;
+    case SDL_WINDOWEVENT_RESIZED:
+        window->onResize(event.window.data1, event.window.data2);
+        break;
+    case SDL_WINDOWEVENT_FOCUS_GAINED:
+        activeWindow = window;
+        break;
+    case SDL_WINDOWEVENT_FOCUS_LOST:
+        if (activeWindow == window) {
+            activeWindow = nullptr;
+        }
+        break;
+    default:
+        redrawEvent = false;
+    }
+}
+
+static void handleOtherEvents(Window *window,
+                              SDL_Event &event,
+                              bool &redrawEvent) {
+    switch (event.type) {
+    case SDL_MOUSEMOTION: {
+        auto &e = event.motion;
+        window->onPointerMove(
+            0, (double)e.x / scale, (double)e.y / scale, e.state);
+        break;
+    }
+
+    case SDL_MOUSEBUTTONDOWN: {
+        auto &e = event.button;
+        auto button =
+            MouseButton(1 << (e.button - 1)); // Make one bit for each button
+        window->onPointerDown(
+            0, button, (double)e.x / scale, (double)e.y / scale);
+        break;
+    }
+
+    case SDL_MOUSEBUTTONUP: {
+        auto &e = event.button;
+        auto button =
+            MouseButton(1 << (e.button - 1)); // Make one bit for each button
+        window->onPointerUp(
+            0, button, (double)e.x / scale, (double)e.y / scale);
+        break;
+    }
+
+    case SDL_MOUSEWHEEL: {
+        auto &e = event.wheel;
+        window->onScroll(0, (double)e.x / scale, (double)e.y / scale);
+        break;
+    }
+
+    case SDL_KEYDOWN: {
+        auto &key = event.key;
+        window->onKeyDown(
+            key.keysym.sym, key.keysym.scancode, key.keysym.mod, key.repeat);
+        break;
+    }
+
+    case SDL_KEYUP: {
+        auto &key = event.key;
+        window->onKeyUp(
+            key.keysym.sym, key.keysym.scancode, key.keysym.mod, key.repeat);
+        break;
+    }
+
+    default:
+        redrawEvent = false;
+        break;
+    }
+}
+
 bool Application::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -138,91 +221,13 @@ bool Application::handleEvents() {
 
         auto window = getWindow(event.window.windowID);
         if (window) {
-            auto redrawEvent =
+            bool redrawEvent =
                 invalidateOnEvent; // If the event should trigger a redraw
             if (event.type == SDL_WINDOWEVENT) {
-
-                switch (event.window.event) {
-                case SDL_WINDOWEVENT_CLOSE:
-                    if (not window->onRequestClose()) {
-                        window->hide();
-                    }
-                    break;
-                case SDL_WINDOWEVENT_LEAVE:
-                    window->onPointerLeave();
-                    break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    window->onResize(event.window.data1, event.window.data2);
-                    break;
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    activeWindow = window;
-                    break;
-                case SDL_WINDOWEVENT_FOCUS_LOST:
-                    if (activeWindow == window) {
-                        activeWindow = nullptr;
-                    }
-                    break;
-                default:
-                    redrawEvent = false;
-                }
+                handleWindowEvents(window, event, redrawEvent);
             }
             else {
-
-                switch (event.type) {
-                case SDL_MOUSEMOTION: {
-                    auto &e = event.motion;
-                    window->onPointerMove(
-                        0, (double)e.x / scale, (double)e.y / scale, e.state);
-                    break;
-                }
-
-                case SDL_MOUSEBUTTONDOWN: {
-                    auto &e = event.button;
-                    auto button = MouseButton(
-                        1 << (e.button - 1)); // Make one bit for each button
-                    window->onPointerDown(
-                        0, button, (double)e.x / scale, (double)e.y / scale);
-                    break;
-                }
-
-                case SDL_MOUSEBUTTONUP: {
-                    auto &e = event.button;
-                    auto button = MouseButton(
-                        1 << (e.button - 1)); // Make one bit for each button
-                    window->onPointerUp(
-                        0, button, (double)e.x / scale, (double)e.y / scale);
-                    break;
-                }
-
-                case SDL_MOUSEWHEEL: {
-                    auto &e = event.wheel;
-                    window->onScroll(
-                        0, (double)e.x / scale, (double)e.y / scale);
-                    break;
-                }
-
-                case SDL_KEYDOWN: {
-                    auto &key = event.key;
-                    window->onKeyDown(key.keysym.sym,
-                                      key.keysym.scancode,
-                                      key.keysym.mod,
-                                      key.repeat);
-                    break;
-                }
-
-                case SDL_KEYUP: {
-                    auto &key = event.key;
-                    window->onKeyUp(key.keysym.sym,
-                                    key.keysym.scancode,
-                                    key.keysym.mod,
-                                    key.repeat);
-                    break;
-                }
-
-                default:
-                    redrawEvent = false;
-                    break;
-                }
+                handleOtherEvents(window, event, redrawEvent);
             }
             if (redrawEvent) {
                 window->invalidate();
@@ -272,30 +277,6 @@ void Application::ContinuousUpdates(bool state) {
 
 void Application::InvalidateOnEvent(bool state) {
     invalidateOnEvent = state;
-}
-
-std::string Application::GetKeyNameFromScancode(int scancode) {
-    return SDL_GetScancodeName((SDL_Scancode)scancode);
-}
-
-std::string Application::GetKeyNameFromKey(int key) {
-    return SDL_GetKeyName(key);
-}
-
-int Application::GetKeyFromName(const std::string &name) {
-    return SDL_GetKeyFromName(name.c_str());
-}
-
-int Application::GetScancodeFromName(const std::string &name) {
-    return SDL_GetScancodeFromName(name.c_str());
-}
-
-int Application::GetScancodeFromKey(int key) {
-    return SDL_GetScancodeFromKey(key);
-}
-
-int Application::GetKeyFromScancode(int scancode) {
-    return SDL_GetKeyFromScancode((SDL_Scancode)scancode);
 }
 
 } // namespace MatGui

@@ -8,7 +8,6 @@
 #include "matgui/window.h"
 #include "matgui/common-gl.h"
 #include "matgui/draw.h"
-#include <SDL2/SDL.h>
 #include <iostream>
 
 #include "matgui/application.h"
