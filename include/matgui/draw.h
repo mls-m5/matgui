@@ -5,7 +5,6 @@
  *      Author: mattias
  */
 
-
 #pragma once
 
 #include <vector>
@@ -15,11 +14,15 @@ class Vec;
 namespace MatGui {
 
 struct vec {
-	vec(double x, double y, double z): x(x), y(y), z(z) {}
-	vec(double x, double y): x(x), y(y), z(0) {}
-	//This is to avoid declaring class Vec here:
-	vec(const Vec &v): x(((double*)&v)[0]), y(((double*)&v)[1]), z(((double*)&v)[2]) {}
-	double x, y, z;
+    vec(double x, double y, double z) : x(x), y(y), z(z) {
+    }
+    vec(double x, double y) : x(x), y(y), z(0) {
+    }
+    // This is to avoid declaring class Vec here:
+    vec(const Vec &v)
+        : x(((double *)&v)[0]), y(((double *)&v)[1]), z(((double *)&v)[2]) {
+    }
+    double x, y, z;
 };
 
 #ifdef __ANDROID__
@@ -31,36 +34,43 @@ typedef double DrawReal;
 #endif
 
 struct vec2 {
-	vec2() {}
-	template <typename T>
-	vec2(T v) : x(v.x), y(v.y) {}
-	vec2(DrawReal x, DrawReal y) : x(x), y(y) {}
-	DrawReal x = 0; DrawReal y = 0;
+    vec2() {
+    }
+    template <typename T>
+    vec2(T v) : x(v.x), y(v.y) {
+    }
+    vec2(DrawReal x, DrawReal y) : x(x), y(y) {
+    }
+    DrawReal x = 0;
+    DrawReal y = 0;
 };
 
 enum DrawStyle : int {
-	None = 0,
-	Filled = 1,
-	Lines = 2,
+    None = 0,
+    Filled = 1,
+    Lines = 2,
 
-	OrigoTopLeft = 0,
-	CenterOrigo = 4,
+    OrigoTopLeft = 0,
+    CenterOrigo = 4,
 
-	Inherit = 1024,
+    Inherit = 1024,
 };
 
-//This is only to be able to do binary operators
+// This is only to be able to do binary operators
 typedef int DrawStyle_t;
 
-//Setup stuff
+// Setup stuff
 bool initDrawModule(double width, double height);
 void QuitDrawModule();
 
-//Graphics settings
+// Graphics settings
 void setDepthEnabled(bool enabled);
 
-//Apply a transform to matrix at "pointer" in current shader program
-void modelTransform(unsigned int pointer, vec p, double a, double scaleX, double scaleY);
+// Apply a transform to matrix at "pointer" in current shader program
+// void modelTransform(unsigned int pointer, vec p, double a, double scaleX,
+// double scaleY);
+
+// clang-format off
 void resetTransform(unsigned int poniter);
 
 void drawRect(double x, double y, double width, double height, const class Paint*);
@@ -87,5 +97,6 @@ inline void drawTextureRect(double x, double y, double a, double sx, double sy, 
 
 void setDimensions(double width, double height);
 
-}
+// clang-format on
 
+} // namespace MatGui

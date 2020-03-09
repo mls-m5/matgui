@@ -5,13 +5,13 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
 
+#include "matgui/constants.h"
 
 namespace PlainShader {
 
-const char *vertexCode = R"V0G0N(
+const char *vertexCode = R"_(
 attribute vec4 vPosition;
 //uniform vec4 uColor;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
@@ -21,10 +21,9 @@ void main() {
 	gl_Position = mvp_matrix * vPosition;
 //	fColor = uColor / (1. + vPosition.y / 4.); //A little shading
 }
-)V0G0N";
+)_";
 
-
-const char *fragmentCode = R"V0G0N(
+const char *fragmentCode = R"_(
 //varying vec4 fColor;
 uniform vec4 uColor;
 
@@ -32,113 +31,116 @@ void main() {
 //	gl_FragColor = fColor;
   gl_FragColor = uColor;
 }
-)V0G0N";
+)_";
 
-
-}
+} // namespace PlainShader
 
 static struct {
-	//pointers to shader variables
-	GLint pColor;
-	GLint pPertices;
-	GLint pMvpMatrix;
-	unique_ptr<ShaderProgram> program;
+    // pointers to shader variables
+    GLint pColor;
+    GLint pPertices;
+    GLint pMvpMatrix;
+    std::unique_ptr<ShaderProgram> program;
 
-	//Square vertices
-	GLfloat vertices[8] = {
-			1.f, 0.f,
-			0.f, 0.f,
-			0.f, 1.f,
-			1.f, 1.f,
-	};
-	GLfloat centeredVertices[8] = {
-			.5f, -.5f,
-			-.5f, -.5f,
-			-.5f, .5f,
-			.5f, .5f,
-	};
-	GLfloat colors[4] = {.8, .8, 1., .5,};
+    // Square vertices
+    GLfloat vertices[8] = {
+        1.f,
+        0.f,
+        0.f,
+        0.f,
+        0.f,
+        1.f,
+        1.f,
+        1.f,
+    };
+    GLfloat centeredVertices[8] = {
+        .5f,
+        -.5f,
+        -.5f,
+        -.5f,
+        -.5f,
+        .5f,
+        .5f,
+        .5f,
+    };
+    GLfloat colors[4] = {
+        .8,
+        .8,
+        1.,
+        .5,
+    };
 
-	std::vector <GLfloat> ellipseVertices;
+    std::vector<GLfloat> ellipseVertices;
 
-	GLuint vertexArray = 0;
-	GLuint vertexBuffer = 0;//, vertexBufferCentered = 0;
-	GLuint ellipseVertexArray = 0;
-	GLuint ellipseBuffer = 0;
+    GLuint vertexArray = 0;
+    GLuint vertexBuffer = 0; //, vertexBufferCentered = 0;
+    GLuint ellipseVertexArray = 0;
+    GLuint ellipseBuffer = 0;
 
-	void init() {
+    void init() {
 
-		int count = 20;
-		ellipseVertices.resize(count * 2);
-		for (int i = 0; i < count; ++i){
-			auto a = (double) i / count * pi2;
-			ellipseVertices.at(i * 2) = .5 + sin(a) / 2;
-			ellipseVertices.at(i * 2 + 1) = .5 + cos(a) / 2;
-		}
+        int count = 20;
+        ellipseVertices.resize(count * 2);
+        for (int i = 0; i < count; ++i) {
+            auto a = (double)i / count * MatGui::pi2;
+            ellipseVertices.at(i * 2) = .5 + sin(a) / 2;
+            ellipseVertices.at(i * 2 + 1) = .5 + cos(a) / 2;
+        }
 
-		program.reset(new ShaderProgram(PlainShader::vertexCode, PlainShader::fragmentCode));
-		debug_check_true(program->getProgram(), "could not create square program");
-	    program->use();
-	    checkGlError("glUseProgram");
+        program.reset(new ShaderProgram(PlainShader::vertexCode,
+                                        PlainShader::fragmentCode));
+        debug_check_true(program->getProgram(),
+                         "could not create square program");
+        program->use();
+        checkGlError("glUseProgram");
 
+        pPertices = program->getAttribute("vPosition");
+        pColor = program->getUniform("uColor");
+        pMvpMatrix = program->getUniform("mvp_matrix");
 
-		pPertices = program->getAttribute("vPosition");
-		pColor = program->getUniform("uColor");
-		pMvpMatrix = program->getUniform("mvp_matrix");
+        { // Initialize square program
 
-	    { //Initialize square program
+            glGenVertexArrays(1, &vertexArray);
+            glBindVertexArray(vertexArray);
+            //		glGenBuffers(2, &vertexBuffer); //Note that i generate 2
+            // buffers
+            glGenBuffers(1, &vertexBuffer); // Note that i generate 2 buffers
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+            glBufferData( // One buffer for both's content
+                GL_ARRAY_BUFFER,
+                sizeof(vertices) * 2, // Change this if start using std::vector
+                vertices,
+                GL_STATIC_DRAW);
 
-			glGenVertexArrays(1, &vertexArray);
-			glBindVertexArray(vertexArray);
-	//		glGenBuffers(2, &vertexBuffer); //Note that i generate 2 buffers
-			glGenBuffers(1, &vertexBuffer); //Note that i generate 2 buffers
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-			glBufferData( //One buffer for both's content
-					GL_ARRAY_BUFFER,
-					sizeof(vertices) * 2, //Change this if start using std::vector
-					vertices,
-					GL_STATIC_DRAW);
+            glVertexAttribPointer(pPertices, 2, GL_FLOAT, GL_FALSE, 0, 0);
+            glEnableVertexAttribArray(pPertices);
+        }
 
+        { // Initialize square program
 
-			glVertexAttribPointer(pPertices, 2, GL_FLOAT, GL_FALSE, 0, 0);
-			glEnableVertexAttribArray(pPertices);
+            auto &squareProgram = *this;
 
-	    }
+            glGenVertexArrays(1, &ellipseVertexArray);
+            glBindVertexArray(ellipseVertexArray);
 
+            glGenBuffers(1, &ellipseBuffer);
+            glBindBuffer(GL_ARRAY_BUFFER, ellipseBuffer);
 
-	    { //Initialize square program
+            program->use();
 
-	    	auto &squareProgram = *this;
+            glBindBuffer(GL_ARRAY_BUFFER, squareProgram.ellipseBuffer);
+            glBufferData(
+                GL_ARRAY_BUFFER,
+                sizeof(GLfloat) *
+                    squareProgram.ellipseVertices
+                        .size(), // Change this if start using std::vector
+                &squareProgram.ellipseVertices[0],
+                GL_STATIC_DRAW);
+            glEnableVertexAttribArray(squareProgram.pPertices);
+            glVertexAttribPointer(
+                squareProgram.pPertices, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        }
 
-			glGenVertexArrays(1, &ellipseVertexArray);
-			glBindVertexArray(ellipseVertexArray);
-
-			glGenBuffers(1, &ellipseBuffer);
-			glBindBuffer(GL_ARRAY_BUFFER, ellipseBuffer);
-
-			program->use();
-
-
-			glBindBuffer(GL_ARRAY_BUFFER, squareProgram.ellipseBuffer);
-			glBufferData(
-					GL_ARRAY_BUFFER,
-					sizeof(GLfloat) * squareProgram.ellipseVertices.size(), //Change this if start using std::vector
-					&squareProgram.ellipseVertices[0],
-					GL_STATIC_DRAW);
-		    glEnableVertexAttribArray(squareProgram.pPertices);
-		    glVertexAttribPointer(
-		    		squareProgram.pPertices,
-					2,
-					GL_FLOAT,
-					GL_FALSE,
-					0,
-					0
-		    );
-	    }
-
-		glBindVertexArray(0);
-	}
+        glBindVertexArray(0);
+    }
 } squareProgram;
-
-
-

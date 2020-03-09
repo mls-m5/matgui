@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "matgui-common.h"
+#include "debug.h"
 
 #ifdef __ANDROID__
 //#include <GLES2/gl2.h>

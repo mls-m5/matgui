@@ -5,97 +5,90 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
 
+#include "math.h"
 #include "view.h"
 
 namespace MatGui {
 
-class ControllerView: public View {
+class ControllerView : public View {
 public:
-	typedef double _valueType;
+    typedef double _valueType;
 
-	ControllerView():
-		changed(true),
-		_value(0),
-		_min(0),
-		_max(1),
-		_step(0),
-		elementId(-1),
-		controllerId(-1){
-		changed.onlySaveLast(true);
-	}
+    ControllerView()
+        : changed(true), _value(0), _min(0), _max(1), _step(0), elementId(-1),
+          controllerId(-1) {
+        changed.onlySaveLast(true);
+    }
 
+    ControllerView(int element, int controller) : ControllerView() {
+        elementId = element;
+        controllerId = controller;
+    }
 
-	ControllerView(int element, int controller):
-		ControllerView(){
-		elementId = element;
-		controllerId = controller;
-	}
+    // Set the controler with a value from 0 to 1
+    void amount(_valueType v) {
+        auto val = v;
+        if (val < 0) {
+            val = 0;
+        }
+        else if (val > 1) {
+            val = 1;
+        }
+        auto newValue = _min + val * (_max - _min);
+        if (_step) {
+            newValue = roundDown(newValue, _step);
+        }
+        value(newValue);
+    }
 
-	//Set the controler with a value from 0 to 1
-	void amount(_valueType v) {
-		auto val = v;
-		if (val < 0) {
-			val = 0;
-		}
-		else if (val > 1) {
-			val = 1;
-		}
-		auto newValue = _min + val* (_max - _min);
-		if (_step) {
-			newValue = roundDown(newValue, _step);
-		}
-		value(newValue);
-	}
+    void value(_valueType v) {
+        if (v != _value) {
+            _value = v;
+            //			changed.emit(v); //Is emitted by key handling
+            // event, to avoid round calling
+        }
+    }
 
-	void value(_valueType v){
-		if (v != _value) {
-			_value = v;
-//			changed.emit(v); //Is emitted by key handling event, to avoid round calling
-		}
-	}
+    [[deprecated("use value(...) instead")]] void setValue(_valueType v) {
+        value(v);
+    }
 
-	[[deprecated ("use value(...) instead")]]
-	void setValue(_valueType v) {
-		value(v);
-	}
+    _valueType value() const {
+        return _value;
+    }
 
-	_valueType value() const {
-		return _value;
-	}
+    [[deprecated("use linear(...) instead")]] //
+    void
+    setLinear(_valueType min, _valueType max, _valueType step) {
+        linear(min, max, step);
+    }
 
-	[[deprecated ("use linear(...) instead")]]
-	void setLinear(_valueType min, _valueType max, _valueType step){
-		linear(min, max, step);
-	}
+    void linear(_valueType min, _valueType max, _valueType step) {
+        this->_min = min;
+        this->_max = max;
+        this->_step = step;
+    }
 
-	void linear(_valueType min, _valueType max, _valueType step){
-		this->_min = min;
-		this->_max = max;
-		this->_step = step;
-	}
+    void operator=(ControllerView view) {
+        value(view.value());
+    }
 
-	void operator=(ControllerView view){
-		value(view.value());
-	}
+    void operator=(_valueType v) {
+        value(v);
+    }
 
-	void operator=(_valueType v) {
-		value(v);
-	}
+    member_property(_valueType, min);
+    member_property(_valueType, max);
+    member_property(_valueType, step);
 
-	member_property(_valueType, min);
-	member_property(_valueType, max);
-	member_property(_valueType, step);
-
-	Signal<_valueType> changed;
+    Signal<_valueType> changed;
 
 private:
-	_valueType _value;
-	_valueType _min, _max, _step;
-	int elementId, controllerId;
+    _valueType _value;
+    _valueType _min, _max, _step;
+    int elementId, controllerId;
 };
 
-
-} //namespace Matgui
+} // namespace MatGui

@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "matgui-common.h"
 #include "matsig.h"
 #include "memberproperties.h"
 #include "style.h"

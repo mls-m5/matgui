@@ -5,10 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
-
-
 
 namespace LineShader {
 
@@ -20,31 +17,28 @@ void main() {
 }
 )V0G0N";
 
-
-const char *fragmentCode = R"V0G0N(
+const char *fragmentCode = R"_(
 uniform  vec4 uColor;
 void main() {
   gl_FragColor = uColor;
 }
-)V0G0N";
+)_";
 
-
-}
-
+} // namespace LineShader
 
 static struct {
-	GLuint v;
-	GLuint mvpMatrix;
-	GLuint color;
-	unique_ptr<ShaderProgram> program;
+    GLuint v;
+    GLuint mvpMatrix;
+    GLuint color;
+    std::unique_ptr<ShaderProgram> program;
 
-	void init() {
-		auto p = new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
-		debug_check_true(p->getProgram(), "could not create graph program");
-		program.reset(p);
-		v = program->getAttribute("v");
-		color = program->getUniform("uColor");
-		mvpMatrix = program->getUniform("mvp_matrix");
-	}
+    void init() {
+        auto p =
+            new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
+        debug_check_true(p->getProgram(), "could not create graph program");
+        program.reset(p);
+        v = program->getAttribute("v");
+        color = program->getUniform("uColor");
+        mvpMatrix = program->getUniform("mvp_matrix");
+    }
 } lineProgram;
-
