@@ -11,19 +11,27 @@
 
 namespace MatGui {
 
-class SliderView: public ControllerView {
+class SliderView : public ControllerView {
 public:
-	SliderView();
-	virtual ~SliderView();
+    SliderView();
+    virtual ~SliderView();
 
-	virtual bool onPointerDown(pointerId id, MouseButton, double x, double y) override;
-	virtual bool onPointerUp(pointerId id, MouseButton, double x, double y) override;
-	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
+    virtual bool onPointerDown(pointerId id,
+                               MouseButton,
+                               double x,
+                               double y) override;
+    virtual bool onPointerUp(pointerId id,
+                             MouseButton,
+                             double x,
+                             double y) override;
+    virtual bool onPointerMove(pointerId id,
+                               double x,
+                               double y,
+                               pointerState state) override;
 
-	void draw() override;
+    void draw() override;
 
-	Paint indicatorStyle;
+    Paint indicatorStyle;
 };
 
-
-}
+} // namespace MatGui

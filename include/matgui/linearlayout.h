@@ -11,13 +11,12 @@
 
 namespace MatGui {
 
-class LinearLayout: public Layout {
+class LinearLayout : public Layout {
 public:
-	LinearLayout();
-	virtual ~LinearLayout();
+    LinearLayout();
+    virtual ~LinearLayout();
 
-	virtual void refresh();
+    virtual void refresh();
 };
 
-} //namespace MatGui
-
+} // namespace MatGui

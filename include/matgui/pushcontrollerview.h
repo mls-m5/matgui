@@ -11,18 +11,23 @@
 
 namespace MatGui {
 
-class PushControlerView: public ControllerView {
+class PushControlerView : public ControllerView {
 public:
-	PushControlerView();
-	virtual ~PushControlerView();
+    PushControlerView();
+    virtual ~PushControlerView();
 
-	virtual bool onPointerDown(pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerUp(pointerId id, MouseButton button, double x, double y) override;
+    virtual bool onPointerDown(pointerId id,
+                               MouseButton button,
+                               double x,
+                               double y) override;
+    virtual bool onPointerUp(pointerId id,
+                             MouseButton button,
+                             double x,
+                             double y) override;
 
-	void draw() override;
+    void draw() override;
 
-	Paint indicatorStyle;
+    Paint indicatorStyle;
 };
 
-
-}
+} // namespace MatGui

@@ -17,12 +17,12 @@ ImageView::~ImageView() {
 }
 
 void ImageView::draw() {
-	drawTextureRect({x(), y()}, 0, width(), height(), _texture, DrawStyle::OrigoTopLeft);
+    drawTextureRect(
+        {x(), y()}, 0, width(), height(), _texture, DrawStyle::OrigoTopLeft);
 }
 
 void ImageView::loadImage(std::string filename) {
-	_texture.load(filename);
-
+    _texture.load(filename);
 }
 
 } /* namespace MatGui */

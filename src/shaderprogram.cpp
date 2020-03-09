@@ -10,34 +10,37 @@
 #include <iostream>
 #include <vector>
 
-
-using std::cout; using std::endl;
+using std::cout;
+using std::endl;
 
 // Used when using for example opengl es 3.0
-std::string translate(const std::string &fromSource, GLenum shaderType, int fromVersion, int toVersion) {
-	std::string ret;
+std::string translate(const std::string &fromSource,
+                      GLenum shaderType,
+                      int fromVersion,
+                      int toVersion) {
+    std::string ret;
 
-	ret = "precision mediump float;\n";
-	ret += fromSource;
-	return ret;
+    ret = "precision mediump float;\n";
+    ret += fromSource;
+    return ret;
 }
 
 static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
     GLuint shader = glCreateShader(shaderType);
     if (shader) {
 #ifdef USING_GL2
-    	if (shaderType == GL_FRAGMENT_SHADER) {
-    		auto translated = translate(pSource, shaderType, 330, 300);
-    		const auto ptr = translated.c_str();
-    		glShaderSource(shader, 1, &ptr, 0);
-    	}
-    	else {
-    		const auto ptr = pSource.c_str();
-    		glShaderSource(shader, 1, &ptr, 0);
-    	}
+        if (shaderType == GL_FRAGMENT_SHADER) {
+            auto translated = translate(pSource, shaderType, 330, 300);
+            const auto ptr = translated.c_str();
+            glShaderSource(shader, 1, &ptr, 0);
+        }
+        else {
+            const auto ptr = pSource.c_str();
+            glShaderSource(shader, 1, &ptr, 0);
+        }
 #else
-    	const auto ptr = pSource.c_str();
-    	glShaderSource(shader, 1, &ptr, 0);
+        const auto ptr = pSource.c_str();
+        glShaderSource(shader, 1, &ptr, 0);
 #endif
         glCompileShader(shader);
         GLint compiled = 0;
@@ -46,11 +49,12 @@ static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
             GLint infoLen = 0;
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen) {
-            	std::vector<char> buffer(infoLen);
-            	glGetShaderInfoLog(shader, infoLen, 0, &buffer[0]);
-            	debug_print("Could not compile shader %d:\n%s\n",
-            			shaderType, &buffer[0]);
-            	debug_print("Shader code: \n%s\n", pSource.c_str());
+                std::vector<char> buffer(infoLen);
+                glGetShaderInfoLog(shader, infoLen, 0, &buffer[0]);
+                debug_print("Could not compile shader %d:\n%s\n",
+                            shaderType,
+                            &buffer[0]);
+                debug_print("Shader code: \n%s\n", pSource.c_str());
                 glDeleteShader(shader);
                 shader = 0;
             }
@@ -59,24 +63,25 @@ static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
     return shader;
 }
 
-
-GLuint createProgram(std::string pVertexSource, std::string pFragmentSource, const std::string &geometryCode) {
+GLuint createProgram(std::string pVertexSource,
+                     std::string pFragmentSource,
+                     const std::string &geometryCode) {
     GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
     if (!vertexShader) {
-    	debug_print("Shader program: failed creating vertex shader");
+        debug_print("Shader program: failed creating vertex shader");
         return 0;
     }
 
     GLuint fragmentShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
     if (!fragmentShader) {
-    	debug_print("Shader program: failed creating fragment shader");
+        debug_print("Shader program: failed creating fragment shader");
         return 0;
     }
 
 #ifndef USING_GL2
     GLuint geometryShader = 0;
     if (!geometryCode.empty()) {
-    	geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryCode.c_str());
+        geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryCode.c_str());
     }
 #endif
 
@@ -86,7 +91,7 @@ GLuint createProgram(std::string pVertexSource, std::string pFragmentSource, con
         glCall(glAttachShader(program, fragmentShader));
         if (!geometryCode.empty()) {
 #ifndef USING_GL2
-        	glCall(glAttachShader(program, geometryShader));
+            glCall(glAttachShader(program, geometryShader));
 #endif
         }
         glLinkProgram(program);
@@ -96,112 +101,116 @@ GLuint createProgram(std::string pVertexSource, std::string pFragmentSource, con
             GLint bufLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
             if (bufLength) {
-            	std::vector<char> buffer(bufLength);
-            	glGetProgramInfoLog(program, bufLength, 0, &buffer[0]);
-            	debug_print("Could not link program:\n%s\n", &buffer[0]);
+                std::vector<char> buffer(bufLength);
+                glGetProgramInfoLog(program, bufLength, 0, &buffer[0]);
+                debug_print("Could not link program:\n%s\n", &buffer[0]);
             }
             else {
-            	debug_print("Shader program linking failed, but with no error log");
+                debug_print(
+                    "Shader program linking failed, but with no error log");
             }
             glDeleteProgram(program);
             program = 0;
         }
     }
     else {
-    	debug_print("glCreateProgram() failed");
+        debug_print("glCreateProgram() failed");
     }
     checkGlError("before return");
 
     return program;
 }
 
-ShaderProgram::ShaderProgram(){
-
+ShaderProgram::ShaderProgram() {
 }
 
-void ShaderProgram::initProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode) {
-	if (_program) {
-		glDeleteProgram(_program);
-	}
-	_program = createProgram(vertexCode, fragmentCode, geometryCode);
+void ShaderProgram::initProgram(const std::string &vertexCode,
+                                const std::string &fragmentCode,
+                                const std::string &geometryCode) {
+    if (_program) {
+        glDeleteProgram(_program);
+    }
+    _program = createProgram(vertexCode, fragmentCode, geometryCode);
 }
 
-GLint ShaderProgram::getUniform(char const* name) {
-	GLint ret;
+GLint ShaderProgram::getUniform(char const *name) {
+    GLint ret;
     ret = glGetUniformLocation(_program, name);
 
-	if (ret < 0) {
-		debug_print("could not find uniform %s\n", name);
-	}
-//    checkGlError(name);
+    if (ret < 0) {
+        debug_print("could not find uniform %s\n", name);
+    }
+    //    checkGlError(name);
     return ret;
 }
 
-GLint ShaderProgram::getAttribute(char const* name) {
-	GLint ret;
-	ret = glGetAttribLocation(_program, name);
+GLint ShaderProgram::getAttribute(char const *name) {
+    GLint ret;
+    ret = glGetAttribLocation(_program, name);
 
-	if (ret < 0) {
-		debug_print("could not find attribute %s\n", name);
-	}
+    if (ret < 0) {
+        debug_print("could not find attribute %s\n", name);
+    }
 
-//	checkGlError(name);
+    //	checkGlError(name);
 
-	return ret;
+    return ret;
 }
 
-ShaderProgram::ShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode) {
-	initProgram(vertexCode, fragmentCode, geometryCode);
+ShaderProgram::ShaderProgram(const std::string &vertexCode,
+                             const std::string &fragmentCode,
+                             const std::string &geometryCode) {
+    initProgram(vertexCode, fragmentCode, geometryCode);
 }
 
 ShaderProgram::~ShaderProgram() {
-	if (_program){
-		glDeleteProgram(_program);
-	}
+    if (_program) {
+        glDeleteProgram(_program);
+    }
 }
 
+StandardShaderProgram::StandardShaderProgram(const std::string &vertexCode,
+                                             const std::string &fragmentCode,
+                                             const std::string &geometryCode)
+    : ShaderProgram(vertexCode, fragmentCode, geometryCode) {
 
-StandardShaderProgram::StandardShaderProgram(const std::string &vertexCode, const std::string &fragmentCode, const std::string &geometryCode) :
-		ShaderProgram(vertexCode, fragmentCode, geometryCode) {
-
-	vertexPointer = getAttribute("vPosition");
-	colorPointer = getAttribute("vColor");
-	mvpMatrixPointer = getUniform("mvp_matrix");
-
+    vertexPointer = getAttribute("vPosition");
+    colorPointer = getAttribute("vColor");
+    mvpMatrixPointer = getUniform("mvp_matrix");
 }
 
 void StandardShaderProgram::disable() {
-	if (vertexPointer != -1){
-		glEnableVertexAttribArray(vertexPointer);
-	}
-	if (colorPointer != -1){
-		glEnableVertexAttribArray(colorPointer);
-	}
+    if (vertexPointer != -1) {
+        glEnableVertexAttribArray(vertexPointer);
+    }
+    if (colorPointer != -1) {
+        glEnableVertexAttribArray(colorPointer);
+    }
 }
 
 void ShaderProgram::use() {
-	if (_program) {
-		glUseProgram(_program);
-	}
+    if (_program) {
+        glUseProgram(_program);
+    }
 }
 
 void ShaderProgram::unuse() {
-	glUseProgram(0);
+    glUseProgram(0);
 }
 
-void ShaderProgram::loadShaderFromFile(const std::string &vertexFile, const std::string &fragmentFile) {
-	std::ifstream vfile(vertexFile);
-	if (!vfile) {
-		cout << "could not open vertex shader file " << vertexFile << endl;
-	}
-	std::string code((std::istreambuf_iterator<char>(vfile)),
-	                 std::istreambuf_iterator<char>());
-	std::ifstream ffile(fragmentFile);
-	if (!ffile) {
-		cout << "could not open fragment shader file " << fragmentFile << endl;
-	}
-	std::string fcode((std::istreambuf_iterator<char>(ffile)),
-	                 std::istreambuf_iterator<char>());
-	initProgram(code, fcode);
+void ShaderProgram::loadShaderFromFile(const std::string &vertexFile,
+                                       const std::string &fragmentFile) {
+    std::ifstream vfile(vertexFile);
+    if (!vfile) {
+        cout << "could not open vertex shader file " << vertexFile << endl;
+    }
+    std::string code((std::istreambuf_iterator<char>(vfile)),
+                     std::istreambuf_iterator<char>());
+    std::ifstream ffile(fragmentFile);
+    if (!ffile) {
+        cout << "could not open fragment shader file " << fragmentFile << endl;
+    }
+    std::string fcode((std::istreambuf_iterator<char>(ffile)),
+                      std::istreambuf_iterator<char>());
+    initProgram(code, fcode);
 }
-

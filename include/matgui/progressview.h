@@ -14,18 +14,20 @@ namespace MatGui {
 
 class ProgressView : public ControllerView {
 public:
-	enum class Orientation {
-		Horizontal,
-		Vertical,
-	};
-	ProgressView();
-	virtual ~ProgressView();
+    enum class Orientation {
+        Horizontal,
+        Vertical,
+    };
+    ProgressView();
+    virtual ~ProgressView();
 
-	void draw() override;
+    void draw() override;
 
-	Paint indicatorStyle;
+    Paint indicatorStyle;
 
-	member_property_declaration_default(Orientation, orientation, Orientation::Horizontal);
+    member_property_declaration_default(Orientation,
+                                        orientation,
+                                        Orientation::Horizontal);
 };
 
 } /* namespace MatGui */
