@@ -46,7 +46,10 @@ public:
     virtual void updateStyle() {
         currentStyle = style;
         currentStyle += hoverStyle;
+        currentStyle += focusStyle;
     }
+    virtual void focus();
+    virtual void unfocus();
 
     [[deprecated]] virtual void setLocation(
         double x, double y, double w, double h, double weight = 1) {
@@ -77,6 +80,9 @@ public:
                                 pointerState state);
     virtual void onPointerLeave();
     virtual void onScroll(pointerId id, double x, double y);
+
+    virtual void onFocus();
+    virtual void onUnfocus();
 
     typedef unsigned KeySym;
     typedef unsigned KeyScanCode;
@@ -128,6 +134,8 @@ public:
     Signal<PointerArgument> pointerUp;
 
     Signal<PointerArgument> pointerEnter;
+    Signal<> focused;
+    Signal<> unfocused;
     Signal<> pointerLeave;
     Signal<ScrollArgument> scroll;
 
@@ -170,8 +178,11 @@ public:
     // This is the style that is used to paint the view
     Paint currentStyle;
 
-    // This is styles that is enabled or disabled depending on the views state
+    // Style enabled when mouse is hovering
     Paint hoverStyle;
+
+    // Style enabled when view got focus
+    Paint focusStyle;
 
     // This is the style of the view with no changes to it
     Paint style;

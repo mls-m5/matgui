@@ -14,17 +14,28 @@ namespace MatGui {
 View::View() : _weight(1) {
     location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
     hoverStyle.enabled = false;
+    focusStyle.enabled = false;
+    updateStyle();
 }
 
 View::~View() {
     if (_parent) {
-        Window *root = this->root();
-        if (root) {
-            if (root->focused() == this) {
-                root->focus(nullptr);
-            }
-        }
-        _parent->removeChild(this);
+        throw std::runtime_error(
+            "View deleted with active parent, remove from layout instead");
+    }
+}
+
+void View::focus() {
+    Window *window = root();
+    if (window) {
+        window->focus(this);
+    }
+}
+
+void View::unfocus() {
+    Window *window = root();
+    if (window) {
+        window->unfocus(this);
     }
 }
 
@@ -67,6 +78,9 @@ bool View::isPointerInsideLocal(double x, double y) {
 }
 
 bool View::onPointerDown(pointerId id, MouseButton button, double x, double y) {
+    if (focusable()) {
+        focus();
+    }
     pointerDown.emit({id, x, y, button});
     return true;
 }
@@ -101,12 +115,27 @@ void View::onScroll(pointerId id, double x, double y) {
     scroll.emit({id, x, y});
 }
 
+void View::onFocus() {
+    focused.emit();
+    focusStyle.enabled = true;
+    updateStyle();
+}
+
+void View::onUnfocus() {
+    unfocused.emit();
+    focusStyle.enabled = false;
+    updateStyle();
+}
+
 bool View::onKeyDown(KeySym sym,
                      KeyScanCode scancode,
                      KeyModifiers modifiers,
                      int repeat) {
     // If there is no listener the key go to another view
     if (keyDown) {
+        if (_focusable) {
+            focus();
+        }
         keyDown.emit({sym, scancode, modifiers, repeat});
         return true;
     }

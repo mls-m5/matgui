@@ -6,6 +6,7 @@
  */
 
 #include "matgui/layout.h"
+#include "matgui/window.h"
 
 #include <algorithm>
 #include <iostream>
@@ -26,11 +27,6 @@ void Layout::draw() {
     for (auto &it : children) {
         it->draw();
     }
-}
-
-void Layout::deleteChild(View *view) {
-    removeChild(view);
-    delete view;
 }
 
 void Layout::refreshChildren() {
@@ -163,7 +159,7 @@ void Layout::location(double x, double y, double w, double h, double weight) {
 }
 
 void Layout::removeChild(View *view) {
-    if (view == nullptr) {
+    if (!view) {
         return;
     }
 
@@ -173,6 +169,7 @@ void Layout::removeChild(View *view) {
 
     for (auto it = children.begin(); it != children.end(); ++it) {
         if (it->get() == view) {
+            view->unfocus();
             if (view->parent() == this) {
                 view->parent(nullptr);
             }
@@ -185,6 +182,31 @@ void Layout::removeChild(View *view) {
             return;
         }
     }
+}
+
+View *Layout::releaseChild(View *view) {
+    if (!view) {
+        return nullptr;
+    }
+
+    if (view == pointerFocusedChild) {
+        pointerFocusedChild = nullptr;
+    }
+
+    for (auto it = children.begin(); it != children.end(); ++it) {
+        if (it->get() == view) {
+            it->release();
+            view->unfocus();
+            view->parent(nullptr);
+            children.erase(it);
+
+            refresh();
+            refreshChildren();
+
+            return view;
+        }
+    }
+    return nullptr;
 }
 
 void Layout::deleteAll() {

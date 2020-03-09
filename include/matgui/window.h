@@ -71,6 +71,8 @@ public:
     // Make a object focused, or clear focus by sending in nullptr
     void focus(View *view);
     View *focused();
+    // Remove focus only if the focused view is the specified view
+    void unfocus(const View *view);
 
     // Set if the cursor should be visible over the window
     void cursorVisibility(bool value);

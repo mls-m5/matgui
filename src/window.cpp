@@ -179,11 +179,28 @@ void Window::invalid(bool state) {
 }
 
 void Window::focus(View *view) {
-    _windowData->_focused = view;
+    if (_windowData->focused) {
+        if (_windowData->focused == view) {
+            return; // Already focused
+        }
+        else {
+            _windowData->focused->onUnfocus();
+        }
+    }
+    _windowData->focused = view;
+    if (view) {
+        view->onFocus();
+    }
 }
 
 View *Window::focused() {
-    return _windowData->_focused;
+    return _windowData->focused;
+}
+
+void Window::unfocus(const View *view) {
+    if (_windowData->focused == view) {
+        focus(nullptr);
+    }
 }
 
 void Window::cursorVisibility(bool value) {
@@ -226,11 +243,11 @@ bool Window::onKeyUp(KeySym sym,
                      KeyModifiers modifiers,
                      int repeat) {
     if (focused()) {
-        if (focused()->onKeyDown(sym, scancode, modifiers, repeat)) {
+        if (focused()->onKeyUp(sym, scancode, modifiers, repeat)) {
             return true;
         }
     }
     return View::onKeyUp(sym, scancode, modifiers, repeat);
 }
 
-} /* namespace MatGui */
+} // namespace MatGui

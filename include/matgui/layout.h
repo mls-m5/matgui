@@ -57,8 +57,10 @@ public:
     virtual void addChild(View *view);
     virtual void addChild(std::unique_ptr<View> &&view);
     virtual void addChildAfter(View *view, View *after);
+    //! Remove child from layout and deletes it
     virtual void removeChild(View *view);
-    virtual void deleteChild(View *view);
+    //! Remove child from layout but release pointer
+    virtual View *releaseChild(View *view);
     virtual void deleteAll();
     virtual View *getChild(size_t index);
     virtual View *getChild(std::string name);

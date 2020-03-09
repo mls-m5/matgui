@@ -15,6 +15,7 @@ ToggleView::ToggleView() {
     indicatorStyle.fill.color(1, 1, 1, .5);
 
     hoverStyle.fill.color(1, 1, 1, .1);
+    focusStyle.line.color(1, 1, 1, .8);
     style.line.color(1, 1, 1, .3);
     updateStyle();
 }

@@ -18,7 +18,7 @@ struct Window::WindowData {
     Uint32 windowId = 0;
     //! Invalid: The window needs redrawing (when continuous updates = false)
     bool invalid = true;
-    View *_focused = nullptr;
+    View *focused = nullptr;
 };
 
 } // namespace MatGui

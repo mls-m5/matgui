@@ -14,6 +14,7 @@ TextEntry::TextEntry() {
     _fontView.alignment(FontView::Left);
     _fontView.font(Font(30));
     style.line.color(1, 1, 1, .3);
+    focusStyle.line.color(1, 1, 1, .8);
     updateStyle();
 }
 
@@ -33,11 +34,15 @@ bool TextEntry::onKeyDown(KeySym sym,
                           KeyModifiers modifiers,
                           int repeat) {
     if (scancode == Keys::Backspace) {
-        _text.pop_back();
-        updateFontView();
+        if (_cursorPosition > 0) {
+            _text.erase(_cursorPosition - 1);
+            --_cursorPosition;
+            updateFontView();
+        }
     }
-    if (isalnum(sym)) {
+    else if (sym < 256 && (isascii(sym))) {
         _text.push_back(static_cast<char>(sym));
+        _cursorPosition = _text.size();
         updateFontView();
     }
     else {

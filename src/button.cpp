@@ -16,6 +16,7 @@ Button::Button(std::string label) {
 
     hoverStyle.fill.color(1, 1, 1, .1);
     style.line.color(1, 1, 1, .3);
+    focusStyle.line.color(1, 1, 1, .8);
     updateStyle();
 }
 
