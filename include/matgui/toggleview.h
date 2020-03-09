@@ -11,20 +11,23 @@
 
 namespace MatGui {
 
-class ToggleView: public ControllerView {
+class ToggleView : public ControllerView {
 public:
-	ToggleView();
-	virtual ~ToggleView();
+    ToggleView();
+    virtual ~ToggleView();
 
-	virtual bool onPointerDown(
-			pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerUp(
-			pointerId id, MouseButton button, double x, double y) override;
+    virtual bool onPointerDown(pointerId id,
+                               MouseButton button,
+                               double x,
+                               double y) override;
+    virtual bool onPointerUp(pointerId id,
+                             MouseButton button,
+                             double x,
+                             double y) override;
 
-	void draw() override;
+    void draw() override;
 
-	Paint indicatorStyle;
+    Paint indicatorStyle;
 };
 
-
-}
+} // namespace MatGui

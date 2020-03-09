@@ -6,37 +6,34 @@
  */
 
 #pragma once
-#include "view.h"
 #include "font.h"
+#include "view.h"
 #include <memory>
 #include <string>
-
 
 namespace MatGui {
 
 class Button : public View {
 public:
-	Button(std::string label = "");
-	virtual ~Button();
+    Button(std::string label = "");
+    virtual ~Button();
 
-	void draw() override;
+    void draw() override;
 
-	void label(const std::string text) {
-		_fontView.text(text);
-	}
+    void label(const std::string text) {
+        _fontView.text(text);
+    }
 
-	const std::string &label() {
-		return _fontView.text();
-	}
+    const std::string &label() {
+        return _fontView.text();
+    }
 
-	void font(Font font) {
-		_fontView.font(font);
-	}
+    void font(Font font) {
+        _fontView.font(font);
+    }
 
-	protected:
-
-
-	FontView _fontView;
+private:
+    FontView _fontView;
 };
 
-}
+} // namespace MatGui
