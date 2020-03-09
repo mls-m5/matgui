@@ -3,7 +3,7 @@ COMPILER=g++
 GUIOBJECTS=view.o knobview.o button.o toggleview.o sliderview.o matsig.o
 GUIOBJECTS+= linearlayout.o layout.o progressview.o imageview.o label.o textentry.o
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o
-BACKENDOBJECTS+= bitmapfont.o paint.o keys.o
+BACKENDOBJECTS+= bitmapfont.o paint.o keys.o fontview.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
 CXXFLAGS=-std=c++11 `sdl2-config --cflags` -I"../include/" -I. -fPIC
 CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies

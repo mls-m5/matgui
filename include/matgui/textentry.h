@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "font.h"
+#include "fontview.h"
 #include "view.h"
 
 namespace MatGui {

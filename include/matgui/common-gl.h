@@ -5,9 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
-
 
 #include "matgui-common.h"
 
@@ -16,10 +14,11 @@
 //#include <GLES2/gl2ext.h>
 #define USING_GL2
 
-//#define GL_BGRA GL_BGRA_EXT
+#define MATGUI_INTERNAL_TEXTURE_FORMAT GL_BGRA
 
 #else
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#if defined(WIN32) || defined(_WIN32) ||                                       \
+    defined(__WIN32) && !defined(__CYGWIN__)
 
 #define GLEW_STATIC
 
@@ -45,8 +44,6 @@
 #endif
 #endif
 
-
-
 #ifdef USING_GL2
 
 #define GL_GLEXT_PROTOTYPES 1
@@ -60,5 +57,14 @@
 
 #endif
 
+// Texture format
 
+#ifdef __ANDROID__
 
+#define MATGUI_INTERNAL_TEXTURE_FORMAT GL_BGRA
+
+#else
+
+#define MATGUI_INTERNAL_TEXTURE_FORMAT GL_RGBA
+
+#endif

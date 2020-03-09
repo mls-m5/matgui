@@ -10,6 +10,10 @@
 #include <memory>
 #include <string>
 
+#ifndef USE_TTF_FONT
+#define USE_BITMAP_FONT
+#endif
+
 namespace MatGui {
 
 class Font {
@@ -40,64 +44,4 @@ protected:
     friend class FontViewData;
 };
 
-class FontView {
-public:
-    FontView();
-    ~FontView();
-
-    void font(const Font &font) {
-        _font = font;
-        _needsUpdate = true;
-    }
-
-    const Font &font() {
-        return _font;
-    }
-
-    int width() const {
-        return _width;
-    }
-
-    int height() const {
-        return _height;
-    }
-
-    void text(std::string text) {
-        if (_text != text) {
-            _text = text;
-            _needsUpdate = true;
-        }
-    }
-
-    const std::string &text() const {
-        return _text;
-    }
-
-    operator bool() const {
-        return bool(_font);
-    }
-
-    enum Alignment {
-        Right = -1,
-        Center = 0,
-        Left = 1,
-    };
-
-    void alignment(Alignment value);
-    Alignment alignment();
-
-    void draw(double x, double y);
-
-protected:
-    int _width = 0;
-    int _height = 0;
-    Font _font;
-    std::string _text;
-    bool _needsUpdate = false;
-
-    std::unique_ptr<class FontViewData> _data;
-
-    friend class FontViewData;
-};
-
-} /* namespace MatGui */
+} // namespace MatGui
