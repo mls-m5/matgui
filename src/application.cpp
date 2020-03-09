@@ -206,6 +206,12 @@ static void handleOtherEvents(Window *window,
         break;
     }
 
+    case SDL_TEXTINPUT: {
+        auto &text = event.text;
+        window->onTextInput(text.text);
+        break;
+    }
+
     default:
         redrawEvent = false;
         break;

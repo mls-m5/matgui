@@ -29,6 +29,11 @@ public:
                  KeyModifiers modifiers,
                  int repeat) override;
 
+    bool onTextInput(const char *text) override;
+
+    void onFocus() override;
+    void onUnfocus() override;
+
     const std::string &text() const {
         return _text;
     }
@@ -36,7 +41,6 @@ public:
     void text(const std::string &value);
 
 private:
-
     void updateFontView();
 
     std::string _text;

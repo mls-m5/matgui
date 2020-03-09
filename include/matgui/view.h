@@ -99,6 +99,10 @@ public:
                          KeyModifiers modifiers,
                          int repeat);
 
+    //! Text input after beginTextInput (from keys.h) is called
+    //! returns true if handled
+    virtual bool onTextInput(const char *text);
+
     //! Return the root window for the layout
     virtual class Window *root();
 

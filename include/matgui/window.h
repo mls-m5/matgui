@@ -37,6 +37,8 @@ public:
                  KeyModifiers modifiers,
                  int repeat) override;
 
+    bool onTextInput(const char *text) override;
+
     // Functions to be called before and after draw() for window
     void clear();
     void swap();

@@ -21,6 +21,9 @@ int GetScancodeFromName(const std::string &name);
 int GetScancodeFromKey(int key);
 int GetKeyFromScancode(int scancode);
 
+void beginTextEntry();
+void endTextEntry();
+
 // Scancode constants
 const int Unknown = 0;
 

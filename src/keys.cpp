@@ -36,6 +36,14 @@ int GetKeyFromScancode(int scancode) {
     return SDL_GetKeyFromScancode((SDL_Scancode)scancode);
 }
 
+void beginTextEntry() {
+    SDL_StartTextInput();
+}
+
+void endTextEntry() {
+    SDL_StopTextInput();
+}
+
 } // namespace Keys
 
 } // namespace MatGui

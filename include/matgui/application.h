@@ -11,6 +11,8 @@
 
 namespace MatGui {
 
+//! The application handles the startup and shutdown of the environment
+//! It also handles the main loop, and distributes events to all windows
 class Application {
 public:
     // Constructor sets up environment

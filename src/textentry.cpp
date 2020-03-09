@@ -40,14 +40,6 @@ bool TextEntry::onKeyDown(KeySym sym,
             updateFontView();
         }
     }
-    else if (sym < 256 && (isascii(sym))) {
-        _text.push_back(static_cast<char>(sym));
-        _cursorPosition = _text.size();
-        updateFontView();
-    }
-    else {
-        return false; // Not handled
-    }
 
     return true;
 }
@@ -57,6 +49,23 @@ bool TextEntry::onKeyUp(KeySym sym,
                         KeyModifiers modifiers,
                         int repeat) {
     return true;
+}
+
+bool TextEntry::onTextInput(const char *text) {
+    _text.append(text);
+    _cursorPosition = _text.size();
+    updateFontView();
+    return true;
+}
+
+void TextEntry::onFocus() {
+    Keys::beginTextEntry();
+    View::onFocus();
+}
+
+void TextEntry::onUnfocus() {
+    Keys::endTextEntry();
+    View::onUnfocus();
 }
 
 void TextEntry::text(const std::string &value) {

@@ -157,6 +157,10 @@ bool View::onKeyUp(KeySym sym,
     }
 }
 
+bool View::onTextInput(const char *text) {
+    return false;
+}
+
 class Window *View::root() {
     return parent() ? parent()->root() : nullptr;
 }

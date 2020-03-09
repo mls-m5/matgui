@@ -249,4 +249,13 @@ bool Window::onKeyUp(KeySym sym,
     return View::onKeyUp(sym, scancode, modifiers, repeat);
 }
 
+bool Window::onTextInput(const char *text) {
+    if (focused()) {
+        if (focused()->onTextInput(text)) {
+            return true;
+        }
+    }
+    return View::onTextInput(text);
+}
+
 } // namespace MatGui
