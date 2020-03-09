@@ -4,18 +4,19 @@
  *  Created on: 22 jan 2014
  *      Author: Mattias Lasersköld
  */
-#include <iostream>
 
-#include "application.h"
-#include "button.h"
-#include "imageview.h"
-#include "knobview.h"
-#include "label.h"
-#include "progressview.h"
-#include "sliderview.h"
-#include "textentry.h"
-#include "toggleview.h"
-#include "window.h"
+#include "matgui/application.h"
+#include "matgui/button.h"
+#include "matgui/imageview.h"
+#include "matgui/knobview.h"
+#include "matgui/label.h"
+#include "matgui/progressview.h"
+#include "matgui/sliderview.h"
+#include "matgui/textentry.h"
+#include "matgui/toggleview.h"
+#include "matgui/window.h"
+
+#include <iostream>
 
 using namespace MatGui;
 using namespace std;
