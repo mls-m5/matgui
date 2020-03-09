@@ -40,8 +40,13 @@ public:
 
     void text(const std::string &value);
 
+    Signal<> submit; // Return is pressed
+
 private:
     void updateFontView();
+
+    void eraseOne();
+    void deleteOne();
 
     std::string _text;
     size_t _cursorPosition = 0;

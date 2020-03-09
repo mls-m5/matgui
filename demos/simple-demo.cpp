@@ -63,6 +63,8 @@ int main(int argc, char *argv[]) {
     auto textEntry = new TextEntry;
     textEntry->text("hej");
     window.addChild(textEntry);
+    textEntry->submit.connect(
+        [textEntry]() { cout << "got text: " << textEntry->text() << endl; });
 
     auto layout2 = new LinearLayout;
     layout2->orientation(LAYOUT_HORIZONTAL);

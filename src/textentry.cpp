@@ -34,11 +34,28 @@ bool TextEntry::onKeyDown(KeySym sym,
                           KeyModifiers modifiers,
                           int repeat) {
     if (scancode == Keys::Backspace) {
-        if (_cursorPosition > 0) {
-            _text.erase(_cursorPosition - 1);
-            --_cursorPosition;
+        if (modifiers & (64 + 128)) { // ctrl left or right
+            while (_cursorPosition > 0 &&
+                   isspace(_text.at(_cursorPosition - 1))) {
+                eraseOne();
+            }
+            while (_cursorPosition > 0 &&
+                   !isspace(_text.at(_cursorPosition - 1))) {
+                eraseOne();
+            }
             updateFontView();
         }
+        else if (_cursorPosition > 0) {
+            while (_cursorPosition > 1 &&
+                   isUtfTail(_text.at(_cursorPosition - 1))) {
+                eraseOne();
+            }
+            eraseOne();
+            updateFontView();
+        }
+    }
+    else if (scancode == Keys::Return) {
+        submit.emit();
     }
 
     return true;
@@ -59,12 +76,12 @@ bool TextEntry::onTextInput(const char *text) {
 }
 
 void TextEntry::onFocus() {
-    Keys::beginTextEntry();
+    beginTextEntry();
     View::onFocus();
 }
 
 void TextEntry::onUnfocus() {
-    Keys::endTextEntry();
+    endTextEntry();
     View::onUnfocus();
 }
 
@@ -76,6 +93,19 @@ void TextEntry::text(const std::string &value) {
 
 void TextEntry::updateFontView() {
     _fontView.text(_text);
+}
+
+// Erase one character to the left of cursor without updating the fontview
+void TextEntry::eraseOne() {
+    if (_cursorPosition > 0) {
+        _text.erase(_cursorPosition - 1);
+        --_cursorPosition;
+    }
+}
+
+// Delete one character to the right without updating the fontview
+void TextEntry::deleteOne() {
+    _text.erase(_cursorPosition);
 }
 
 } // namespace MatGui

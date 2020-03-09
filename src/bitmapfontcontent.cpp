@@ -9,6 +9,8 @@
 
 #include <map>
 
+namespace MatGui {
+
 // clang-format off
 std::map<char, BitmapFontData> fontBitmap = {
 { //Space
@@ -966,3 +968,5 @@ l xxx
 }
 
 };
+
+} // namespace MatGui

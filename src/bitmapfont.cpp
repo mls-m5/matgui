@@ -1,4 +1,5 @@
 #include "matgui/bitmapfont.h"
+#include "matgui/keys.h"
 
 #include <list>
 #include <map>
@@ -10,13 +11,11 @@
 using std::list;
 using std::string;
 
+namespace MatGui {
+
 // Forward declaration for readability
 extern std::map<char, BitmapFontData> fontBitmap;
 extern std::map<std::string, BitmapFontData> multiCharacterFontBitmap;
-
-bool isUtfTail(char c) {
-    return ((c & 0xC0) == 0x80);
-}
 
 // static void printToConsole(const BitmapFontData & data) {
 //	auto x = 0;
@@ -114,3 +113,5 @@ BitmapFontData getFontDataVector(string text) {
 
     return fontData;
 }
+
+} // namespace MatGui

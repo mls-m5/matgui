@@ -11,18 +11,19 @@
 
 namespace MatGui {
 
-namespace Keys {
-
 // Functions to convert between key and description string
 std::string GetKeyNameFromScancode(int scancode);
 std::string GetKeyNameFromKey(int scancode);
-int GetKeyFromName(const std::string &name);
-int GetScancodeFromName(const std::string &name);
-int GetScancodeFromKey(int key);
-int GetKeyFromScancode(int scancode);
+int getKeyFromName(const std::string &name);
+int getScancodeFromName(const std::string &name);
+int getScancodeFromKey(int key);
+int getKeyFromScancode(int scancode);
 
 void beginTextEntry();
 void endTextEntry();
+bool isUtfTail(char c);
+
+namespace Keys {
 
 // Scancode constants
 const int Unknown = 0;

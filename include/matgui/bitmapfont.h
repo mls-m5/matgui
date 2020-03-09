@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+namespace MatGui {
+
 struct ColorType {
     unsigned char r, g, b, a;
 };
@@ -142,3 +144,5 @@ inline BitmapFontData::BitmapFontData(const char *data) {
     lineHeight = linePos;
     lineDepth = height - linePos;
 }
+
+} // namespace MatGui

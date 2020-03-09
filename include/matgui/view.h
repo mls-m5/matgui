@@ -85,6 +85,12 @@ public:
 
     typedef unsigned KeySym;
     typedef unsigned KeyScanCode;
+
+    // Example
+    // left shift = 1
+    // right shift = 2
+    // left ctrl = 64
+    // right ctrl = 128
     typedef unsigned KeyModifiers;
 
     //! Handle key events
