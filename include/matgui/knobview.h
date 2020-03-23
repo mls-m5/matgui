@@ -11,19 +11,27 @@
 
 namespace MatGui {
 
-class KnobView: public ControllerView {
+class KnobView : public ControllerView {
 public:
-	KnobView();
-	virtual ~KnobView();
+    KnobView();
+    virtual ~KnobView();
 
-	virtual bool onPointerDown(pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerUp(pointerId id, MouseButton button, double x, double y) override;
-	virtual bool onPointerMove(pointerId id, double x, double y, pointerState state) override;
+    virtual bool onPointerDown(pointerId id,
+                               MouseButton button,
+                               double x,
+                               double y) override;
+    virtual bool onPointerUp(pointerId id,
+                             MouseButton button,
+                             double x,
+                             double y) override;
+    virtual bool onPointerMove(pointerId id,
+                               double x,
+                               double y,
+                               pointerState state) override;
 
-	void draw() override;
+    void draw() override;
 
-	Paint indicatorStyle;
+    Paint indicatorStyle;
 };
 
-
-}
+} // namespace MatGui

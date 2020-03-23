@@ -16,22 +16,25 @@ namespace MatGui {
 
 class ImageView : public View {
 public:
-	ImageView();
-	ImageView(std::string filename) {
-		loadImage(filename);
-	}
-	ImageView(const Texture &texture):
-		_texture(texture)
-		{}
-	virtual ~ImageView();
+    ImageView();
+    ImageView(std::string filename) {
+        loadImage(filename);
+    }
+    ImageView(const Texture &texture) : _texture(texture) {
+    }
+    virtual ~ImageView();
 
-	void draw() override;
+    void draw() override;
 
-	void loadImage(std::string filename);
-	void texture(const Texture &texture) { _texture = texture; }
-	Texture &texture() {return _texture; };
+    void loadImage(std::string filename);
+    void texture(const Texture &texture) {
+        _texture = texture;
+    }
+    Texture &texture() {
+        return _texture;
+    };
 
-	Texture _texture;
+    Texture _texture;
 };
 
 } /* namespace MatGui */

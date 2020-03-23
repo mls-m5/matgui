@@ -311,7 +311,8 @@ public:
     // Remember that this probably only should be called from the gui thread
     template <typename T = _returnValue>
     typename std::enable_if<std::is_void<T>::value>::type // This checks if the
-                                                          // return value is void
+                                                          // return value is
+                                                          // void
                                                           directCall() {
         if (!this->empty()) {
             matsig_flush_loop(it->call());

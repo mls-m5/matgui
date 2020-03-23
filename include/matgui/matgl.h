@@ -9,423 +9,491 @@
 
 #pragma once
 
-
 #include "shaderprogram.h"
-#include <string>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
-
 namespace GL {
-
 
 template <typename T>
 GLenum getType();
 
 template <>
 inline GLenum getType<double>() {
-	return GL_DOUBLE;
+    return GL_DOUBLE;
 }
 
 template <>
 inline GLenum getType<float>() {
-	return GL_FLOAT;
+    return GL_FLOAT;
 }
 
 template <>
 inline GLenum getType<GLuint>() {
-	return GL_UNSIGNED_INT;
+    return GL_UNSIGNED_INT;
 }
 
 template <>
 inline GLenum getType<GLint>() {
-	return GL_INT;
+    return GL_INT;
 }
 
 template <>
 inline GLenum getType<GLubyte>() {
-	return GL_UNSIGNED_BYTE;
+    return GL_UNSIGNED_BYTE;
 }
 
 template <>
 inline GLenum getType<GLbyte>() {
-	return GL_BYTE;
+    return GL_BYTE;
 }
 
-
-class VertexArrayObject  {
+class VertexArrayObject {
 public:
-	// Create a VAO _and_ bind it
-	VertexArrayObject() {
-		init();
-	}
+    // Create a VAO _and_ bind it
+    VertexArrayObject() {
+        init();
+    }
 
-	// For creating the object later
-	VertexArrayObject(nullptr_t t) {
-		id = 0;
-	}
+    // For creating the object later
+    VertexArrayObject(nullptr_t t) {
+        id = 0;
+    }
 
-	VertexArrayObject(const VertexArrayObject&) = delete;
-	VertexArrayObject(VertexArrayObject && other) {
-		id = other.id;
-		other.id = 0;
-	}
+    VertexArrayObject(const VertexArrayObject &) = delete;
+    VertexArrayObject(VertexArrayObject &&other) {
+        id = other.id;
+        other.id = 0;
+    }
 
-	void init() {
-		glCall(glGenVertexArrays(1, &id));
-		bind();
-	}
+    void init() {
+        glCall(glGenVertexArrays(1, &id));
+        bind();
+    }
 
-	void bind() {
-		glCall(glBindVertexArray(id));
-	}
+    void bind() {
+        glCall(glBindVertexArray(id));
+    }
 
-	void unbind() {
-		glCall(glBindVertexArray(0));
-	}
+    void unbind() {
+        glCall(glBindVertexArray(0));
+    }
 
-	void clear() {
-		glCall(glDeleteVertexArrays(1, &id));
-	}
+    void clear() {
+        glCall(glDeleteVertexArrays(1, &id));
+    }
 
-	~VertexArrayObject() {
-		clear();
-	}
+    ~VertexArrayObject() {
+        clear();
+    }
 
-	GLuint id;
+    GLuint id;
 };
-
-
 
 class VertexBufferObject {
 public:
-	// GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER is the most common
-	// More info on https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferData.xhtml
-	VertexBufferObject(GLenum target = GL_ARRAY_BUFFER): target(target) {
-		glCall(glGenBuffers(1, &id));
-		bind();
-	}
+    // GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER is the most common
+    // More info on
+    // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferData.xhtml
+    VertexBufferObject(GLenum target = GL_ARRAY_BUFFER) : target(target) {
+        glCall(glGenBuffers(1, &id));
+        bind();
+    }
 
-	// Shorthand version
-	// if size == 0 it will be calculated from the size of the vector
-	// index is the index in the shader program
-	// elementSize is the size of each element eg 3 for 3d-position
-	// stride is how far it is between each element in bytes
-	//   can for example be calculated by sizeof(T) * element size
-	// start is the starting position in bytes
-	template <class T>
-	VertexBufferObject(
-			const std::vector<T> &data,
-			GLuint index, GLuint elementSize = 3,
-			GLuint stride = 0, size_t start = 0,
-			GLenum target = GL_ARRAY_BUFFER,
-			GLenum usage = GL_STATIC_DRAW):
-			VertexBufferObject(target) {
-		setData(data, usage);
-		attribPointer(index, elementSize, getType<T>(), false, stride, (void*)start);
-	}
+    // Shorthand version
+    // if size == 0 it will be calculated from the size of the vector
+    // index is the index in the shader program
+    // elementSize is the size of each element eg 3 for 3d-position
+    // stride is how far it is between each element in bytes
+    //   can for example be calculated by sizeof(T) * element size
+    // start is the starting position in bytes
+    template <class T>
+    VertexBufferObject(const std::vector<T> &data,
+                       GLuint index,
+                       GLuint elementSize = 3,
+                       GLuint stride = 0,
+                       size_t start = 0,
+                       GLenum target = GL_ARRAY_BUFFER,
+                       GLenum usage = GL_STATIC_DRAW)
+        : VertexBufferObject(target) {
+        setData(data, usage);
+        attribPointer(
+            index, elementSize, getType<T>(), false, stride, (void *)start);
+    }
 
-	// The same as above but for a standard array
-	// dataSize: The number of values in the data
-	template <class T>
-	VertexBufferObject(
-			const T *data, size_t dataSize,
-			GLuint index, GLuint elementSize = 3,
-			GLuint stride = 0, size_t start = 0,
-			GLenum target = GL_ARRAY_BUFFER,
-			GLenum usage = GL_STATIC_DRAW):
-			VertexBufferObject(target) {
-		setData(data, dataSize, usage);
-		attribPointer(index, elementSize, getType<T>(), false, stride, (void*)start);
-	}
+    // The same as above but for a standard array
+    // dataSize: The number of values in the data
+    template <class T>
+    VertexBufferObject(const T *data,
+                       size_t dataSize,
+                       GLuint index,
+                       GLuint elementSize = 3,
+                       GLuint stride = 0,
+                       size_t start = 0,
+                       GLenum target = GL_ARRAY_BUFFER,
+                       GLenum usage = GL_STATIC_DRAW)
+        : VertexBufferObject(target) {
+        setData(data, dataSize, usage);
+        attribPointer(
+            index, elementSize, getType<T>(), false, stride, (void *)start);
+    }
 
-	// A specialized version for element buffers
-	VertexBufferObject(const std::vector<GLuint> &indices): VertexBufferObject(GL_ELEMENT_ARRAY_BUFFER){
-		setData(indices);
-	}
+    // A specialized version for element buffers
+    VertexBufferObject(const std::vector<GLuint> &indices)
+        : VertexBufferObject(GL_ELEMENT_ARRAY_BUFFER) {
+        setData(indices);
+    }
 
-	VertexBufferObject(VertexBufferObject &&other): id(other.id), target(other.target) {
-		other.id = 0;
-	}
+    VertexBufferObject(VertexBufferObject &&other)
+        : id(other.id), target(other.target) {
+        other.id = 0;
+    }
 
-	VertexBufferObject(const VertexBufferObject &) = delete;
+    VertexBufferObject(const VertexBufferObject &) = delete;
 
-	~VertexBufferObject() {
-		glCall(glDeleteBuffers(1, &id));
-	}
+    ~VertexBufferObject() {
+        glCall(glDeleteBuffers(1, &id));
+    }
 
-	void bind() {
-		glCall(glBindBuffer(target, id));
-	}
+    void bind() {
+        glCall(glBindBuffer(target, id));
+    }
 
-	void unbind() {
-		glCall(glBindBuffer(target, 0));
-	}
+    void unbind() {
+        glCall(glBindBuffer(target, 0));
+    }
 
-	// Set attribute pointer
-	// and enable it if it is not GL_ELEMENT_ARRAY_BUFFER
-	// Index is the index in the shader program
-	// size is the total number of variables for each element eg. 3 for a 3d position
-	// type is the data type eg. GL_FLOAT or GL_DOUBLE
-	// stride is if you have some other format like and needs the size of each element to be bigger
-	// pointer is the offset of the first element, probably used in combination with stride
-	void attribPointer(
-			GLuint index,
-			GLint size,
-			GLenum type = GL_FLOAT,
-			GLboolean normalized = false,
-			GLsizei stride = 0,
-			const void *pointer = nullptr
-	) {
-		glCall(glVertexAttribPointer(index, size, type, normalized, stride, pointer));
-		if (type != GL_ELEMENT_ARRAY_BUFFER) {
-			glCall(glEnableVertexAttribArray(index));
-		}
-	}
+    // Set attribute pointer
+    // and enable it if it is not GL_ELEMENT_ARRAY_BUFFER
+    // Index is the index in the shader program
+    // size is the total number of variables for each element eg. 3 for a 3d
+    // position type is the data type eg. GL_FLOAT or GL_DOUBLE stride is if you
+    // have some other format like and needs the size of each element to be
+    // bigger pointer is the offset of the first element, probably used in
+    // combination with stride
+    void attribPointer(GLuint index,
+                       GLint size,
+                       GLenum type = GL_FLOAT,
+                       GLboolean normalized = false,
+                       GLsizei stride = 0,
+                       const void *pointer = nullptr) {
+        glCall(glVertexAttribPointer(
+            index, size, type, normalized, stride, pointer));
+        if (type != GL_ELEMENT_ARRAY_BUFFER) {
+            glCall(glEnableVertexAttribArray(index));
+        }
+    }
 
-	// Binds and set data
-	template <class T>
-	void setData(const std::vector<T> &data, GLenum usage = GL_STATIC_DRAW) {
-		bind();
-		glCall(glBufferData(target, sizeof(T) * data.size(), &data.front(), usage));
-	}
+    // Binds and set data
+    template <class T>
+    void setData(const std::vector<T> &data, GLenum usage = GL_STATIC_DRAW) {
+        bind();
+        glCall(glBufferData(
+            target, sizeof(T) * data.size(), &data.front(), usage));
+    }
 
+    // Binds and set data
+    template <class T>
+    void setData(const T *data, size_t size, GLenum usage = GL_STATIC_DRAW) {
+        if (!data || !size) {
+            return;
+        }
+        bind();
+        glCall(glBufferData(target, sizeof(T) * size, data, usage));
+    }
 
-	// Binds and set data
-	template <class T>
-	void setData(const T *data, size_t size, GLenum usage = GL_STATIC_DRAW) {
-		if (!data || !size) {
-			return;
-		}
-		bind();
-		glCall(glBufferData(target, sizeof(T) * size, data, usage));
-	}
-
-	GLuint id;
-	GLenum target;
+    GLuint id;
+    GLenum target;
 };
-
 
 class FrameBufferObject {
 public:
-	FrameBufferObject(int width, int height):
-		width(width), height(height){
-		glCall(glGenFramebuffers(1, &id));
-		glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
-		glCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
-	}
+    FrameBufferObject(int width, int height) : width(width), height(height) {
+        glCall(glGenFramebuffers(1, &id));
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
+        glCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
+    }
 
-	// Setup opengl to render to this framebuffer
-	void bind() {
-		glBindTexture(GL_TEXTURE_2D, 0); // Make sure to unbind any textures
-		glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			throw std::runtime_error("Framebuffer is not complete");
-		}
-		glCall(glViewport(0, 0, width, height));
-	}
+    // Setup opengl to render to this framebuffer
+    void bind() {
+        glBindTexture(GL_TEXTURE_2D, 0); // Make sure to unbind any textures
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+            GL_FRAMEBUFFER_COMPLETE) {
+            throw std::runtime_error("Framebuffer is not complete");
+        }
+        glCall(glViewport(0, 0, width, height));
+    }
 
-	// Sets opengl to render to the default framebuffer (the screen)
-	static void unBind() {
-		glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	}
+    // Sets opengl to render to the default framebuffer (the screen)
+    static void unBind() {
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    }
 
-	static void unBind(int w, int h) {
-		unBind();
-		glCall(glViewport(0, 0, w, h));
-	}
+    static void unBind(int w, int h) {
+        unBind();
+        glCall(glViewport(0, 0, w, h));
+    }
 
-	~FrameBufferObject() {
-		glDeleteFramebuffers(1, &id);
-	}
+    ~FrameBufferObject() {
+        glDeleteFramebuffers(1, &id);
+    }
 
-	GLuint id;
-	int width, height;
+    GLuint id;
+    int width, height;
 };
 
 class TextureAttachment {
 public:
-	TextureAttachment(int width, int height, GLenum attachment = GL_COLOR_ATTACHMENT0) {
-		glCall(glGenTextures(1, &id));
-		bind();
-		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-				GL_RGB, GL_UNSIGNED_BYTE, nullptr));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		glCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, id, 0));
-		unbind();
-	}
+    TextureAttachment(int width,
+                      int height,
+                      GLenum attachment = GL_COLOR_ATTACHMENT0) {
+        glCall(glGenTextures(1, &id));
+        bind();
+        glCall(glTexImage2D(GL_TEXTURE_2D,
+                            0,
+                            GL_RGB,
+                            width,
+                            height,
+                            0,
+                            GL_RGB,
+                            GL_UNSIGNED_BYTE,
+                            nullptr));
+        glCall(
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        glCall(
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        glCall(
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, id, 0));
+        unbind();
+    }
 
-	~TextureAttachment() {
-		glCall(glDeleteTextures(1, &id));
-	}
+    ~TextureAttachment() {
+        glCall(glDeleteTextures(1, &id));
+    }
 
-	void bind() {
-		glCall(glBindTexture(GL_TEXTURE_2D, id));
-	}
+    void bind() {
+        glCall(glBindTexture(GL_TEXTURE_2D, id));
+    }
 
-	void unbind() {
-		glCall(glBindTexture(GL_TEXTURE_2D, 0));
-	}
+    void unbind() {
+        glCall(glBindTexture(GL_TEXTURE_2D, 0));
+    }
 
-	GLuint id;
+    GLuint id;
 };
 
 // A depth buffer that may be used to render somewhere else
 class DepthTextureAttachment {
 public:
-	DepthTextureAttachment(int width, int height) {
-		glCall(glGenTextures(1, &id));
-		bind();
-		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0,
-				GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		glCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, id, 0));
-		unbind();
-	}
+    DepthTextureAttachment(int width, int height) {
+        glCall(glGenTextures(1, &id));
+        bind();
+        glCall(glTexImage2D(GL_TEXTURE_2D,
+                            0,
+                            GL_DEPTH_COMPONENT32,
+                            width,
+                            height,
+                            0,
+                            GL_DEPTH_COMPONENT,
+                            GL_UNSIGNED_INT,
+                            nullptr));
+        glCall(
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        glCall(
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        glCall(
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, id, 0));
+        unbind();
+    }
 
-	~DepthTextureAttachment() {
-		glCall(glDeleteTextures(1, &id));
-	}
+    ~DepthTextureAttachment() {
+        glCall(glDeleteTextures(1, &id));
+    }
 
-	void bind() {
-		glCall(glBindTexture(GL_TEXTURE_2D, id));
-	}
+    void bind() {
+        glCall(glBindTexture(GL_TEXTURE_2D, id));
+    }
 
-	void unbind() {
-		glCall(glBindTexture(GL_TEXTURE_2D, 0));
-	}
+    void unbind() {
+        glCall(glBindTexture(GL_TEXTURE_2D, 0));
+    }
 
-	GLuint id;
+    GLuint id;
 };
 
 // A depth buffer that is not used to render to anywhere else
 class DepthBufferAttachment {
 public:
-	DepthBufferAttachment (int width, int height) {
-		glGenRenderbuffers(1, &id);
-		bind();
-		glCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height));
-		glCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, id));
-		unbind();
-	}
+    DepthBufferAttachment(int width, int height) {
+        glGenRenderbuffers(1, &id);
+        bind();
+        glCall(glRenderbufferStorage(
+            GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height));
+        glCall(glFramebufferRenderbuffer(
+            GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, id));
+        unbind();
+    }
 
-	~DepthBufferAttachment() {
-		glCall(glDeleteRenderbuffers(1, &id));
-	}
+    ~DepthBufferAttachment() {
+        glCall(glDeleteRenderbuffers(1, &id));
+    }
 
-	void bind() {
-		glCall(glBindRenderbuffer(GL_RENDERBUFFER, id));
-	}
+    void bind() {
+        glCall(glBindRenderbuffer(GL_RENDERBUFFER, id));
+    }
 
-	void unbind() {
-		glCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
-	}
+    void unbind() {
+        glCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    }
 
-	GLuint id;
+    GLuint id;
 };
-
 
 class Texture {
 public:
-	Texture() {
-		glGenTextures(1, &id);
-	}
+    Texture() {
+        glGenTextures(1, &id);
+    }
 
-	//Shorthand function
-	//Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
-	template <typename T>
-	Texture(const std::vector<T> &data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR, bool generateMipmap = true): Texture() {
-		setData(data, width, height, format, interpolationType);
-		if (generateMipmap) {
-			this->generateMipmap();
-		}
-		setWrap();
-	}
+    // Shorthand function
+    // Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and
+    // GL_LUMINANCE_ALPHA
+    template <typename T>
+    Texture(const std::vector<T> &data,
+            int width,
+            int height,
+            GLenum format = GL_RGB,
+            GLenum interpolationType = GL_LINEAR,
+            bool generateMipmap = true)
+        : Texture() {
+        setData(data, width, height, format, interpolationType);
+        if (generateMipmap) {
+            this->generateMipmap();
+        }
+        setWrap();
+    }
 
-	//Shorthand function
-	//Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
-	template <typename T>
-	Texture(const T *data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR, bool generateMipmap = true): Texture() {
-		setData(data, width, height, format, interpolationType);
-		if (generateMipmap) {
-			this->generateMipmap();
-		}
-		setWrap();
-	}
+    // Shorthand function
+    // Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and
+    // GL_LUMINANCE_ALPHA
+    template <typename T>
+    Texture(const T *data,
+            int width,
+            int height,
+            GLenum format = GL_RGB,
+            GLenum interpolationType = GL_LINEAR,
+            bool generateMipmap = true)
+        : Texture() {
+        setData(data, width, height, format, interpolationType);
+        if (generateMipmap) {
+            this->generateMipmap();
+        }
+        setWrap();
+    }
 
-	// Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
-	template <typename T>
-	void setData(const std::vector<T> &data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR) {
-		setData(&data.front(), width, height, format, interpolationType);
-	}
+    // Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and
+    // GL_LUMINANCE_ALPHA
+    template <typename T>
+    void setData(const std::vector<T> &data,
+                 int width,
+                 int height,
+                 GLenum format = GL_RGB,
+                 GLenum interpolationType = GL_LINEAR) {
+        setData(&data.front(), width, height, format, interpolationType);
+    }
 
-	// Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA
-	template <typename T>
-	void setData(const T *data, int width, int height, GLenum format = GL_RGB, GLenum interpolationType = GL_LINEAR) {
-		bind();
-		glCall(glTexImage2D(
-				GL_TEXTURE_2D, 0, format,
-				width, height, 0, format,
-				getType<T>(), data
-		));
-		setInterpolationType(interpolationType);
-	}
+    // Possible formats: GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, and
+    // GL_LUMINANCE_ALPHA
+    template <typename T>
+    void setData(const T *data,
+                 int width,
+                 int height,
+                 GLenum format = GL_RGB,
+                 GLenum interpolationType = GL_LINEAR) {
+        bind();
+        glCall(glTexImage2D(GL_TEXTURE_2D,
+                            0,
+                            format,
+                            width,
+                            height,
+                            0,
+                            format,
+                            getType<T>(),
+                            data));
+        setInterpolationType(interpolationType);
+    }
 
-	// Calls glTexSubImage
-	template <typename T>
-	void updateData(const T *data, int xoffset, int yoffset, int width, int height, GLenum format = GL_RGB) {
-		bind();
-		glCall(glTexSubImage2D(GL_TEXTURE_2D, 0, xoffset, yoffset, width, height, format, getType<T>(), data));
-	}
+    // Calls glTexSubImage
+    template <typename T>
+    void updateData(const T *data,
+                    int xoffset,
+                    int yoffset,
+                    int width,
+                    int height,
+                    GLenum format = GL_RGB) {
+        bind();
+        glCall(glTexSubImage2D(GL_TEXTURE_2D,
+                               0,
+                               xoffset,
+                               yoffset,
+                               width,
+                               height,
+                               format,
+                               getType<T>(),
+                               data));
+    }
 
-	template <typename T>
-	void updateData(const std::vector<T> &data, int xoffset, int yoffset, int width, int height, GLenum format = GL_RGB) {
-		updateData(&data.front(), xoffset, yoffset, width, height, format);
-	}
+    template <typename T>
+    void updateData(const std::vector<T> &data,
+                    int xoffset,
+                    int yoffset,
+                    int width,
+                    int height,
+                    GLenum format = GL_RGB) {
+        updateData(&data.front(), xoffset, yoffset, width, height, format);
+    }
 
+    void generateMipmap() {
+        bind();
+        glCall(glGenerateMipmap(GL_TEXTURE_2D));
+    }
 
+    Texture(Texture &&other) {
+        id = other.id;
+        other.id = 0;
+    }
 
-	void generateMipmap() {
-		bind();
-		glCall(glGenerateMipmap(GL_TEXTURE_2D));
-	}
+    void bind() {
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
 
-	Texture(Texture &&other) {
-		id = other.id;
-		other.id = 0;
-	}
+    // Note that you need to bind before using these functions
+    static void setParameteri(GLenum paramName, GLint value) {
+        glTexParameteri(GL_TEXTURE_2D, paramName, value);
+    }
 
-	void bind() {
-		glBindTexture(GL_TEXTURE_2D, id);
-	}
+    static void setWrap() {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    }
 
-	//Note that you need to bind before using these functions
-	static void setParameteri(GLenum paramName, GLint value) {
-		glTexParameteri(GL_TEXTURE_2D, paramName, value);
-	}
+    // GL_LINEAR GL_NEAREST_MIPMAP_NEAREST GL_LINEAR_MIPMAP_NEAREST
+    // GL_NEAREST_MIPMAP_LINEAR GL_LINEAR_MIPMAP_LINEAR
+    static void setInterpolationType(GLenum type) {
+        setParameteri(GL_TEXTURE_MIN_FILTER, type);
+        setParameteri(GL_TEXTURE_MAG_FILTER, type);
+    }
 
-	static void setWrap() {
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	}
+    ~Texture() noexcept {
+        if (id) {
+            glDeleteTextures(1, &id);
+        }
+    }
 
-
-	// GL_LINEAR GL_NEAREST_MIPMAP_NEAREST GL_LINEAR_MIPMAP_NEAREST GL_NEAREST_MIPMAP_LINEAR GL_LINEAR_MIPMAP_LINEAR
-	static void setInterpolationType(GLenum type) {
-		setParameteri(GL_TEXTURE_MIN_FILTER, type);
-		setParameteri(GL_TEXTURE_MAG_FILTER, type);
-	}
-
-	~Texture() noexcept {
-		if (id) {
-			glDeleteTextures(1, &id);
-		}
-	}
-
-	GLuint id;
+    GLuint id;
 };
 
 } // namespace GL

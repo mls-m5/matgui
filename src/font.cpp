@@ -5,7 +5,6 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #include "matgui/font.h"
 
 #ifdef USE_BITMAP_FONT

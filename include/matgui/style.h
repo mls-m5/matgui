@@ -5,18 +5,11 @@
  *      Author: Mattias Larsson Sköld
  */
 
-
 #pragma once
 #include "paint.h"
 
-
 namespace MatGui {
 
+class Style {};
 
-	class Style {
-
-	};
-
-}
-
-
+} // namespace MatGui
