@@ -1,8 +1,17 @@
+/*
+ * draw.cpp
+ *
+ *  Created on: 19 aug 2014
+ *      Author: mattias
+ */
+
 #include "matgui/draw.h"
+
 #include "matgui/paint.h"
 #include <math.h>
 #include <memory>
 #include <vector>
+#include <cmath>
 
 #include "matgui/shaderprogram.h"
 
