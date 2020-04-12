@@ -35,7 +35,7 @@ void Layout::refreshChildren() {
     }
 }
 
-void Layout::addChild(std::unique_ptr<View> &&view) {
+void Layout::addChild(std::unique_ptr<View> view) {
     if (not view) {
         return;
     }

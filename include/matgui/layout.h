@@ -55,7 +55,7 @@ public:
 
     //! Take ownership over a view pointer and adds it to the layout
     virtual void addChild(View *view);
-    virtual void addChild(std::unique_ptr<View> &&view);
+    virtual void addChild(std::unique_ptr<View> view);
     virtual void addChildAfter(View *view, View *after);
     //! Remove child from layout and deletes it
     virtual void removeChild(View *view);
