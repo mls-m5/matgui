@@ -68,8 +68,8 @@ inline void printGLString(const char *name, GLenum s) {
 inline int checkGlError(const char *op, bool throwError = false) {
 #ifndef NO_GRAPHICS
     bool ret = false;
-    for (GLint error = glGetError(); error; error = glGetError()) {
-        const char *c;
+    for (GLuint error = glGetError(); error; error = glGetError()) {
+        const char *c = nullptr;
         switch (error) {
         case 0x0500:
             c = "GL_INVALID_ENUM";
@@ -102,6 +102,7 @@ inline int checkGlError(const char *op, bool throwError = false) {
         debug_print("after %s()\n glError (0x%x) %s \n\n", op, error, c);
         printGLString(op, error);
         if (throwError) {
+            printf("%s\n", c);
             throw c;
         }
     }

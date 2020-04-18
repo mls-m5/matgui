@@ -8,22 +8,74 @@
 #include "matgui/shaderprogram.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 using std::cout;
 using std::endl;
 
-// Used when using for example opengl es 3.0
-std::string translate(const std::string &fromSource,
-                      GLenum shaderType,
-                      int fromVersion,
-                      int toVersion) {
-    std::string ret;
+namespace {
 
-    ret = "precision mediump float;\n";
-    ret += fromSource;
-    return ret;
+//// Used when using for example opengl es 3.0
+// std::string translate(const std::string &fromSource,
+//                      GLenum shaderType,
+//                      int fromVersion,
+//                      int toVersion) {
+//    std::string ret;
+
+//    ret = "precision mediump float;\n";
+//    ret += fromSource;
+//    return ret;
+//}
+
+//! Print info and indicate the right line
+void printDebugInfo(std::string info, const std::string &code) {
+    using namespace std;
+
+    auto firstColon = info.find(':');
+    auto firstParen = info.find('(');
+    auto secondParen = info.find(')');
+
+    if (firstColon == string::npos && firstParen == string::npos &&
+        secondParen == string::npos) {
+        cout << info << endl;
+        cout << code << endl;
+    }
+
+    auto b = info.begin();
+    cout << "line: " << string(b + firstColon + 1, b + firstParen) << endl;
+    cout << "col: " << string(b + firstParen + 1, b + secondParen) << endl;
+
+    istringstream ss(code);
+    size_t lineNum = stoul(string(b + firstColon + 1, b + firstParen));
+    size_t colNum = stoul(string(b + firstParen + 1, b + secondParen));
+    string line;
+    bool printed = false;
+
+    for (size_t i = 1; getline(ss, line); ++i) {
+
+        cout << line << endl;
+        if (printed) {
+            continue;
+        }
+
+        else if (i < lineNum) {
+            continue;
+        }
+
+        printed = true;
+        for (size_t c = 0; c < colNum; ++c) {
+            cout << "-";
+        }
+        cout << "^ here\n\n";
+        break;
+    }
+    cout << info << endl;
+
+    throw std::runtime_error(info);
 }
+
+} // namespace
 
 static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -51,10 +103,14 @@ static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
             if (infoLen) {
                 std::vector<char> buffer(infoLen);
                 glGetShaderInfoLog(shader, infoLen, 0, &buffer[0]);
-                debug_print("Could not compile shader %d:\n%s\n",
-                            shaderType,
-                            &buffer[0]);
-                debug_print("Shader code: \n%s\n", pSource.c_str());
+                //                debug_print("Could not compile shader
+                //                %d:\n%s\n",
+                //                            shaderType,
+                //                            &buffer[0]);
+
+                //                debug_print("Shader code: \n%s\n",
+                //                pSource.c_str());
+                printDebugInfo(buffer.data(), pSource);
                 glDeleteShader(shader);
                 shader = 0;
             }
@@ -101,9 +157,11 @@ GLuint createProgram(std::string pVertexSource,
             GLint bufLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
             if (bufLength) {
-                std::vector<char> buffer(bufLength);
-                glGetProgramInfoLog(program, bufLength, 0, &buffer[0]);
-                debug_print("Could not link program:\n%s\n", &buffer[0]);
+                std::vector<char> buffer(static_cast<size_t>(bufLength));
+                glGetProgramInfoLog(program, bufLength, nullptr, &buffer[0]);
+                printDebugInfo(buffer.data(), "");
+                //                debug_print("Could not link program:\n%s\n",
+                //                &buffer[0]);
             }
             else {
                 debug_print(

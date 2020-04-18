@@ -6,7 +6,6 @@ SortIncludes: true
 AccessModifierOffset: -4
 AlwaysBreakTemplateDeclarations: true
 AllowShortFunctionsOnASingleLine: None
-AllowAllArgumentsOnNextLine: true
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBraces: Custom
