@@ -6,31 +6,30 @@
  */
 
 #include "matgui/shaderprogram.h"
+#include "matgui/gl-error-handling.h"
+#include "translateshader.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <vector>
 
-using std::cout;
-using std::endl;
+using namespace std;
 
 namespace {
 
-//// Used when using for example opengl es 3.0
-// std::string translate(const std::string &fromSource,
-//                      GLenum shaderType,
-//                      int fromVersion,
-//                      int toVersion) {
-//    std::string ret;
-
-//    ret = "precision mediump float;\n";
-//    ret += fromSource;
-//    return ret;
-//}
-
 //! Print info and indicate the right line
-void printDebugInfo(std::string info, const std::string &code) {
+[[noreturn]] void printDebugInfo(std::string info, const std::string &code) {
     using namespace std;
+
+#ifdef __EMSCRIPTEN__
+    cout << info << endl;
+    cout << code << endl;
+
+#endif
+
+    if (info.substr(0, 7) == "ERROR: ") {
+        info = info.substr(7);
+    }
 
     auto firstColon = info.find(':');
     auto firstParen = info.find('(');
@@ -77,23 +76,19 @@ void printDebugInfo(std::string info, const std::string &code) {
 
 } // namespace
 
-static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
+static GLuint loadShader(GLenum shaderType, const std::string &sourceIn) {
     GLuint shader = glCreateShader(shaderType);
-    if (shader) {
 #ifdef USING_GL2
-        if (shaderType == GL_FRAGMENT_SHADER) {
-            auto translated = translate(pSource, shaderType, 330, 300);
-            const auto ptr = translated.c_str();
-            glShaderSource(shader, 1, &ptr, 0);
-        }
-        else {
-            const auto ptr = pSource.c_str();
-            glShaderSource(shader, 1, &ptr, 0);
-        }
+    auto source = translateShader(sourceIn, shaderType);
 #else
-        const auto ptr = pSource.c_str();
-        glShaderSource(shader, 1, &ptr, 0);
+    auto &source = sourceIn;
 #endif
+
+    if (shader) {
+        (void)translateShader;
+
+        const auto ptr = source.c_str();
+        glShaderSource(shader, 1, &ptr, nullptr);
         glCompileShader(shader);
         GLint compiled = 0;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -102,17 +97,12 @@ static GLuint loadShader(GLenum shaderType, const std::string &pSource) {
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen) {
                 std::vector<char> buffer(infoLen);
-                glGetShaderInfoLog(shader, infoLen, 0, &buffer[0]);
-                //                debug_print("Could not compile shader
-                //                %d:\n%s\n",
-                //                            shaderType,
-                //                            &buffer[0]);
+                glGetShaderInfoLog(shader, infoLen, nullptr, &buffer[0]);
 
-                //                debug_print("Shader code: \n%s\n",
-                //                pSource.c_str());
-                printDebugInfo(buffer.data(), pSource);
                 glDeleteShader(shader);
                 shader = 0;
+
+                printDebugInfo(buffer.data(), source);
             }
         }
     }

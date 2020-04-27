@@ -34,6 +34,16 @@
 
 #else
 
+#define USING_GL3
+
+#endif
+#endif
+#endif
+
+#ifdef USING_GL3
+
+#define MAT_GL_VERSION 3
+
 #define GL_GLEXT_PROTOTYPES 1
 #define GL3_PROTOTYPES 1
 
@@ -41,10 +51,10 @@
 #include <GL/glext.h>
 
 #endif
-#endif
-#endif
 
 #ifdef USING_GL2
+
+#define MAT_GL_VERSION 2
 
 #define GL_GLEXT_PROTOTYPES 1
 
@@ -54,6 +64,7 @@
 #define glBindVertexArray glBindVertexArrayOES
 #define glDeleteVertexArrays glDeleteVertexArraysOES
 #define glGenVertexArrays glGenVertexArraysOES
+#define glFramebufferTexture glFramebufferTextureOES
 
 #endif
 

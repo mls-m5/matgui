@@ -7,8 +7,8 @@
 
 //#define DO_NOT_CATCH_ERRORS
 
-#include "matsig.h"
-#include "unittest.h"
+#include "matgui/matsig.h"
+#include "mls-unit-test/unittest.h"
 #include <thread>
 using namespace MatSig;
 using namespace std;

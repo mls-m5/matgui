@@ -10,7 +10,8 @@
 namespace LineShader {
 
 const char *vertexCode = R"V0G0N(
-attribute vec2 v;
+#version 330 core
+in vec2 v;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
 void main() {
   gl_Position = mvp_matrix * vec4(v.x, v.y, 1, 1);
@@ -18,9 +19,12 @@ void main() {
 )V0G0N";
 
 const char *fragmentCode = R"_(
+#version 330 core
 uniform  vec4 uColor;
+out vec4 fragColor;
+
 void main() {
-  gl_FragColor = uColor;
+  fragColor = uColor;
 }
 )_";
 

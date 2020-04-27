@@ -11,8 +11,11 @@
 
 namespace GraphShader {
 
+namespace {
+
 const char *vertexCode = R"_(
-attribute float vX, vY;
+#version 330 core
+in float vX, vY;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
 void main() {
   gl_Position = mvp_matrix * vec4(vX, vY, 1, 1);
@@ -20,10 +23,15 @@ void main() {
 )_";
 
 const char *fragmentCode = R"_(
+#version 330 core
+out vec4 fragColor;
+
 void main() {
-  gl_FragColor = vec4(1,1,1,1);
+  fragColor = vec4(1,1,1,1);
 }
 )_";
+
+} // namespace
 
 } // namespace GraphShader
 

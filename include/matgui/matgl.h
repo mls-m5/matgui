@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "common-gl.h"
+#include "gl-error-handling.h"
 #include "shaderprogram.h"
 #include <iostream>
 #include <stdexcept>
@@ -20,10 +22,12 @@ namespace GL {
 template <typename T>
 GLenum getType();
 
+#ifdef GL_DOUBLE
 template <>
 inline GLenum getType<double>() {
     return GL_DOUBLE;
 }
+#endif
 
 template <>
 inline GLenum getType<float>() {
@@ -58,7 +62,7 @@ public:
     }
 
     // For creating the object later
-    VertexArrayObject(nullptr_t t) {
+    VertexArrayObject(std::nullptr_t) {
         id = 0;
     }
 
@@ -208,6 +212,8 @@ public:
     GLenum target;
 };
 
+#if MAT_GL_VERSION >= 3
+
 class FrameBufferObject {
 public:
     FrameBufferObject(int width, int height) : width(width), height(height) {
@@ -350,6 +356,8 @@ public:
 
     GLuint id;
 };
+
+#endif
 
 class Texture {
 public:

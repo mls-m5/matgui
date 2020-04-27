@@ -5,15 +5,19 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "bitmapfont.h"
-#include "unittest.h"
+#include "matgui/bitmapfont.h"
+#include "mls-unit-test/unittest.h"
 #include <iostream>
 
 using namespace std;
 using namespace MatGui;
 
+namespace {
+
 BitmapFontData apData("xx\nxx\n");
 BitmapFontData bepData("xx\nxx\n");
+
+} // namespace
 
 TEST_SUIT_BEGIN
 

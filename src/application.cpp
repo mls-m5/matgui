@@ -99,10 +99,10 @@ inline void Application::innerLoop() {
 
     if (handleEvents()) {
         running = false;
-        return;
 #ifdef __EMSCRIPTEN__
         emscripten_cancel_main_loop();
 #endif
+        return;
     }
 
     MatSig::flushSignals();

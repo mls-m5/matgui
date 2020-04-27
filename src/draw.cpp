@@ -8,11 +8,12 @@
 #include "matgui/draw.h"
 
 #include "matgui/paint.h"
+#include <cmath>
 #include <math.h>
 #include <memory>
 #include <vector>
-#include <cmath>
 
+#include "matgui/gl-error-handling.h"
 #include "matgui/shaderprogram.h"
 
 #define debug_check_true(cond, text)                                           \

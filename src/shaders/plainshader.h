@@ -11,27 +11,28 @@
 
 namespace PlainShader {
 
+namespace {
 const char *vertexCode = R"_(
-attribute vec4 vPosition;
-//uniform vec4 uColor;
+#version 330 core
+in vec4 vPosition;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
-//varying vec4 fColor;
 
 void main() {
 	gl_Position = mvp_matrix * vPosition;
-//	fColor = uColor / (1. + vPosition.y / 4.); //A little shading
 }
 )_";
 
 const char *fragmentCode = R"_(
-//varying vec4 fColor;
+#version 330 core
 uniform vec4 uColor;
+out vec4 fragColor;
 
 void main() {
-//	gl_FragColor = fColor;
-  gl_FragColor = uColor;
+    fragColor = uColor;
 }
 )_";
+
+} // namespace
 
 } // namespace PlainShader
 

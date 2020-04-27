@@ -9,12 +9,15 @@
 
 namespace TextureShader {
 
+namespace {
+
 const char *vertexCode = R"_(
-attribute vec4 vPosition;
-attribute vec4 vtex;
+#version 330 core
+in vec4 vPosition;
+in vec4 vtex;
 uniform vec4 uColor;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
-varying vec4 fTex;
+out vec4 fTex;
 
 void main() {
 	gl_Position = mvp_matrix * vPosition;
@@ -24,14 +27,18 @@ void main() {
 )_";
 
 const char *fragmentCode = R"_(
-varying vec4 fTex;
+#version 330 core
+in vec4 fTex;
 uniform sampler2D texture1;
+out vec4 fragColor;
 
 void main() {
 	float s = texture2D(texture1, fTex.xy).a;
-	gl_FragColor = texture2D(texture1, fTex.xy) * s;
+    fragColor = texture2D(texture1, fTex.xy) * s;
 }
 )_";
+
+} // namespace
 
 } // namespace TextureShader
 
