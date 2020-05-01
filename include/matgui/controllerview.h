@@ -29,14 +29,10 @@ public:
 
     // Set the controler with a value from 0 to 1
     void amount(_valueType v) {
-        auto val = v;
-        if (val < 0) {
-            val = 0;
-        }
-        else if (val > 1) {
-            val = 1;
-        }
-        auto newValue = _min + val * (_max - _min);
+        v = std::max(v, 0.);
+        v = std::min(v, 1.);
+
+        auto newValue = _min + v * (_max - _min);
         if (_step) {
             newValue = roundDown(newValue, _step);
         }
@@ -44,6 +40,9 @@ public:
     }
 
     void value(_valueType v) {
+        v = std::max(v, _min);
+        v = std::min(v, _max);
+
         if (v != _value) {
             _value = v;
             //			changed.emit(v); //Is emitted by key handling
@@ -60,12 +59,14 @@ public:
     }
 
     [[deprecated("use linear(...) instead")]] //
-    void
-    setLinear(_valueType min, _valueType max, _valueType step) {
-        linear(min, max, step);
-    }
+        void
+        setLinear(_valueType min, _valueType max, _valueType step) {
+            linear(min, max, step);
+        }
 
-    void linear(_valueType min, _valueType max, _valueType step) {
+    //! Setup min, max and step value for controller
+    //! if step is zero the highest available precision is selected
+    void linear(_valueType min, _valueType max, _valueType step = 0) {
         this->_min = min;
         this->_max = max;
         this->_step = step;

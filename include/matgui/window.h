@@ -19,6 +19,7 @@ public:
            int width = 512,
            int height = 512,
            bool resizable = false);
+
     virtual ~Window();
 
     void draw() override;
@@ -64,7 +65,7 @@ public:
     // invalidate triggers a redraw of the window
     inline void invalidate() {
         invalid(true);
-    };
+    }
 
     // check if the window needs redrawing
     bool invalid();
@@ -92,24 +93,6 @@ public:
     // Note: the functions is called directly so it is okay to connect
     // render code to this signal
     MatSig::Signal<double> frameUpdate;
-
-    [[deprecated("use fullscreen(...)")]] //
-    bool
-    setFullscreen(bool state = true, bool changeVideoMode = false) {
-        return fullscreen(state, changeVideoMode);
-    }
-
-    [[deprecated("use cursorPosition(...)")]] //
-    void
-    setCursorPosition(int x, int y) {
-        cursorPosition(x, y);
-    }
-
-    [[deprecated("use cursorPosition()")]] //
-    std::pair<int, int>
-    getCursorPosition() {
-        return cursorPosition();
-    }
 
 private:
     struct WindowData;
