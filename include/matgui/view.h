@@ -41,6 +41,8 @@ public:
         currentStyle.drawBasicView(this);
     }
 
+    //! Trigger a redraw
+    virtual void invalidate();
     virtual void refresh(){};
     virtual void updateStyle() {
         currentStyle = style;

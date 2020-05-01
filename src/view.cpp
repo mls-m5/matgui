@@ -25,6 +25,10 @@ View::~View() {
     }
 }
 
+void View::invalidate() {
+    root()->invalidate();
+}
+
 void View::focus() {
     Window *window = root();
     if (window) {

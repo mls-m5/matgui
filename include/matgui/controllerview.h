@@ -45,6 +45,7 @@ public:
 
         if (v != _value) {
             _value = v;
+            invalidate();
             //			changed.emit(v); //Is emitted by key handling
             // event, to avoid round calling
         }

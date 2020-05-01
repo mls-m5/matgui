@@ -30,7 +30,7 @@ std::list<Window *> windows;
 Window *activeWindow = nullptr;
 Application *application = nullptr;
 float scale = 1.f;
-bool continuousUpdates = true;
+bool continuousUpdates = false;
 bool invalidateOnEvent = true;
 
 bool running = false;
