@@ -54,6 +54,68 @@ inline GLenum getType<GLbyte>() {
     return GL_BYTE;
 }
 
+//! Like unique_ptr but for unsigned ints
+//! Used to be able to easier move objects
+template <typename Deleter>
+class UniqueGlPointer {
+
+public:
+    UniqueGlPointer() = default;
+
+    UniqueGlPointer(GLuint ptr) : ptr(ptr) {
+    }
+
+    UniqueGlPointer(UniqueGlPointer &) = delete;
+
+    UniqueGlPointer(UniqueGlPointer &&other) : ptr(other.ptr) {
+        other.ptr = 0;
+    }
+
+    UniqueGlPointer &operator=(GLuint ptr) {
+        reset();
+        this->ptr = ptr;
+    }
+
+    UniqueGlPointer &operator=(const UniqueGlPointer &other) = delete;
+
+    UniqueGlPointer &operator=(UniqueGlPointer &&other) {
+        reset();
+        ptr = other.ptr;
+        other.ptr = 0;
+        return *this;
+    }
+
+    ~UniqueGlPointer() {
+        reset();
+    }
+
+    // Delete content if set and reset pointer
+    void reset() {
+        if (ptr) {
+            glCall(Deleter(ptr));
+        }
+        ptr = 0;
+    }
+
+    GLuint get() const {
+        return ptr;
+    }
+
+    GLuint &get() {
+        return ptr;
+    }
+
+    operator GLuint() const {
+        return ptr;
+    }
+
+    operator GLuint &() {
+        return ptr;
+    }
+
+    GLuint ptr = 0;
+};
+
 class VertexArrayObject {
 public:
     // Create a VAO _and_ bind it
@@ -63,22 +125,19 @@ public:
 
     // For creating the object later
     VertexArrayObject(std::nullptr_t) {
-        id = 0;
     }
 
     VertexArrayObject(const VertexArrayObject &) = delete;
-    VertexArrayObject(VertexArrayObject &&other) {
-        id = other.id;
-        other.id = 0;
-    }
+    VertexArrayObject(VertexArrayObject &&other) = default;
+    ~VertexArrayObject() = default;
 
     void init() {
-        glCall(glGenVertexArrays(1, &id));
+        glCall(glGenVertexArrays(1, &ptr.get()));
         bind();
     }
 
     void bind() {
-        glCall(glBindVertexArray(id));
+        glCall(glBindVertexArray(ptr));
     }
 
     void unbind() {
@@ -86,14 +145,21 @@ public:
     }
 
     void clear() {
-        glCall(glDeleteVertexArrays(1, &id));
+        ptr.reset();
     }
 
-    ~VertexArrayObject() {
-        clear();
+    operator GLuint() {
+        return ptr;
     }
 
-    GLuint id;
+private:
+    struct DeleteVertexArray {
+        void operator()(GLuint p) {
+            glCall(glDeleteVertexArrays(1, &p));
+        }
+    };
+
+    UniqueGlPointer<DeleteVertexArray> ptr;
 };
 
 class VertexBufferObject {
@@ -102,7 +168,7 @@ public:
     // More info on
     // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBufferData.xhtml
     VertexBufferObject(GLenum target = GL_ARRAY_BUFFER) : target(target) {
-        glCall(glGenBuffers(1, &id));
+        glCall(glGenBuffers(1, &ptr.get()));
         bind();
     }
 
@@ -150,23 +216,23 @@ public:
         setData(indices);
     }
 
-    VertexBufferObject(VertexBufferObject &&other)
-        : id(other.id), target(other.target) {
-        other.id = 0;
-    }
-
+    VertexBufferObject(VertexBufferObject &&other) = default;
     VertexBufferObject(const VertexBufferObject &) = delete;
+    VertexBufferObject &operator=(VertexBufferObject &other) = delete;
+    VertexBufferObject &operator=(VertexBufferObject &&other) = default;
 
-    ~VertexBufferObject() {
-        glCall(glDeleteBuffers(1, &id));
-    }
+    ~VertexBufferObject() = default;
 
     void bind() {
-        glCall(glBindBuffer(target, id));
+        glCall(glBindBuffer(target, ptr));
     }
 
     void unbind() {
         glCall(glBindBuffer(target, 0));
+    }
+
+    void clear() {
+        ptr.reset();
     }
 
     // Set attribute pointer
@@ -208,7 +274,18 @@ public:
         glCall(glBufferData(target, sizeof(T) * size, data, usage));
     }
 
-    GLuint id;
+    operator GLuint() const {
+        return ptr.get();
+    }
+
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glDeleteBuffers(1, &p);
+        }
+    };
+
+    UniqueGlPointer<Deleter> ptr;
     GLenum target;
 };
 
@@ -217,15 +294,15 @@ public:
 class FrameBufferObject {
 public:
     FrameBufferObject(int width, int height) : width(width), height(height) {
-        glCall(glGenFramebuffers(1, &id));
-        glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
+        glCall(glGenFramebuffers(1, &ptr.get()));
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, ptr));
         glCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
     }
 
     // Setup opengl to render to this framebuffer
     void bind() {
         glBindTexture(GL_TEXTURE_2D, 0); // Make sure to unbind any textures
-        glCall(glBindFramebuffer(GL_FRAMEBUFFER, id));
+        glCall(glBindFramebuffer(GL_FRAMEBUFFER, ptr));
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
             GL_FRAMEBUFFER_COMPLETE) {
             throw std::runtime_error("Framebuffer is not complete");
@@ -243,11 +320,19 @@ public:
         glCall(glViewport(0, 0, w, h));
     }
 
-    ~FrameBufferObject() {
-        glDeleteFramebuffers(1, &id);
+    ~FrameBufferObject() = default;
+
+    operator GLuint() const {
+        return ptr;
     }
 
-    GLuint id;
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glDeleteFramebuffers(1, &p);
+        }
+    };
+    UniqueGlPointer<Deleter> ptr;
     int width, height;
 };
 
@@ -256,7 +341,7 @@ public:
     TextureAttachment(int width,
                       int height,
                       GLenum attachment = GL_COLOR_ATTACHMENT0) {
-        glCall(glGenTextures(1, &id));
+        glCall(glGenTextures(1, &ptr.get()));
         bind();
         glCall(glTexImage2D(GL_TEXTURE_2D,
                             0,
@@ -271,30 +356,44 @@ public:
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
         glCall(
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        glCall(glFramebufferTexture(GL_FRAMEBUFFER, attachment, id, 0));
+        glCall(glFramebufferTexture(GL_FRAMEBUFFER, attachment, ptr, 0));
         unbind();
     }
 
-    ~TextureAttachment() {
-        glCall(glDeleteTextures(1, &id));
-    }
+    TextureAttachment(const TextureAttachment &) = delete;
+    TextureAttachment(TextureAttachment &&) = default;
+    TextureAttachment &operator=(const TextureAttachment &) = delete;
+    TextureAttachment &operator=(TextureAttachment &&) = default;
+
+    ~TextureAttachment() = default;
 
     void bind() {
-        glCall(glBindTexture(GL_TEXTURE_2D, id));
+        glCall(glBindTexture(GL_TEXTURE_2D, ptr.get()));
     }
 
     void unbind() {
         glCall(glBindTexture(GL_TEXTURE_2D, 0));
     }
 
-    GLuint id;
+    operator GLuint() const {
+        return ptr;
+    }
+
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glCall(glDeleteTextures(1, &p));
+        }
+    };
+
+    UniqueGlPointer<Deleter> ptr;
 };
 
 // A depth buffer that may be used to render somewhere else
 class DepthTextureAttachment {
 public:
     DepthTextureAttachment(int width, int height) {
-        glCall(glGenTextures(1, &id));
+        glCall(glGenTextures(1, &ptr.get()));
         bind();
         glCall(glTexImage2D(GL_TEXTURE_2D,
                             0,
@@ -310,51 +409,76 @@ public:
         glCall(
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
         glCall(
-            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, id, 0));
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ptr, 0));
         unbind();
     }
 
-    ~DepthTextureAttachment() {
-        glCall(glDeleteTextures(1, &id));
-    }
+    DepthTextureAttachment(const DepthTextureAttachment &) = delete;
+    DepthTextureAttachment(DepthTextureAttachment &&) = default;
+    DepthTextureAttachment &operator=(const DepthTextureAttachment &) = delete;
+    DepthTextureAttachment &operator=(DepthTextureAttachment &&) = default;
+    ~DepthTextureAttachment() = default;
 
     void bind() {
-        glCall(glBindTexture(GL_TEXTURE_2D, id));
+        glCall(glBindTexture(GL_TEXTURE_2D, ptr));
     }
 
     void unbind() {
         glCall(glBindTexture(GL_TEXTURE_2D, 0));
     }
 
-    GLuint id;
+    operator GLuint() const {
+        return ptr;
+    }
+
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glCall(glDeleteTextures(1, &p));
+        }
+    };
+    UniqueGlPointer<Deleter> ptr;
 };
 
 // A depth buffer that is not used to render to anywhere else
 class DepthBufferAttachment {
 public:
     DepthBufferAttachment(int width, int height) {
-        glGenRenderbuffers(1, &id);
+        glGenRenderbuffers(1, &ptr.get());
         bind();
         glCall(glRenderbufferStorage(
             GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height));
         glCall(glFramebufferRenderbuffer(
-            GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, id));
+            GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, ptr));
         unbind();
     }
 
-    ~DepthBufferAttachment() {
-        glCall(glDeleteRenderbuffers(1, &id));
-    }
+    DepthBufferAttachment(const DepthBufferAttachment &) = delete;
+    DepthBufferAttachment(DepthBufferAttachment &&) = default;
+    DepthBufferAttachment &operator=(const DepthBufferAttachment &) = delete;
+    DepthBufferAttachment &operator=(DepthBufferAttachment &&) = default;
+    ~DepthBufferAttachment() = default;
 
     void bind() {
-        glCall(glBindRenderbuffer(GL_RENDERBUFFER, id));
+        glCall(glBindRenderbuffer(GL_RENDERBUFFER, ptr));
     }
 
     void unbind() {
         glCall(glBindRenderbuffer(GL_RENDERBUFFER, 0));
     }
 
-    GLuint id;
+    operator GLuint() const {
+        return ptr;
+    }
+
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glCall(glDeleteRenderbuffers(1, &p));
+        }
+    };
+
+    UniqueGlPointer<Deleter> ptr;
 };
 
 #endif
@@ -362,7 +486,7 @@ public:
 class Texture {
 public:
     Texture() {
-        glGenTextures(1, &id);
+        glGenTextures(1, &ptr.get());
     }
 
     // Shorthand function
@@ -468,13 +592,14 @@ public:
         glCall(glGenerateMipmap(GL_TEXTURE_2D));
     }
 
-    Texture(Texture &&other) {
-        id = other.id;
-        other.id = 0;
-    }
+    Texture(const Texture &other) = delete;
+    Texture(Texture &&other) = default;
+    Texture &operator=(const Texture &other) = delete;
+    Texture &operator=(Texture &&other) = default;
+    ~Texture() = default;
 
     void bind() {
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, ptr);
     }
 
     // Note that you need to bind before using these functions
@@ -494,13 +619,17 @@ public:
         setParameteri(GL_TEXTURE_MAG_FILTER, type);
     }
 
-    ~Texture() noexcept {
-        if (id) {
-            glDeleteTextures(1, &id);
-        }
+    operator GLuint() {
+        return ptr;
     }
 
-    GLuint id;
+private:
+    struct Deleter {
+        void operator()(GLuint p) {
+            glDeleteTextures(1, &p);
+        }
+    };
+    UniqueGlPointer<Deleter> ptr;
 };
 
 } // namespace GL

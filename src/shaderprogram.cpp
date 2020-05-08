@@ -169,6 +169,12 @@ GLuint createProgram(std::string pVertexSource,
     return program;
 }
 
+ShaderProgram::ShaderProgram(ShaderProgram &&s) {
+    clear();
+    _program = s._program;
+    s._program = 0;
+}
+
 ShaderProgram::ShaderProgram() {
 }
 
@@ -181,7 +187,7 @@ void ShaderProgram::initProgram(const std::string &vertexCode,
     _program = createProgram(vertexCode, fragmentCode, geometryCode);
 }
 
-GLint ShaderProgram::getUniform(char const *name) {
+GLint ShaderProgram::getUniform(char const *name) const {
     GLint ret;
     ret = glGetUniformLocation(_program, name);
 
@@ -192,7 +198,7 @@ GLint ShaderProgram::getUniform(char const *name) {
     return ret;
 }
 
-GLint ShaderProgram::getAttribute(char const *name) {
+GLint ShaderProgram::getAttribute(char const *name) const {
     GLint ret;
     ret = glGetAttribLocation(_program, name);
 
@@ -211,10 +217,15 @@ ShaderProgram::ShaderProgram(const std::string &vertexCode,
     initProgram(vertexCode, fragmentCode, geometryCode);
 }
 
+ShaderProgram &ShaderProgram::operator=(ShaderProgram &&s) {
+    clear();
+    _program = s._program;
+    s._program = 0;
+    return *this;
+}
+
 ShaderProgram::~ShaderProgram() {
-    if (_program) {
-        glDeleteProgram(_program);
-    }
+    clear();
 }
 
 StandardShaderProgram::StandardShaderProgram(const std::string &vertexCode,
@@ -236,14 +247,20 @@ void StandardShaderProgram::disable() {
     }
 }
 
-void ShaderProgram::use() {
+void ShaderProgram::use() const {
     if (_program) {
         glUseProgram(_program);
     }
 }
 
-void ShaderProgram::unuse() {
+void ShaderProgram::unuse() const {
     glUseProgram(0);
+}
+
+void ShaderProgram::clear() {
+    if (_program) {
+        glDeleteProgram(_program);
+    }
 }
 
 void ShaderProgram::loadShaderFromFile(const std::string &vertexFile,

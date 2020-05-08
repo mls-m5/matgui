@@ -13,33 +13,41 @@
 
 class ShaderProgram {
 public:
-    ShaderProgram(ShaderProgram &&s) {
-        this->_program = s._program;
-        s._program = 0;
-    }
+    ShaderProgram(ShaderProgram &&s);
     ShaderProgram(const ShaderProgram &s) = delete;
     ShaderProgram();
     ShaderProgram(const std::string &vertexCode,
                   const std::string &fragmentCode,
                   const std::string &geometryCode = "");
+
+    ShaderProgram &operator=(const ShaderProgram &) = delete;
+    ShaderProgram &operator=(ShaderProgram &&s);
+
     void initProgram(const std::string &vertexCode,
                      const std::string &fragmentCode,
                      const std::string &geometryCode = "");
     void loadShaderFromFile(const std::string &vertexFile,
                             const std::string &fragmentFile);
+    void use() const;
+    void unuse() const;
 
-    void use();
-    void unuse();
+    //! Delete the program from opengl context
+    void clear();
 
     [[deprecated]] inline void useProgram() {
         use();
     }
 
-    GLuint getProgram() {
+    GLuint getProgram() const {
         return _program;
     }
-    GLint getUniform(char const *name);
-    GLint getAttribute(char const *name);
+    GLint getUniform(char const *name) const;
+    GLint getAttribute(char const *name) const;
+
+    operator bool() {
+        return _program;
+    }
+
     virtual ~ShaderProgram();
 
 private:
