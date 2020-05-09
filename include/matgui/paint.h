@@ -20,21 +20,18 @@ public:
     // remember to set this to override previous value
     bool inherit = true;
 
-    // set color and disable inherit flag
-    void color(float red, float green, float blue) {
-        r = red;
-        g = green;
-        b = blue;
-        a = 1;
+    ColorStyle() = default;
+    ColorStyle(const ColorStyle &) = default;
+    ColorStyle(ColorStyle &&) = default;
+    ColorStyle &operator=(const ColorStyle &) = default;
+    ColorStyle &operator=(ColorStyle &&) = default;
 
-        if (_style == DrawStyle::None) {
-            _style = DrawStyle::Filled;
-        }
-
-        inherit = false;
+    ColorStyle(float red, float green, float blue, float alpha = 1.f) {
+        color(red, green, blue, alpha);
     }
 
-    void color(float red, float green, float blue, float alpha) {
+    // set color and disable inherit flag
+    void color(float red, float green, float blue, float alpha = 1.f) {
         r = red;
         g = green;
         b = blue;

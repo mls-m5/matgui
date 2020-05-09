@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+class Vec;
+
 namespace GL {
 
 template <typename T>
@@ -52,6 +54,11 @@ inline GLenum getType<GLubyte>() {
 template <>
 inline GLenum getType<GLbyte>() {
     return GL_BYTE;
+}
+
+template <>
+inline GLenum getType<::Vec>() {
+    return GL_DOUBLE;
 }
 
 //! Like unique_ptr but for unsigned ints
