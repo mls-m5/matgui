@@ -143,11 +143,11 @@ public:
         bind();
     }
 
-    void bind() {
+    void bind() const {
         glCall(glBindVertexArray(ptr));
     }
 
-    void unbind() {
+    void unbind() const {
         glCall(glBindVertexArray(0));
     }
 
@@ -230,11 +230,11 @@ public:
 
     ~VertexBufferObject() = default;
 
-    void bind() {
+    void bind() const {
         glCall(glBindBuffer(target, ptr));
     }
 
-    void unbind() {
+    void unbind() const {
         glCall(glBindBuffer(target, 0));
     }
 
@@ -307,7 +307,7 @@ public:
     }
 
     // Setup opengl to render to this framebuffer
-    void bind() {
+    void bind() const {
         glBindTexture(GL_TEXTURE_2D, 0); // Make sure to unbind any textures
         glCall(glBindFramebuffer(GL_FRAMEBUFFER, ptr));
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
@@ -374,7 +374,7 @@ public:
 
     ~TextureAttachment() = default;
 
-    void bind() {
+    void bind() const {
         glCall(glBindTexture(GL_TEXTURE_2D, ptr.get()));
     }
 
@@ -426,7 +426,7 @@ public:
     DepthTextureAttachment &operator=(DepthTextureAttachment &&) = default;
     ~DepthTextureAttachment() = default;
 
-    void bind() {
+    void bind() const {
         glCall(glBindTexture(GL_TEXTURE_2D, ptr));
     }
 
@@ -466,7 +466,7 @@ public:
     DepthBufferAttachment &operator=(DepthBufferAttachment &&) = default;
     ~DepthBufferAttachment() = default;
 
-    void bind() {
+    void bind() const {
         glCall(glBindRenderbuffer(GL_RENDERBUFFER, ptr));
     }
 
@@ -605,7 +605,7 @@ public:
     Texture &operator=(Texture &&other) = default;
     ~Texture() = default;
 
-    void bind() {
+    void bind() const {
         glBindTexture(GL_TEXTURE_2D, ptr);
     }
 
