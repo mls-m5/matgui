@@ -9,7 +9,7 @@
 
 #include <vector>
 
-class Vec;
+#include "vec.h"
 
 namespace MatGui {
 

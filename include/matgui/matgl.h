@@ -12,12 +12,11 @@
 #include "common-gl.h"
 #include "gl-error-handling.h"
 #include "shaderprogram.h"
+#include "vec.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-class Vec;
 
 namespace GL {
 

@@ -112,7 +112,7 @@ void Application::mainLoop() {
     running = true;
     lastTick = SDL_GetTicks();
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(innerLoop, 60, 1);
+    emscripten_set_main_loop(innerLoop, 0, 1);
 #else
     while (running) {
         innerLoop();
