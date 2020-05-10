@@ -56,10 +56,12 @@ inline GLenum getType<GLbyte>() {
     return GL_BYTE;
 }
 
+#ifdef GL_DOUBLE
 template <>
 inline GLenum getType<::Vec>() {
     return GL_DOUBLE;
 }
+#endif
 
 //! Like unique_ptr but for unsigned ints
 //! Used to be able to easier move objects
@@ -99,7 +101,8 @@ public:
     // Delete content if set and reset pointer
     void reset() {
         if (ptr) {
-            glCall(Deleter(ptr));
+            Deleter d;
+            glCall(d(ptr));
         }
         ptr = 0;
     }
