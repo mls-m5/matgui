@@ -63,13 +63,25 @@ public:
     void bordered(bool state);
 
     // invalidate triggers a redraw of the window
-    inline void invalidate() {
+    void invalidate() override {
         invalid(true);
     }
 
     // check if the window needs redrawing
     bool invalid();
     void invalid(bool state);
+
+    // @see LinearLayout.
+    // This is to hide warnings
+    void focus() override {
+        LinearLayout::focus();
+    }
+
+    // @see LinearLayout
+    // Explicit to hide warnings
+    void unfocus() override {
+        LinearLayout::unfocus();
+    }
 
     // Make a object focused, or clear focus by sending in nullptr
     void focus(View *view);

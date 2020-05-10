@@ -73,6 +73,9 @@ void renderText(const FontType *font,
 
     // Create some variables.
 #ifdef USE_BITMAP_FONT
+    (void)r;
+    (void)g;
+    (void)b;
     auto data = getFontDataVector(text);
     auto messageSurface = new BitmapFont(text);
 #else
@@ -107,7 +110,7 @@ void renderText(const FontType *font,
                  GL_UNSIGNED_BYTE,
                  messageSurface->pixels);
 
-    drawTextureRect({x + messageSurface->w * alignment / 2, y},
+    drawTextureRect({x + messageSurface->w * alignment / 2, y, z},
                     0,
                     messageSurface->w,
                     messageSurface->h,
@@ -124,6 +127,8 @@ void renderText(const FontType *font,
 
 Font::Font(const std::string filename, int size) : Font() {
 #ifdef USE_BITMAP_FONT
+    (void)filename;
+    (void)size;
     _data->font = (void *)-1; // some random non-null value
 #else
     FontDescriptionStruct *find = 0;

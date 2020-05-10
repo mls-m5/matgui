@@ -29,10 +29,10 @@ void TextEntry::draw() {
     }
 }
 
-bool TextEntry::onKeyDown(KeySym sym,
+bool TextEntry::onKeyDown(KeySym /*sym*/,
                           KeyScanCode scancode,
                           KeyModifiers modifiers,
-                          int repeat) {
+                          int /*repeat*/) {
     if (scancode == Keys::Backspace) {
         if (modifiers & (64 + 128)) { // ctrl left or right
             while (_cursorPosition > 0 &&
@@ -61,10 +61,10 @@ bool TextEntry::onKeyDown(KeySym sym,
     return true;
 }
 
-bool TextEntry::onKeyUp(KeySym sym,
-                        KeyScanCode scancode,
-                        KeyModifiers modifiers,
-                        int repeat) {
+bool TextEntry::onKeyUp(KeySym /*sym*/,
+                        KeyScanCode /*scancode*/,
+                        KeyModifiers /*modifiers*/,
+                        int /*repeat*/) {
     return true;
 }
 

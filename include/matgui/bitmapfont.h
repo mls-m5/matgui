@@ -30,8 +30,8 @@ struct BitmapFontData : public std::vector<char> {
         return this->at(x + y * width);
     }
 
-    inline void fill(char value) {
-        std::fill(begin(), end(), ' ');
+    inline void fill(char value = ' ') {
+        std::fill(begin(), end(), value);
     }
 
     unsigned width = 0;

@@ -235,8 +235,13 @@ void drawEllipse(const float *location, const class Paint *paint) {
     glBindVertexArray(0);
 }
 
-void drawGraph(
-    double x, double y, double a, double sx, double sy, float *v, int size) {
+void drawGraph(double /*x*/,
+               double /*y*/,
+               double /*a*/,
+               double /*sx*/,
+               double /*sy*/,
+               float * /*v*/,
+               int /*size*/) {
     //    glLineWidth(2);
     //    graphProgram.program->use();
     //

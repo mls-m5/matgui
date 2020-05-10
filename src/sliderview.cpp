@@ -29,19 +29,19 @@ bool SliderView::onPointerDown(pointerId id,
     return true;
 }
 
-bool SliderView::onPointerUp(pointerId id,
-                             MouseButton button,
-                             double x,
-                             double y) {
+bool SliderView::onPointerUp(pointerId /*id*/,
+                             MouseButton /*button*/,
+                             double /*x*/,
+                             double /*y*/) {
     return true;
 }
 
-bool SliderView::onPointerMove(pointerId id,
-                               double x,
-                               double y,
+bool SliderView::onPointerMove(pointerId /*id*/,
+                               double /*x*/,
+                               double /*y*/,
                                pointerState state) {
     if (state) {
-        double v = 1 - (y - height() * handleHeight / 2.) /
+        double v = 1 - (y() - height() * handleHeight / 2.) /
                            (height() * (1 - handleHeight));
         ;
         amount(v);

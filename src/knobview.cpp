@@ -32,14 +32,14 @@ bool KnobView::onPointerDown(pointerId id,
     return true;
 }
 
-bool KnobView::onPointerUp(pointerId id,
-                           MouseButton button,
-                           double x,
-                           double y) {
+bool KnobView::onPointerUp(pointerId /*id*/,
+                           MouseButton /*button*/,
+                           double /*x*/,
+                           double /*y*/) {
     return true;
 }
 
-bool KnobView::onPointerMove(pointerId id,
+bool KnobView::onPointerMove(pointerId /*id*/,
                              double x,
                              double y,
                              pointerState state) {

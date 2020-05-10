@@ -161,7 +161,7 @@ bool View::onKeyUp(KeySym sym,
     }
 }
 
-bool View::onTextInput(const char *text) {
+bool View::onTextInput(const char * /*text*/) {
     return false;
 }
 

@@ -22,4 +22,4 @@ public:                                                                        \
     member_get(type, m) member_set(type, m) private : type _##m;
 #define member_property_declaration_default(type, m, defValue)                 \
 public:                                                                        \
-    member_get(type, m) member_set(type, m) private : type _##m = defValue;
+    member_get(type, m) member_set(type, m) private : type _##m = defValue

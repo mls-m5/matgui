@@ -18,7 +18,7 @@ PushControlerView::~PushControlerView() {
 }
 
 bool PushControlerView::onPointerDown(pointerId id,
-                                      MouseButton button,
+                                      MouseButton /*button*/,
                                       double x,
                                       double y) {
     onPointerMove(id, x, y, 1);
@@ -28,7 +28,7 @@ bool PushControlerView::onPointerDown(pointerId id,
 }
 
 bool PushControlerView::onPointerUp(pointerId id,
-                                    MouseButton button,
+                                    MouseButton /*button*/,
                                     double x,
                                     double y) {
     onPointerMove(id, x, y, 1);
