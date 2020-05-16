@@ -184,7 +184,7 @@ void Layout::removeChild(View *view) {
     }
 }
 
-View *Layout::releaseChild(View *view) {
+std::unique_ptr<View> Layout::releaseChild(View *view) {
     if (!view) {
         return nullptr;
     }
@@ -198,12 +198,13 @@ View *Layout::releaseChild(View *view) {
             it->release();
             view->unfocus();
             view->parent(nullptr);
+            auto ret = std::move(*it);
             children.erase(it);
 
             refresh();
             refreshChildren();
 
-            return view;
+            return ret;
         }
     }
     return nullptr;

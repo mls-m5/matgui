@@ -60,7 +60,7 @@ public:
     //! Remove child from layout and deletes it
     virtual void removeChild(View *view);
     //! Remove child from layout but release pointer
-    virtual View *releaseChild(View *view);
+    virtual std::unique_ptr<View> releaseChild(View *view);
     virtual void deleteAll();
     virtual View *getChild(size_t index);
     virtual View *getChild(std::string name);
