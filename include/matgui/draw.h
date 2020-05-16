@@ -9,9 +9,9 @@
 
 #include <vector>
 
-#include "vec.h"
-
 namespace MatGui {
+
+class Vec;
 
 struct vec {
     vec(double x, double y, double z) : x(x), y(y), z(z) {
