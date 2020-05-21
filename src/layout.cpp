@@ -35,20 +35,25 @@ void Layout::refreshChildren() {
     }
 }
 
-void Layout::addChild(std::unique_ptr<View> view) {
+View *Layout::addChild(std::unique_ptr<View> view) {
     if (not view) {
-        return;
+        return nullptr;
     }
     view->parent(this);
-    children.push_back(std::move(view));
+
+    auto ret = view.get();
+
+    children.emplace_back(std::move(view));
 
     refresh();
 
     refreshChildren();
+
+    return ret;
 }
 
-void Layout::addChild(View *view) {
-    addChild(std::unique_ptr<View>(view));
+View *Layout::addChild(View *view) {
+    return addChild(std::unique_ptr<View>(view));
 }
 
 void Layout::addChildAfter(View *view, View *after) {

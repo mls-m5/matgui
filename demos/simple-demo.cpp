@@ -41,40 +41,36 @@ int main(int argc, char *argv[]) {
 
     Window window("matgui-demo");
 
-    auto button = new Button("knapp 1");
-    auto button2 = new Button("stäng");
-    auto knob = new KnobView;
-    auto progress = new ProgressView;
+    auto *button = window.addChild(make_unique<Button>("button 1"));
+    auto *button2 = window.addChild(make_unique<Button>("close"));
+    auto *knob = window.createChild<KnobView>(); // Create the child directly
 
-    progressView = progress;
+    auto *progress = new ProgressView; // You can create objects as raw pointers
+                                       // but i don't using 'new' in new code
+    window.addChild(progress);         // Notice2 this is not recommended
 
-    window.addChild(button);
-    window.addChild(knob);
-    window.addChild(button2);
-    window.addChild(progress);
-
-    auto leftLabel = new Label("left aligned");
+    auto leftLabel = make_unique<Label>("left aligned");
     leftLabel->alignment(FontView::Left);
-    window.addChild(leftLabel);
+    window.addChild(move(leftLabel));
 
-    auto rightLabel = new Label("right aligned");
+    auto rightLabel = make_unique<Label>("right aligned");
     rightLabel->alignment(FontView::Right);
-    window.addChild(rightLabel);
+    window.addChild(move(rightLabel));
 
-    auto textEntry = new TextEntry;
+    auto *textEntry = window.createChild<TextEntry>();
     textEntry->text("hej");
-    window.addChild(textEntry);
+
     textEntry->submit.connect(
         [textEntry]() { cout << "got text: " << textEntry->text() << endl; });
 
-    auto layout2 = new LinearLayout;
+    auto layout2 = make_unique<LinearLayout>();
     layout2->orientation(LAYOUT_HORIZONTAL);
-    layout2->addChild(new Label("standard label"));
-    layout2->addChild(new ImageView("gfx/test.png"));
-    layout2->addChild(new ToggleView());
-    layout2->addChild(new SliderView());
+    layout2->createChild<Label>("standard label");
+    layout2->createChild<ImageView>("gfx/test.png");
+    layout2->createChild<ToggleView>();
+    layout2->createChild<SliderView>();
 
-    window.addChild(layout2);
+    window.addChild(move(layout2));
 
     button->clicked.connect(callback); // callback to a function
     button2->clicked.connect(

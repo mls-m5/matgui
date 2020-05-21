@@ -46,16 +46,15 @@ public:
         double x, double y, double w, double h, double weight = 0) override;
 
     [[deprecated("use orientation(...) instead")]] //
-    void
-    setOrientation(LayoutOrientation o) {
-        orientation(o);
-    }
+        void
+        setOrientation(LayoutOrientation o) { orientation(o); }
 
     void orientation(LayoutOrientation orientation);
 
     //! Take ownership over a view pointer and adds it to the layout
-    virtual void addChild(View *view);
-    virtual void addChild(std::unique_ptr<View> view);
+    //! @returns a raw pointer to the child
+    View *addChild(View *view);
+    View *addChild(std::unique_ptr<View> view);
     virtual void addChildAfter(View *view, View *after);
     //! Remove child from layout and deletes it
     virtual void removeChild(View *view);
@@ -73,8 +72,9 @@ public:
 #if __cplusplus >= 201402L
     //! Create and add a child to to the layout
     template <class T, class... Types>
-    void createChild(Types... args) {
-        addChild(std::move(std::make_unique<T>(args...)));
+    T *createChild(Types... args) {
+        return dynamic_cast<T *>(
+            addChild(std::move(std::make_unique<T>(args...))));
     }
 #endif
 

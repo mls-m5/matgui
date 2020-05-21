@@ -19,10 +19,9 @@ int main(int argc, char **argv) {
     Application app(argc, argv);
 
     Window window("matgui", 200, 200);
+    window.createChild<Label>("enter text:");
+    auto *textEntry = window.createChild<TextEntry>();
 
-    window.addChild(new Label("enter text:"));
-
-    TextEntry *textEntry = new TextEntry();
     textEntry->submit.connect(
         [textEntry]() { cout << textEntry->text() << endl; });
 

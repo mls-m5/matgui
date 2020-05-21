@@ -9,8 +9,9 @@
 
 // standard getters and setters
 #define member_set(type, m)                                                    \
-    inline void m(type value) {                                                \
+    inline auto &m(type value) {                                               \
         _##m = value;                                                          \
+        return *this;                                                          \
     }
 #define member_get(type, m)                                                    \
     inline type m() const {                                                    \

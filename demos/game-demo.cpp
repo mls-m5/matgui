@@ -68,16 +68,17 @@ public:
 int main(int argc, char **argv) {
     Application app(argc, argv);
 
-    Window *window = new Window("matgui game-demo");
-    Button *button = new Button("turn rotation");
+    Application::ContinuousUpdates(true); // Update the screen constantly
+
+    Window window("matgui game-demo");
+    auto game = window.createChild<Game>();
+    auto button = window.createChild<Button>("turn rotation");
+
     button->weight(.3);
-    auto game = new Game;
-
-    window->addChild(button);
-    window->addChild(game);
-
-    window->frameUpdate.connect(game, &Game::frameCallback);
     button->clicked.connect(game, &Game::buttonClicked);
+    window.refresh();
+
+    window.frameUpdate.connect(game, &Game::frameCallback);
 
     app.mainLoop();
 }

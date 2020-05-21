@@ -5,7 +5,7 @@ GUIOBJECTS+= linearlayout.o layout.o progressview.o imageview.o label.o textentr
 BACKENDOBJECTS=draw.o shaderprogram.o window.o application.o font.o texture.o
 BACKENDOBJECTS+= bitmapfont.o bitmapfontcontent.o paint.o keys.o fontview.o
 OBJECTS= ${PROGOBJECS} ${GUIOBJECTS}
-CXXFLAGS=-std=c++11 `sdl2-config --cflags` -I"../include/" -I. -fPIC
+CXXFLAGS=-std=c++14 `sdl2-config --cflags` -I"../include/" -I. -fPIC
 CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies
 LIB=../matgui-sdl.a
 SHARED=../libmatgui.so
