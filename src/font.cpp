@@ -77,7 +77,7 @@ void renderText(const FontType *font,
     (void)g;
     (void)b;
     auto data = getFontDataVector(text);
-    auto messageSurface = new BitmapFont(text);
+    auto messageSurface = std::make_unique<BitmapFont>(text);
 #else
     SDL_Color color = {r, g, b};
     SDL_Surface *messageSurface = TTF_RenderUTF8_Blended(
@@ -149,7 +149,7 @@ Font::Font(const std::string filename, int size) : Font() {
 #endif
 }
 
-Font::Font() : _data(new FontData) {
+Font::Font() : _data(std::make_unique<FontData>()) {
     if (!isInitialized) {
 #ifndef USE_BITMAP_FONT
         TTF_Init();
@@ -161,7 +161,7 @@ Font::Font() : _data(new FontData) {
 Font::Font(int size) : Font(defaultFontPath, size) {
 }
 
-Font::Font(const Font &font) : _data(new FontData) {
+Font::Font(const Font &font) : _data(std::make_unique<FontData>()) {
     _data->font = font._data->font;
 }
 

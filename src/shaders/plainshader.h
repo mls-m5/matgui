@@ -7,7 +7,11 @@
 
 #pragma once
 
+#include "matgui/common-gl.h"
 #include "matgui/constants.h"
+#include "matgui/shaderprogram.h"
+#include <memory>
+#include <vector>
 
 namespace PlainShader {
 
@@ -88,8 +92,8 @@ static struct {
             ellipseVertices.at(i * 2 + 1) = .5 + cos(a) / 2;
         }
 
-        program.reset(new ShaderProgram(PlainShader::vertexCode,
-                                        PlainShader::fragmentCode));
+        program = std::make_unique<ShaderProgram>(PlainShader::vertexCode,
+                                                  PlainShader::fragmentCode);
         debug_check_true(program->getProgram(),
                          "could not create square program");
         program->use();

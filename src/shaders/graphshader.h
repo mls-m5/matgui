@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include "matgui/shaderprogram.h"
 #include <memory>
+#include <vector>
 
 namespace GraphShader {
 
@@ -43,8 +45,8 @@ static struct {
     std::vector<float> tmpFloat;
 
     void init() {
-        program.reset(new ShaderProgram(GraphShader::vertexCode,
-                                        GraphShader::fragmentCode));
+        program = std::make_unique<ShaderProgram>(GraphShader::vertexCode,
+                                                  GraphShader::fragmentCode);
         x = program->getAttribute("vX");
         y = program->getAttribute("vY");
         mvpMatrix = program->getUniform("mvp_matrix");

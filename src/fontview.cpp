@@ -40,7 +40,7 @@ public:
         if (view._needsUpdate) {
             // Create some variables.
 #ifdef USE_BITMAP_FONT
-            auto messageSurface = new BitmapFont(view._text);
+            auto messageSurface = std::make_unique<BitmapFont>(view._text);
 
 #else
             auto messageSurface = TTF_RenderUTF8_Blended(
@@ -118,7 +118,7 @@ public:
     FontView::Alignment alignment = FontView::Center;
 };
 
-FontView::FontView() : _data(new FontViewData) {
+FontView::FontView() : _data(std::make_unique<FontViewData>()) {
 }
 
 FontView::~FontView() {

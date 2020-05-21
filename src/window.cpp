@@ -45,7 +45,7 @@ void Window::bordered(bool state) {
 }
 
 Window::Window(string title, int width, int height, bool resizable) {
-    _windowData.reset(new WindowData);
+    _windowData = std::make_unique<WindowData>();
 
 #ifdef USING_GL2
 

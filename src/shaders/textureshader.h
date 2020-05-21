@@ -62,8 +62,8 @@ static struct {
     };
 
     void init() {
-        program.reset(new ShaderProgram(TextureShader::vertexCode,
-                                        TextureShader::fragmentCode));
+        program = std::make_unique<ShaderProgram>(TextureShader::vertexCode,
+                                                  TextureShader::fragmentCode);
         debug_check_true(program->getProgram(),
                          "could not create texture program");
 

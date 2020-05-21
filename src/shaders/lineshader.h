@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include "matgui/common-gl.h"
+#include "matgui/shaderprogram.h"
+#include <memory>
+
 namespace LineShader {
 
 const char *vertexCode = R"V0G0N(
@@ -37,10 +41,10 @@ static struct {
     std::unique_ptr<ShaderProgram> program;
 
     void init() {
-        auto p =
-            new ShaderProgram(LineShader::vertexCode, LineShader::fragmentCode);
-        debug_check_true(p->getProgram(), "could not create graph program");
-        program.reset(p);
+        program = std::make_unique<ShaderProgram>(LineShader::vertexCode,
+                                                  LineShader::fragmentCode);
+        debug_check_true(program->getProgram(),
+                         "could not create graph program");
         v = program->getAttribute("v");
         color = program->getUniform("uColor");
         mvpMatrix = program->getUniform("mvp_matrix");
