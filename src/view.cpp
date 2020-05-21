@@ -26,7 +26,9 @@ View::~View() {
 }
 
 void View::invalidate() {
-    root()->invalidate();
+    if (auto r = root()) {
+        r->invalidate();
+    }
 }
 
 void View::focus() {

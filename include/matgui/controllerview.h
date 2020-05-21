@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "math.h"
+#include "matgui/math.h"
 #include "view.h"
+#include <cmath>
 
 namespace MatGui {
 
