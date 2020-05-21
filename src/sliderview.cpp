@@ -38,12 +38,11 @@ bool SliderView::onPointerUp(pointerId /*id*/,
 
 bool SliderView::onPointerMove(pointerId /*id*/,
                                double /*x*/,
-                               double /*y*/,
+                               double y,
                                pointerState state) {
     if (state) {
-        double v = 1 - (y() - height() * handleHeight / 2.) /
-                           (height() * (1 - handleHeight));
-        ;
+        double v = 1. - (y - height() * handleHeight / 2.) /
+                            (height() * (1 - handleHeight));
         amount(v);
         changed.emit(value());
         return true;
