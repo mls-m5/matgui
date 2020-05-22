@@ -44,24 +44,21 @@ struct BitmapFontData : public std::vector<char> {
 struct BitmapFont {
     int w = 0, h = 0;
 
-    union {
-        unsigned char *pixels;
-        ColorType *colors;
-    };
+    std::vector<unsigned char> pixels;
+    ColorType *colors() {
+        return reinterpret_cast<ColorType *>(pixels.data());
+    }
 
     BitmapFont(){};
     BitmapFont(int width, int height, char *data) {
-        pixels = 0;
         setContent(width, height, data);
     }
 
     BitmapFont(BitmapFontData *data) {
-        pixels = 0;
         setContent(data->width, data->height, &data->front());
     }
 
     BitmapFont(const std::string &text) {
-        pixels = 0;
         auto data = getFontDataVector(text);
         setContent(data.width, data.height, &data.front());
     }
@@ -71,16 +68,14 @@ struct BitmapFont {
     }
 
     void clear() {
-        if (pixels) {
-            delete pixels;
-        }
+        pixels.clear();
     }
 
     void create(int width, int height) {
         clear();
         w = width;
         h = height;
-        pixels = new unsigned char[width * height * 4];
+        pixels.resize(width * height * 4);
     }
 
     void setContent(int width, int height, char *data) {
@@ -92,10 +87,10 @@ struct BitmapFont {
         for (int i = 0; i < len; ++i) {
             switch (data[i]) {
             case 'x':
-                colors[i] = {255, 255, 255, 255};
+                colors()[i] = {255, 255, 255, 255};
                 break;
             case ' ':
-                colors[i] = {0, 0, 0, 0};
+                colors()[i] = {0, 0, 0, 0};
                 break;
             }
         }

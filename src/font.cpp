@@ -108,7 +108,7 @@ void renderText(const FontType *font,
                  0,
                  GL_RGBA,
                  GL_UNSIGNED_BYTE,
-                 messageSurface->pixels);
+                 messageSurface->pixels.data());
 
     drawTextureRect({x + messageSurface->w * alignment / 2, y, z},
                     0,

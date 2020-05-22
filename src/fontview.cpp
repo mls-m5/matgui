@@ -87,7 +87,7 @@ public:
                          0,
                          GL_RGBA,
                          GL_UNSIGNED_BYTE,
-                         messageSurface->pixels);
+                         messageSurface->pixels.data());
 
             view._width = messageSurface->w;
             view._height = messageSurface->h;
