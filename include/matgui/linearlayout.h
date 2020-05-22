@@ -16,7 +16,7 @@ public:
     LinearLayout();
     virtual ~LinearLayout();
 
-    virtual void refresh();
+    virtual void refresh() override;
 };
 
 } // namespace MatGui
