@@ -2,7 +2,6 @@
 #pragma once
 
 #include <ciso646> //For or, and, etc...
-#include <string.h>
 #include <string>
 #include <vector>
 
