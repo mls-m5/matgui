@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 Buildflags
 --------
 
-Here is some example flags
+### Example build flags
 
 ``` bash
 
@@ -166,6 +166,25 @@ LIBS = -lGL -lSDL2 -lSDL2_ttf -lSDL2_image
 CXXFLAGS += -DUSE_TTF_FONT #This flag will use libsdl2-ttf fonts instead of the built in bitmap fonts.
 ```
 
+### Build with [matmake](https://github.com/mls-m5/matmake)
+``` bash
+config += c++14
+
+includes +=
+   include
+   matgui/include
+
+main.src +=
+   src/*.cpp          # project source files
+   matgui/src/*.cpp   # matgui source files
+
+main.libs +=
+   -lSDL2
+   -lGL
+   -lSDL2_ttf
+   -lSDL2_image
+
+```
 
 For compilation with emscripten, to compile to javascript these flags are needed.
 
