@@ -1,4 +1,5 @@
-#matgui
+Matgui
+=======================================
 
 Matgui is a simple gui that aims to
 * Be platform independent (linux, windows, mac, android, iphone/ipad, web)
@@ -21,56 +22,135 @@ Layout automatically sets the parent-property when a child view is added
 example usage:
 --------
 
+### Minimal example
+``` c++
 
-```
+#include "matgui/application.h"
+#include "matgui/label.h"
+#include "matgui/textentry.h"
+#include "matgui/window.h"
+
 #include <iostream>
-
-#include "application.h"
-#include "window.h"
-#include "button.h"
-#include "draw.h"
-#include "knobview.h"
-#include "linearlayout.h"
 
 using namespace MatGui;
 using namespace std;
 
-void callback(View::pointerArgument arg) {
-	cout << "callback... x = " << arg.x << endl;
+int main(int argc, char **argv) {
+    Application app(argc, argv);
+
+    Window window("matgui", 200, 200);
+    window.createChild<Label>("enter text:");
+    auto *textEntry = window.createChild<TextEntry>();
+
+    textEntry->submit.connect(
+        [textEntry]() { cout << textEntry->text() << endl; });
+
+    window.addChild(textEntry);
+
+    app.mainLoop();
 }
 
-int main(int argc, char *argv[])
-{
-	Application app(argc, argv); //Initialize stuff
 
-	auto window = new Window("matgui-demo"); //create the window
+```
 
-	auto button = new Button("button");
-	auto button2 = new Button;
-	auto button3 = new Button("button 3");
-	auto knob = new KnobView;
 
-	window.addChild(button);
-	window.addChild(knob);
-	window.addChild(button2);
-	window.addChild(button3);
-	
-	window.style.fill.color(1, 1, 1); //Change the window style
-	window.updateStyle();
+### A example with callbacks
+``` c++
+#include "matgui/application.h"
+#include "matgui/button.h"
+#include "matgui/imageview.h"
+#include "matgui/knobview.h"
+#include "matgui/label.h"
+#include "matgui/progressview.h"
+#include "matgui/sliderview.h"
+#include "matgui/textentry.h"
+#include "matgui/toggleview.h"
+#include "matgui/window.h"
 
-	button->clicked.connect(callback); //callback to a function
-	button2->clicked.connect(&app, &Application::quit); //A demo just to show how signals work
-	button3->clicked.connect([] (PointerArgument arg) {
-		cout << "button 3 clicked" << endl;
-	});
+#include <iostream>
 
-	app.mainLoop();
-	
-	// All views are automatically deleted when the containers are deleted
+using namespace MatGui;
+using namespace std;
+
+// Example callback function
+ProgressView *progressView;
+void callback(View::PointerArgument arg) {
+    cout << "callback... x = " << arg.x << endl;
+}
+
+// Another callback example
+void knobCallback(double value) {
+    progressView->value(value);
+}
+
+void keyDownCallback(View::KeyArgument arg) {
+    cout << "keypress " << (char)arg.symbol << endl;
+}
+
+int main(int argc, char *argv[]) {
+    Application app(argc, argv); // Initialize stuff
+
+    Window window("matgui-demo");
+
+    auto *button = window.addChild(make_unique<Button>("button 1"));
+    auto *button2 = window.addChild(make_unique<Button>("close"));
+    auto *knob = window.createChild<KnobView>(); // Create the child directly
+
+    auto *progress = new ProgressView; // You can create objects as raw pointers
+                                       // but i don't using 'new' in new code
+    window.addChild(progress);         // Notice2 this is not recommended
+
+    auto leftLabel = make_unique<Label>("left aligned");
+    leftLabel->alignment(FontView::Left);
+    window.addChild(move(leftLabel));
+
+    auto rightLabel = make_unique<Label>("right aligned");
+    rightLabel->alignment(FontView::Right);
+    window.addChild(move(rightLabel));
+
+    auto *textEntry = window.createChild<TextEntry>();
+    textEntry->text("hej");
+
+    textEntry->submit.connect(
+        [textEntry]() { cout << "got text: " << textEntry->text() << endl; });
+
+    auto layout2 = make_unique<LinearLayout>();
+    layout2->orientation(LAYOUT_HORIZONTAL);
+    layout2->createChild<Label>("standard label");
+    layout2->createChild<ImageView>("gfx/test.png");
+    layout2->createChild<ToggleView>();
+    layout2->createChild<SliderView>();
+
+    window.addChild(move(layout2));
+
+    button->clicked.connect(callback); // callback to a function
+    button2->clicked.connect(
+        Application::quit); // A demo just to show how signals work
+
+    knob->changed.connect(knobCallback);
+    // To specify argument is optional
+    // as can be seen from these two examples
+    knob->changed.connect([](double value) {
+        cout << "lambda function called from signal with value " << value
+             << endl;
+    });
+    knob->changed.connect([]() {
+        cout << "lambda function called to function without specified arguments"
+             << endl;
+    });
+
+    window.keyDown.connect(keyDownCallback);
+
+    knob->value(.3);
+
+    app.mainLoop();
+
+    // Application will delete all remaining windows
+    // The windows delete all views that is attached to it
 
     return 0;
-    // Program is teared down when Application runs out of scope, except for when using emscripten ( compiled to javascript )
 }
+
 ```
 
 Buildflags
@@ -78,21 +158,21 @@ Buildflags
 
 Here is some example flags
 
-```
+``` bash
 
 CXXFLAGS = -std=c++11 -Iinclude/ -Imatgui/include/matgui
 LIBS = -lGL -lSDL2 -lSDL2_ttf -lSDL2_image
 
-CXXFLAGS += -DUSE_TTF_FONT //This flag will use libsdl2-ttf fonts instead of the built in bitmap fonts.
+CXXFLAGS += -DUSE_TTF_FONT #This flag will use libsdl2-ttf fonts instead of the built in bitmap fonts.
 ```
 
 
 For compilation with emscripten, to compile to javascript these flags are needed.
 
-```
+``` bash
 -s USE_SDL=2 -s FULL_ES2=1 -s USE_WEBGL2=1
 
--s USE_SDL_IMAGE=2 // needed if using sdl2-image
+-s USE_SDL_IMAGE=2 # Needed if using sdl2-image
 
 ```
 
