@@ -9,9 +9,15 @@
 
 #include <vector>
 
-namespace MatGui {
+template <class T>
+class VecT;
+using Vec = VecT<double>;
 
-class Vec;
+template <class T>
+class Vec2T;
+using Vec2 = Vec2T<double>;
+
+namespace MatGui {
 
 struct vec {
     vec(double x, double y, double z) : x(x), y(y), z(z) {
@@ -22,6 +28,10 @@ struct vec {
     vec(const Vec &v)
         : x(((double *)&v)[0]), y(((double *)&v)[1]), z(((double *)&v)[2]) {
     }
+    vec(const Vec2 &v, double z = 0)
+        : x(((double *)&v)[0]), y(((double *)&v)[1]), z(z) {
+    }
+
     double x, y, z;
 };
 
