@@ -10,13 +10,6 @@
 #include "matgui/memberproperties.h"
 #include "matgui/view.h"
 
-MatGui::Paint::Paint() {
-    fill._style = DrawStyle::None;
-}
-
-MatGui::Paint::~Paint() {
-}
-
 void MatGui::Paint::drawRect(double x,
                              double y,
                              double width,

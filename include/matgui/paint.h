@@ -20,18 +20,24 @@ public:
     // remember to set this to override previous value
     bool inherit = true;
 
-    ColorStyle() = default;
-    ColorStyle(const ColorStyle &) = default;
-    ColorStyle(ColorStyle &&) = default;
-    ColorStyle &operator=(const ColorStyle &) = default;
-    ColorStyle &operator=(ColorStyle &&) = default;
+    constexpr ColorStyle() = default;
+    constexpr ColorStyle(const ColorStyle &) = default;
+    constexpr ColorStyle(ColorStyle &&) = default;
+    constexpr ColorStyle &operator=(const ColorStyle &) = default;
+    constexpr ColorStyle &operator=(ColorStyle &&) = default;
 
-    ColorStyle(float red, float green, float blue, float alpha = 1.f) {
+    constexpr ColorStyle(float red,
+                         float green,
+                         float blue,
+                         float alpha = 1.f) {
         color(red, green, blue, alpha);
     }
 
     // set color and disable inherit flag
-    void color(float red, float green, float blue, float alpha = 1.f) {
+    constexpr ColorStyle &color(float red,
+                                float green,
+                                float blue,
+                                float alpha = 1.f) {
         r = red;
         g = green;
         b = blue;
@@ -42,9 +48,10 @@ public:
         }
 
         inherit = false;
+        return *this;
     }
 
-    void color(long longColor, float alpha = 1) {
+    constexpr ColorStyle &color(long longColor, float alpha = 1) {
         r = (float)((longColor & 0xFF000000) >> 24) / 255.;
         g = (float)((longColor & 0x00FF0000) >> 16) / 255.;
         b = (float)((longColor & 0x0000FF00) >> 8) / 255.;
@@ -55,15 +62,17 @@ public:
         }
 
         inherit = false;
+        return *this;
     }
 
     // set style and disable inherit flag
-    void style(DrawStyle value) {
+    constexpr ColorStyle &style(DrawStyle value) {
         _style = value;
         inherit = false;
+        return *this;
     }
 
-    operator bool() const {
+    constexpr operator bool() const {
         return _style != DrawStyle::None;
     }
 
@@ -84,6 +93,8 @@ protected:
 
 class LineStyle : public ColorStyle {
 public:
+    using ColorStyle::ColorStyle;
+
     void width(float w) {
         _width = w;
         inherit = false;
@@ -116,10 +127,7 @@ protected:
 
 class Paint {
 public:
-    Paint();
-    virtual ~Paint();
-
-    ColorStyle fill;
+    ColorStyle fill = ColorStyle().style(DrawStyle::None);
     LineStyle line;
     ShadowStyle shadow;
 
