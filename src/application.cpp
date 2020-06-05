@@ -83,7 +83,9 @@ inline void Application::innerLoop() {
 
 #ifndef __EMSCRIPTEN__
     if (!shouldRedraw && !continuousUpdates) {
-        SDL_Delay(10); // Limit cpu usage on idle
+        if (!shouldRedraw) {
+            SDL_Delay(10); // Limit cpu usage on idle
+        }
     }
 #endif
 
