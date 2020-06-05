@@ -46,8 +46,10 @@ public:
         double x, double y, double w, double h, double weight = 0) override;
 
     [[deprecated("use orientation(...) instead")]] //
-        void
-        setOrientation(LayoutOrientation o) { orientation(o); }
+    void
+    setOrientation(LayoutOrientation o) {
+        orientation(o);
+    }
 
     void orientation(LayoutOrientation orientation);
 
@@ -72,9 +74,8 @@ public:
 #if __cplusplus >= 201402L
     //! Create and add a child to to the layout
     template <class T, class... Types>
-    T *createChild(Types... args) {
-        return dynamic_cast<T *>(
-            addChild(std::move(std::make_unique<T>(args...))));
+    constexpr T *createChild(Types &&... args) {
+        return dynamic_cast<T *>(addChild(std::make_unique<T>(args...)));
     }
 #endif
 
