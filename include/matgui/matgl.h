@@ -12,11 +12,16 @@
 #include "common-gl.h"
 #include "gl-error-handling.h"
 #include "shaderprogram.h"
-#include "vec.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+template <class T>
+class VecT;
+
+using Vec = VecT<double>;
+using Vecf = VecT<float>;
 
 namespace GL {
 
@@ -25,42 +30,47 @@ GLenum getType();
 
 #ifdef GL_DOUBLE
 template <>
-inline GLenum getType<double>() {
+constexpr inline GLenum getType<double>() {
     return GL_DOUBLE;
 }
 #endif
 
 template <>
-inline GLenum getType<float>() {
+constexpr inline GLenum getType<float>() {
     return GL_FLOAT;
 }
 
 template <>
-inline GLenum getType<GLuint>() {
+constexpr inline GLenum getType<GLuint>() {
     return GL_UNSIGNED_INT;
 }
 
 template <>
-inline GLenum getType<GLint>() {
+constexpr inline GLenum getType<GLint>() {
     return GL_INT;
 }
 
 template <>
-inline GLenum getType<GLubyte>() {
+constexpr inline GLenum getType<GLubyte>() {
     return GL_UNSIGNED_BYTE;
 }
 
 template <>
-inline GLenum getType<GLbyte>() {
+constexpr inline GLenum getType<GLbyte>() {
     return GL_BYTE;
 }
 
 #ifdef GL_DOUBLE
 template <>
-inline GLenum getType<::Vec>() {
+constexpr inline GLenum getType<::Vec>() {
     return GL_DOUBLE;
 }
 #endif
+
+template <>
+constexpr inline GLenum getType<::Vecf>() {
+    return GL_FLOAT;
+}
 
 //! Like unique_ptr but for unsigned ints
 //! Used to be able to easier move objects
