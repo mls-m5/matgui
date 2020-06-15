@@ -29,7 +29,7 @@ public:
     }
 
     // Set the controler with a value from 0 to 1
-    void amount(_valueType v) {
+    ControllerView &amount(_valueType v) {
         v = std::max(v, 0.);
         v = std::min(v, 1.);
 
@@ -38,9 +38,10 @@ public:
             newValue = roundDown(newValue, _step);
         }
         value(newValue);
+        return *this;
     }
 
-    void value(_valueType v) {
+    ControllerView &value(_valueType v) {
         v = std::max(v, _min);
         v = std::min(v, _max);
 
@@ -50,9 +51,13 @@ public:
             //			changed.emit(v); //Is emitted by key handling
             // event, to avoid round calling
         }
+
+        return *this;
     }
 
-    [[deprecated("use value(...) instead")]] void setValue(_valueType v) {
+    [[deprecated("use value(...) instead")]] //
+    void
+    setValue(_valueType v) {
         value(v);
     }
 
@@ -61,25 +66,30 @@ public:
     }
 
     [[deprecated("use linear(...) instead")]] //
-        void
-        setLinear(_valueType min, _valueType max, _valueType step) {
-            linear(min, max, step);
-        }
+    void
+    setLinear(_valueType min, _valueType max, _valueType step) {
+        linear(min, max, step);
+    }
 
     //! Setup min, max and step value for controller
     //! if step is zero the highest available precision is selected
-    void linear(_valueType min, _valueType max, _valueType step = 0) {
+    ControllerView &linear(_valueType min,
+                           _valueType max,
+                           _valueType step = 0) {
         this->_min = min;
         this->_max = max;
         this->_step = step;
+        return *this;
     }
 
-    void operator=(ControllerView view) {
+    ControllerView &operator=(ControllerView view) {
         value(view.value());
+        return *this;
     }
 
-    void operator=(_valueType v) {
+    ControllerView &operator=(_valueType v) {
         value(v);
+        return *this;
     }
 
     member_property(_valueType, min);
