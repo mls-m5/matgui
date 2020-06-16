@@ -17,6 +17,8 @@
 
 namespace MatGui {
 
+namespace {
+
 static std::map<std::string, Texture> loadedTextures;
 
 static bool isInitialized = false;
@@ -39,6 +41,15 @@ static unsigned int createTextureFromFile(const std::string filename) {
     if (!surface) {
         debug_print("could not load file %s\n", filename.c_str());
         return 0;
+    }
+
+    if (surface->format->format != SDL_PIXELFORMAT_RGBA32) {
+        //! Convert to a format from IMG_Load
+        std::unique_ptr<SDL_Surface, void (*)(SDL_Surface *)> newSurface(
+            SDL_ConvertSurfaceFormat(surface.get(), SDL_PIXELFORMAT_RGBA32, 0),
+            SDL_FreeSurface);
+
+        surface = std::move(newSurface);
     }
 
     glGenTextures(1, &textureId);
@@ -132,6 +143,14 @@ static unsigned int createGrayscaleFromPixels(
 #endif
 }
 
+} // namespace
+
+Texture::Texture() {
+}
+
+Texture::~Texture() {
+}
+
 void Texture::interpolation(Interpolation interpolation) {
 #ifndef DISABLE_TEXTURES
     glBindTexture(GL_TEXTURE_2D, *this);
@@ -190,12 +209,6 @@ void Texture::createGrayscale(const std::vector<float> &pixels,
     else {
         texture(createGrayscaleFromPixels(pixels, width, height));
     }
-}
-
-Texture::Texture() {
-}
-
-Texture::~Texture() {
 }
 
 Texture::Texture(const std::string filename, bool addToLibrary) {
