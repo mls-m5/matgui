@@ -14,7 +14,7 @@
 #define USE_BITMAP_FONT
 #endif
 
-namespace MatGui {
+namespace matgui {
 
 class Font {
 public:
@@ -44,4 +44,4 @@ protected:
     friend class FontViewData;
 };
 
-} // namespace MatGui
+} // namespace matgui

@@ -87,7 +87,7 @@ static struct {
         int count = 20;
         ellipseVertices.resize(count * 2);
         for (int i = 0; i < count; ++i) {
-            auto a = (double)i / count * MatGui::pi2;
+            auto a = (double)i / count * matgui::pi2;
             ellipseVertices.at(i * 2) = .5 + sin(a) / 2;
             ellipseVertices.at(i * 2 + 1) = .5 + cos(a) / 2;
         }

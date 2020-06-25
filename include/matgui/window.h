@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 
-namespace MatGui {
+namespace matgui {
 
 class Window : public LinearLayout {
 public:
@@ -113,4 +113,4 @@ private:
     friend class Application;
 };
 
-} /* namespace MatGui */
+} /* namespace matgui */

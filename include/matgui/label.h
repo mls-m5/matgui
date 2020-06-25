@@ -13,7 +13,7 @@
 #include <memory>
 #include <string>
 
-namespace MatGui {
+namespace matgui {
 
 // A simple label
 class Label : public View {
@@ -47,4 +47,4 @@ private:
     FontView _fontView;
 };
 
-} // namespace MatGui
+} // namespace matgui

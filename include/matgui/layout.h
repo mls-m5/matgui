@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 
-namespace MatGui {
+namespace matgui {
 
 enum LayoutOrientation { LAYOUT_HORIZONTAL, LAYOUT_VERTICAL };
 
@@ -90,4 +90,4 @@ protected:
     double _padding;
 };
 
-} // namespace MatGui
+} // namespace matgui

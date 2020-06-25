@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 
-namespace MatGui {
+namespace matgui {
 
 class Button : public View {
 public:
@@ -36,4 +36,4 @@ private:
     FontView _fontView;
 };
 
-} // namespace MatGui
+} // namespace matgui

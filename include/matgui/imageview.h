@@ -12,7 +12,7 @@
 #include "texture.h"
 #include "view.h"
 
-namespace MatGui {
+namespace matgui {
 
 class ImageView : public View {
 public:
@@ -37,4 +37,4 @@ public:
     Texture _texture;
 };
 
-} /* namespace MatGui */
+} /* namespace matgui */

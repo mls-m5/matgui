@@ -9,7 +9,7 @@
 #include "matgui/layout.h"
 #include "matgui/window.h"
 
-namespace MatGui {
+namespace matgui {
 
 View::View() : _weight(1) {
     location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
@@ -173,4 +173,4 @@ class Window *View::root() {
     return parent() ? parent()->root() : nullptr;
 }
 
-} // namespace MatGui
+} // namespace matgui

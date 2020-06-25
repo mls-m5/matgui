@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace MatGui {
+namespace matgui {
 
 // The texture class is supposed to be used by value
 // Because the textureId is kept in a shared_ptr the background texture is freed
@@ -91,4 +91,4 @@ public:
     std::shared_ptr<void> _texturePtr;
 };
 
-} /* namespace MatGui */
+} /* namespace matgui */

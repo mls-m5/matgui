@@ -8,7 +8,7 @@
 #include "matgui/progressview.h"
 #include "matgui/draw.h"
 
-namespace MatGui {
+namespace matgui {
 
 ProgressView::ProgressView() {
     indicatorStyle.fill.color(1, 1, 1, .5);
@@ -36,4 +36,4 @@ void ProgressView::draw() {
     }
 }
 
-} /* namespace MatGui */
+} /* namespace matgui */

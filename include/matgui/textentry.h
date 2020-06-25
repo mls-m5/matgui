@@ -10,7 +10,7 @@
 #include "fontview.h"
 #include "view.h"
 
-namespace MatGui {
+namespace matgui {
 
 class TextEntry : public View {
 public:
@@ -53,4 +53,4 @@ private:
     FontView _fontView;
 };
 
-} // namespace MatGui
+} // namespace matgui

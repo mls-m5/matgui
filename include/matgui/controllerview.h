@@ -11,7 +11,7 @@
 #include "view.h"
 #include <cmath>
 
-namespace MatGui {
+namespace matgui {
 
 class ControllerView : public View {
 public:
@@ -104,4 +104,4 @@ private:
     int elementId, controllerId;
 };
 
-} // namespace MatGui
+} // namespace matgui

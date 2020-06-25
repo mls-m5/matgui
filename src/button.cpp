@@ -8,7 +8,7 @@
 #include "matgui/button.h"
 #include "matgui/draw.h"
 
-namespace MatGui {
+namespace matgui {
 
 Button::Button(std::string label) {
     _fontView.font(Font(30));
@@ -30,4 +30,4 @@ void Button::draw() {
     }
 }
 
-} // namespace MatGui
+} // namespace matgui

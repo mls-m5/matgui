@@ -34,7 +34,7 @@ void checkSDLError(int line = -1) {
 
 } // namespace
 
-namespace MatGui {
+namespace matgui {
 
 void Window::title(string title) {
     SDL_SetWindowTitle(_windowData->window, title.c_str());
@@ -258,4 +258,4 @@ bool Window::onTextInput(const char *text) {
     return View::onTextInput(text);
 }
 
-} // namespace MatGui
+} // namespace matgui

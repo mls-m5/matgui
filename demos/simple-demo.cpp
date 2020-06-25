@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-using namespace MatGui;
+using namespace matgui;
 using namespace std;
 
 // Example callback function

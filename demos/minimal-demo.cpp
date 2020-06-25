@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-using namespace MatGui;
+using namespace matgui;
 using namespace std;
 
 int main(int argc, char **argv) {

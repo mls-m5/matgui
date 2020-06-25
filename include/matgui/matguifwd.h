@@ -2,7 +2,7 @@
 
 //! For when pointing to matgui objects in header files
 
-namespace MatGui {
+namespace matgui {
 
 class Application;
 class Button;
@@ -21,6 +21,6 @@ class ToggleView;
 class View;
 class Window;
 
-} // namespace MatGui
+} // namespace matgui
 
 class ShaderProgram;

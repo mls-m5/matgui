@@ -19,9 +19,9 @@
 typedef SDL_Color ColorType;
 #endif
 
-using namespace MatGui;
+using namespace matgui;
 
-namespace MatGui {
+namespace matgui {
 
 class FontView::FontViewData {
 public:
@@ -132,8 +132,8 @@ void FontView::alignment(Alignment value) {
     _data->alignment = value;
 }
 
-MatGui::FontView::Alignment FontView::alignment() {
+matgui::FontView::Alignment FontView::alignment() {
     return _data->alignment;
 }
 
-} // namespace MatGui
+} // namespace matgui

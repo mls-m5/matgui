@@ -9,7 +9,7 @@
 #include "matgui/button.h"
 #include "matgui/window.h"
 
-using namespace MatGui;
+using namespace matgui;
 
 int main(int argc, char **argv) {
     Application app(argc, argv);

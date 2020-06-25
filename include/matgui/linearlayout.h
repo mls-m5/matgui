@@ -9,7 +9,7 @@
 
 #include "layout.h"
 
-namespace MatGui {
+namespace matgui {
 
 class LinearLayout : public Layout {
 public:
@@ -19,4 +19,4 @@ public:
     virtual void refresh() override;
 };
 
-} // namespace MatGui
+} // namespace matgui

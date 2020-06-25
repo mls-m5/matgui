@@ -9,7 +9,7 @@
 
 #include "controllerview.h"
 
-namespace MatGui {
+namespace matgui {
 
 class ToggleView : public ControllerView {
 public:
@@ -30,4 +30,4 @@ public:
     Paint indicatorStyle;
 };
 
-} // namespace MatGui
+} // namespace matgui

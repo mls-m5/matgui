@@ -10,18 +10,18 @@
 #include "matgui/memberproperties.h"
 #include "matgui/view.h"
 
-void MatGui::Paint::drawRect(double x,
+void matgui::Paint::drawRect(double x,
                              double y,
                              double width,
                              double height) const {
-    MatGui::drawRect(x, y, width, height, this);
+    matgui::drawRect(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawRect(const float *location) const {
-    MatGui::drawRect(location, this);
+void matgui::Paint::drawRect(const float *location) const {
+    matgui::drawRect(location, this);
 }
 
-void MatGui::Paint::push(Paint &s) {
+void matgui::Paint::push(Paint &s) {
     if (not s.enabled) {
         return;
     }
@@ -29,35 +29,35 @@ void MatGui::Paint::push(Paint &s) {
     line += s.line;
 }
 
-void MatGui::Paint::drawLine(double x, double y, double x2, double y2) const {
+void matgui::Paint::drawLine(double x, double y, double x2, double y2) const {
     if (line.style()) {
-        MatGui::drawLine(x, y, x2, y2, this);
+        matgui::drawLine(x, y, x2, y2, this);
     }
 }
 
-void MatGui::Paint::drawLine(vec v1, vec v2) const {
+void matgui::Paint::drawLine(vec v1, vec v2) const {
     if (line.style()) {
-        MatGui::drawLine(v1, v2, this);
+        matgui::drawLine(v1, v2, this);
     }
 }
 
-void MatGui::Paint::drawEllipse(double x,
+void matgui::Paint::drawEllipse(double x,
                                 double y,
                                 double width,
                                 double height) const {
-    MatGui::drawEllipse(x, y, width, height, this);
+    matgui::drawEllipse(x, y, width, height, this);
 }
 
-void MatGui::Paint::drawEllipse(const float *location) const {
-    MatGui::drawEllipse(location, this);
+void matgui::Paint::drawEllipse(const float *location) const {
+    matgui::drawEllipse(location, this);
 }
 
-void MatGui::Paint::drawBasicView(View *view) const {
+void matgui::Paint::drawBasicView(View *view) const {
     drawRect(view->x(), view->y(), view->width(), view->height());
 }
 
-void MatGui::Paint::drawTriangle(vec v1, vec v2, vec v3) const {
-    MatGui::drawTriangle(v1, v2, v3, this);
+void matgui::Paint::drawTriangle(vec v1, vec v2, vec v3) const {
+    matgui::drawTriangle(v1, v2, v3, this);
 }
 
-//} /* namespace MatGui */
+//} /* namespace matgui */

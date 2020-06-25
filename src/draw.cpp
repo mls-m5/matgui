@@ -31,7 +31,7 @@ namespace {
 
 using std::unique_ptr;
 
-namespace MatGui {
+namespace matgui {
 
 namespace {
 
@@ -362,4 +362,4 @@ void QuitDrawModule() {
     lineProgram.program.reset();
 }
 
-} // namespace MatGui
+} // namespace matgui

@@ -9,7 +9,7 @@
 
 #include "font.h"
 
-namespace MatGui {
+namespace matgui {
 
 class FontView {
 public:
@@ -70,4 +70,4 @@ protected:
     std::unique_ptr<FontViewData> _data;
 };
 
-} // namespace MatGui
+} // namespace matgui

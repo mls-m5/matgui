@@ -24,7 +24,7 @@ typedef TTF_Font FontType;
 #include "matgui/shaderprogram.h"
 #include <list>
 
-namespace MatGui {
+namespace matgui {
 
 struct FontDescriptionStruct {
     std::string filename;
@@ -184,4 +184,4 @@ Font::operator bool() const {
     return bool(_data->font);
 }
 
-} // namespace MatGui
+} // namespace matgui

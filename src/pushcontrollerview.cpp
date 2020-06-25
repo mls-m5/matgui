@@ -9,7 +9,7 @@
 #include "matgui/draw.h"
 #include "math.h"
 
-namespace MatGui {
+namespace matgui {
 
 PushControlerView::PushControlerView() {
 }
@@ -67,4 +67,4 @@ void PushControlerView::draw() {
     }
 }
 
-} // namespace MatGui
+} // namespace matgui

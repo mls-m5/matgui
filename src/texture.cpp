@@ -15,7 +15,7 @@
 #include "matgui/draw.h"
 #include <map>
 
-namespace MatGui {
+namespace matgui {
 
 namespace {
 
@@ -240,4 +240,4 @@ void Texture::load(const std::string filename, bool addToLibrary) {
 void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, *this);
 }
-} /* namespace MatGui */
+} /* namespace matgui */

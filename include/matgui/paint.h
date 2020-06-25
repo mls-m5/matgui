@@ -9,7 +9,7 @@
 #include "draw.h"
 #include "memberproperties.h"
 
-namespace MatGui {
+namespace matgui {
 
 class View;
 
@@ -150,4 +150,4 @@ public:
     void drawBasicView(View *) const;
 };
 
-} /* namespace MatGui */
+} /* namespace matgui */

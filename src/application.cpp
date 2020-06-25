@@ -21,7 +21,7 @@
 #endif
 
 using namespace std;
-using namespace MatGui;
+using namespace matgui;
 
 namespace {
 
@@ -38,7 +38,7 @@ uint32_t lastTick = 0; // used to keep track of framerate
 
 } // namespace
 
-namespace MatGui {
+namespace matgui {
 
 Application::Application(int argc, char **argv) {
     application = this;
@@ -287,6 +287,6 @@ void Application::InvalidateOnEvent(bool state) {
     invalidateOnEvent = state;
 }
 
-} // namespace MatGui
+} // namespace matgui
 
 #endif //__ANDROID__ block

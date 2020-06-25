@@ -13,7 +13,7 @@
 using std::cout;
 using std::endl;
 
-namespace MatGui {
+namespace matgui {
 
 Layout::Layout() : _orientation(LAYOUT_VERTICAL), _padding(4) {
     focusable(false);
@@ -380,4 +380,4 @@ View *Layout::getChild(std::string name) {
     return nullptr;
 }
 
-} // Namespace MatGui
+} // Namespace matgui

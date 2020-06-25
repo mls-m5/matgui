@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace MatGui {
+namespace matgui {
 
 KnobView::KnobView() {
     indicatorStyle.fill.color(1, 1, 1, .5);
@@ -82,4 +82,4 @@ void KnobView::draw() {
                                smallR * 2);
 }
 
-} // namespace MatGui
+} // namespace matgui

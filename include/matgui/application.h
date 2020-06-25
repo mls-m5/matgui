@@ -9,7 +9,7 @@
 
 #include "matsig.h"
 
-namespace MatGui {
+namespace matgui {
 
 //! The application handles the startup and shutdown of the environment
 //! It also handles the main loop, and distributes events to all windows
@@ -60,4 +60,4 @@ private:
     friend class Window;
 };
 
-} // namespace MatGui
+} // namespace matgui

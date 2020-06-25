@@ -7,7 +7,7 @@
 
 #include "matgui/linearlayout.h"
 
-namespace MatGui {
+namespace matgui {
 
 LinearLayout::LinearLayout() {
 }
@@ -39,4 +39,4 @@ void LinearLayout::refresh() {
     //	Gui::postRedraw();
 }
 
-} // namespace MatGui
+} // namespace matgui

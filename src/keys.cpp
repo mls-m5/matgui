@@ -8,7 +8,7 @@
 #include "matgui/keys.h"
 #include <SDL2/SDL_keyboard.h>
 
-namespace MatGui {
+namespace matgui {
 
 std::string GetKeyNameFromScancode(int scancode) {
     return SDL_GetScancodeName((SDL_Scancode)scancode);
@@ -48,4 +48,4 @@ void endTextEntry() {
     SDL_StopTextInput();
 }
 
-} // namespace MatGui
+} // namespace matgui

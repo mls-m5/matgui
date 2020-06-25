@@ -11,7 +11,7 @@
 using std::list;
 using std::string;
 
-namespace MatGui {
+namespace matgui {
 
 // Forward declaration for readability
 extern std::map<char, BitmapFontData> fontBitmap;
@@ -114,4 +114,4 @@ BitmapFontData getFontDataVector(string text) {
     return fontData;
 }
 
-} // namespace MatGui
+} // namespace matgui

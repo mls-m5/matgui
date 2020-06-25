@@ -9,7 +9,7 @@
 
 #include <map>
 
-namespace MatGui {
+namespace matgui {
 
 // clang-format off
 std::map<char, BitmapFontData> fontBitmap = {
@@ -969,4 +969,4 @@ l xxx
 
 };
 
-} // namespace MatGui
+} // namespace matgui

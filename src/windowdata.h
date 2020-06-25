@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h> //For SDL_GLContext
 
-namespace MatGui {
+namespace matgui {
 
 struct Window::WindowData {
     SDL_Window *window = 0;    // Handle to sdl window
@@ -21,4 +21,4 @@ struct Window::WindowData {
     View *focused = nullptr;
 };
 
-} // namespace MatGui
+} // namespace matgui

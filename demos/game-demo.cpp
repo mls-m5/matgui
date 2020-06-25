@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-using namespace MatGui;
+using namespace matgui;
 using namespace std;
 
 class Game : public View {

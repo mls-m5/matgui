@@ -9,7 +9,7 @@
 #include "matgui/draw.h"
 #include "math.h"
 
-namespace MatGui {
+namespace matgui {
 
 ToggleView::ToggleView() {
     indicatorStyle.fill.color(1, 1, 1, .5);
@@ -65,4 +65,4 @@ void ToggleView::draw() {
     }
 }
 
-} // namespace MatGui
+} // namespace matgui

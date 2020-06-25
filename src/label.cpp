@@ -7,7 +7,7 @@
 
 #include "matgui/label.h"
 
-namespace MatGui {
+namespace matgui {
 
 Label::Label(std::string label) {
     _fontView.font(Font(30));
@@ -26,4 +26,4 @@ void Label::draw() {
     }
 }
 
-} // namespace MatGui
+} // namespace matgui

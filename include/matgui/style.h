@@ -8,8 +8,8 @@
 #pragma once
 #include "paint.h"
 
-namespace MatGui {
+namespace matgui {
 
 class Style {};
 
-} // namespace MatGui
+} // namespace matgui

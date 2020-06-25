@@ -10,7 +10,7 @@
 #include "controllerview.h"
 #include "paint.h"
 
-namespace MatGui {
+namespace matgui {
 
 class ProgressView : public ControllerView {
 public:
@@ -30,4 +30,4 @@ public:
                                         Orientation::Horizontal);
 };
 
-} /* namespace MatGui */
+} /* namespace matgui */

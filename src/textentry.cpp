@@ -8,7 +8,7 @@
 #include "matgui/textentry.h"
 #include "matgui/keys.h"
 
-namespace MatGui {
+namespace matgui {
 
 TextEntry::TextEntry() {
     _fontView.alignment(FontView::Left);
@@ -108,4 +108,4 @@ void TextEntry::deleteOne() {
     _text.erase(_cursorPosition);
 }
 
-} // namespace MatGui
+} // namespace matgui

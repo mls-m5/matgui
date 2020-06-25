@@ -9,7 +9,7 @@
 #include "matgui/draw.h"
 #include "math.h"
 
-namespace MatGui {
+namespace matgui {
 
 static constexpr double middleWidth = .1;
 static constexpr double handleHeight = .1;
@@ -66,4 +66,4 @@ void SliderView::draw() {
                             height() * handleHeight);
 }
 
-} // namespace MatGui
+} // namespace matgui

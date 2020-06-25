@@ -8,7 +8,7 @@
 #include "matgui/imageview.h"
 #include "matgui/draw.h"
 
-namespace MatGui {
+namespace matgui {
 
 ImageView::ImageView() {
 }
@@ -25,4 +25,4 @@ void ImageView::loadImage(std::string filename) {
     _texture.load(filename);
 }
 
-} /* namespace MatGui */
+} /* namespace matgui */

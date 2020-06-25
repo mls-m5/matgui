@@ -11,7 +11,7 @@
 #include "memberproperties.h"
 #include "style.h"
 
-namespace MatGui {
+namespace matgui {
 
 enum MouseButton {
     MOUSE_LEFT = 1,
@@ -209,4 +209,4 @@ private:
     bool _focusable = true;
 };
 
-} // namespace MatGui
+} // namespace matgui

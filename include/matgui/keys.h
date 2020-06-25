@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace MatGui {
+namespace matgui {
 
 // Functions to convert between key and description string
 std::string GetKeyNameFromScancode(int scancode);
@@ -106,4 +106,4 @@ const int AltLeft = 226;
 
 } // namespace Keys
 
-} // namespace MatGui
+} // namespace matgui

@@ -17,7 +17,7 @@ template <class T>
 class Vec2T;
 using Vec2 = Vec2T<double>;
 
-namespace MatGui {
+namespace matgui {
 
 struct vec {
     vec(double x, double y, double z) : x(x), y(y), z(z) {
@@ -109,4 +109,4 @@ void setDimensions(double width, double height);
 
 // clang-format on
 
-} // namespace MatGui
+} // namespace matgui

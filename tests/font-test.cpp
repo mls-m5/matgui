@@ -10,7 +10,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace MatGui;
+using namespace matgui;
 
 namespace {
 
