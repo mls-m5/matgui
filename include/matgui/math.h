@@ -6,15 +6,16 @@
  */
 
 #pragma once
+#include <cmath>
 
 namespace MatGui {
 
 inline double roundDown(double value, double factor = 1.) {
-    return factor * (double)((int)(value / factor));
+    return factor * floor(value / factor);
 }
 
 inline double roundMiddle(double value, double factor = 1.) {
-    return factor * (double)((int)(value / factor + .5));
+    return factor * round(value / factor + .5);
 }
 
 } // namespace MatGui
