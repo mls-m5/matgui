@@ -14,6 +14,13 @@ namespace matgui {
 class FontView {
 public:
     FontView();
+    FontView(std::string text);
+
+    FontView(const FontView &);
+    FontView(FontView &&);
+    FontView &operator=(const FontView &);
+    FontView &operator=(FontView &&);
+
     ~FontView();
 
     void font(const Font &font) {

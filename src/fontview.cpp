@@ -121,6 +121,28 @@ public:
 FontView::FontView() : _data(std::make_unique<FontViewData>()) {
 }
 
+matgui::FontView::FontView(std::string text) : FontView() {
+    this->text(text);
+}
+
+FontView::FontView(const FontView &f)
+    : _width(f._width), _height(f._height), _font(f._font), _text(f._text),
+      _needsUpdate(true), _data(std::make_unique<FontViewData>()) {
+}
+
+FontView &FontView::operator=(const FontView &f) {
+    _width = f._width;
+    _height = f._height;
+    _font = f._font;
+    _text = f._text;
+    _needsUpdate = true;
+    return *this;
+}
+
+FontView &FontView::operator=(FontView &&) = default;
+
+FontView::FontView(FontView &&) = default;
+
 FontView::~FontView() {
 }
 
