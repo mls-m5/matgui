@@ -187,7 +187,7 @@ public:
     // signalname.connect(this, &NameOfClass::nameOfMemberFunction)
     template <class _classType>
     void connect(_classType *c, void (_classType::*f)(_argument)) {
-        connect(std::bind(f, c, std::placeholders::_1), c);
+        connect([c, f](auto argument) { (c->*f)(argument); }, c);
     }
 
     // Connect to a class function with no arguments
@@ -195,12 +195,7 @@ public:
     // signalname.connect(this, &NameOfClass::nameOfMemberFunction)
     template <class _classType>
     void connect(_classType *c, void (_classType::*f)()) {
-        auto bound = std::bind(f, c);
-        connect(
-            [bound](_argument) {
-                bound(); // Ignore argument
-            },
-            c);
+        connect([c, f](auto) { (c->*f)(); }, c);
     }
 
     // Generic connection method
@@ -215,7 +210,7 @@ public:
     // Connect a function with void arguments
     void connect(std::function<_returnValue()> f, void *reference = 0) {
         LockGuard guard(_mutex);
-        this->push_back({[f](_argument arg) {
+        this->push_back({[f](_argument) {
                              // Just ignoring argument
                              return f();
                          },
@@ -313,7 +308,7 @@ public:
     typename std::enable_if<std::is_void<T>::value>::type // This checks if the
                                                           // return value is
                                                           // void
-                                                          directCall() {
+    directCall() {
         if (!this->empty()) {
             matsig_flush_loop(it->call());
         }
@@ -343,7 +338,7 @@ public:
     // signalname.connect(this, &NameOfClass::nameOfMemberFunction)
     template <class _classType>
     void connect(_classType *c, void (_classType::*f)()) {
-        connect(std::bind(f, c), c);
+        connect([c, f]() { (c->*f)(); }, c);
     }
 
     // Connect generic function to signal
@@ -361,7 +356,7 @@ public:
     }
 
     template <typename T>
-    void disconnect(T *reference) {
+    void disconnect(T * /*reference*/) {
         LockGuard guard(_mutex);
         for (auto &connection : *this) {
             connection.clear();

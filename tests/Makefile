@@ -3,7 +3,7 @@ RUNSTRING=./${TARGET}
 
 OBJECTS=signal-test.o font-test.o shadertranslate-test.o
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CXXFLAGS=-g -std=c++11 -O0 `sdl2-config --cflags` -I"../include/" -Imls-unit-test
+CXXFLAGS=-g -std=c++14 -O0 `sdl2-config --cflags` -I"../include/" -Imls-unit-test
 CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies
 TESTS=${OBJECTS:.o= }
 
