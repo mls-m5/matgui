@@ -106,6 +106,12 @@ static GLuint loadShader(GLenum shaderType, const std::string &sourceIn) {
             }
         }
     }
+    else {
+        throw runtime_error(std::string(__FILE__) + ":" +
+                            std::to_string(__LINE__) +
+                            ": cannot create shader, is the window and context "
+                            "started properly?");
+    }
     return shader;
 }
 
