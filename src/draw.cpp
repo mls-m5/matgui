@@ -9,7 +9,6 @@
 
 #include "matgui/paint.h"
 #include <cmath>
-#include <cmath>
 #include <memory>
 #include <vector>
 
