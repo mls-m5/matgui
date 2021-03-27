@@ -1,5 +1,5 @@
 #include "matgui/bitmapfont.h"
-#include "matgui/keys.h"
+#include "matgui/keyutils.h"
 
 #include <list>
 #include <map>

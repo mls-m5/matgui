@@ -7,102 +7,88 @@
 
 #pragma once
 
-#include <string>
-
 namespace matgui {
-
-// Functions to convert between key and description string
-std::string GetKeyNameFromScancode(int scancode);
-std::string GetKeyNameFromKey(int scancode);
-int getKeyFromName(const std::string &name);
-int getScancodeFromName(const std::string &name);
-int getScancodeFromKey(int key);
-int getKeyFromScancode(int scancode);
-
-void beginTextEntry();
-void endTextEntry();
-bool isUtfTail(char c);
 
 namespace Keys {
 
 // Scancode constants
-const int Unknown = 0;
+constexpr const int Unknown = 0;
 
-const int Escape = 41;
-const int Left = 80;
-const int Right = 79;
-const int Down = 81;
-const int Up = 82;
-const int Return = 40;
-const int Backspace = 42;
-const int Tab = 43;
-const int Space = 44;
+constexpr const int Escape = 41;
+constexpr const int Left = 80;
+constexpr const int Right = 79;
+constexpr const int Down = 81;
+constexpr const int Up = 82;
+constexpr const int Return = 40;
+constexpr const int Backspace = 42;
+constexpr const int Tab = 43;
+constexpr const int Space = 44;
 
-const int A = 4;
-const int B = 5;
-const int C = 6;
-const int D = 7;
-const int E = 8;
-const int F = 9;
-const int G = 10;
-const int H = 11;
-const int I = 12;
-const int J = 13;
-const int K = 14;
-const int L = 15;
-const int M = 16;
-const int N = 17;
-const int O = 18;
-const int P = 19;
-const int Q = 20;
-const int R = 21;
-const int S = 22;
-const int T = 23;
-const int U = 24;
-const int V = 25;
-const int W = 26;
-const int X = 27;
-const int Y = 28;
-const int Z = 29;
+constexpr const int A = 4;
+constexpr const int B = 5;
+constexpr const int C = 6;
+constexpr const int D = 7;
+constexpr const int E = 8;
+constexpr const int F = 9;
+constexpr const int G = 10;
+constexpr const int H = 11;
+constexpr const int I = 12;
+constexpr const int J = 13;
+constexpr const int K = 14;
+constexpr const int L = 15;
+constexpr const int M = 16;
+constexpr const int N = 17;
+constexpr const int O = 18;
+constexpr const int P = 19;
+constexpr const int Q = 20;
+constexpr const int R = 21;
+constexpr const int S = 22;
+constexpr const int T = 23;
+constexpr const int U = 24;
+constexpr const int V = 25;
+constexpr const int W = 26;
+constexpr const int X = 27;
+constexpr const int Y = 28;
+constexpr const int Z = 29;
 
-const int Key1 = 30;
-const int Key2 = 31;
-const int Key3 = 32;
-const int Key4 = 33;
-const int Key5 = 34;
-const int Key6 = 35;
-const int Key7 = 36;
-const int Key8 = 36;
-const int Key9 = 38;
-const int Key0 = 39;
+constexpr const int Key1 = 30;
+constexpr const int Key2 = 31;
+constexpr const int Key3 = 32;
+constexpr const int Key4 = 33;
+constexpr const int Key5 = 34;
+constexpr const int Key6 = 35;
+constexpr const int Key7 = 36;
+constexpr const int Key8 = 36;
+constexpr const int Key9 = 38;
+constexpr const int Key0 = 39;
 
-const int F1 = 58;
-const int F2 = 59;
-const int F3 = 60;
-const int F4 = 61;
-const int F5 = 62;
-const int F6 = 63;
-const int F7 = 64;
-const int F8 = 65;
-const int F9 = 66;
-const int F10 = 67;
-const int F11 = 68;
-const int F12 = 69;
+constexpr const int F1 = 58;
+constexpr const int F2 = 59;
+constexpr const int F3 = 60;
+constexpr const int F4 = 61;
+constexpr const int F5 = 62;
+constexpr const int F6 = 63;
+constexpr const int F7 = 64;
+constexpr const int F8 = 65;
+constexpr const int F9 = 66;
+constexpr const int F10 = 67;
+constexpr const int F11 = 68;
+constexpr const int F12 = 69;
 
-const int PrintScreen = 70;
-const int ScrollLock = 71;
-const int Pause = 72;
-const int Insert = 73;
+constexpr const int PrintScreen = 70;
+constexpr const int ScrollLock = 71;
+constexpr const int Pause = 72;
+constexpr const int Insert = 73;
 
-const int Home = 74;
-const int PageUp = 75;
-const int Delete = 76;
-const int End = 77;
-const int PageDown = 78;
+constexpr const int Home = 74;
+constexpr const int PageUp = 75;
+constexpr const int Delete = 76;
+constexpr const int End = 77;
+constexpr const int PageDown = 78;
 
-const int CtrlLeft = 224;
-const int ShiftLeft = 225;
-const int AltLeft = 226;
+constexpr const int CtrlLeft = 224;
+constexpr const int ShiftLeft = 225;
+constexpr const int AltLeft = 226;
 
 } // namespace Keys
 

@@ -7,6 +7,7 @@
 
 #include "matgui/textentry.h"
 #include "matgui/keys.h"
+#include "matgui/keyutils.h"
 
 namespace matgui {
 

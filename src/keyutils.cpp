@@ -5,7 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-#include "matgui/keys.h"
+#include "matgui/keyutils.h"
 #include <SDL2/SDL_keyboard.h>
 
 namespace matgui {
