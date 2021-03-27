@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <vector>
-
 template <class T>
 class VecT;
 using Vec = VecT<double>;
