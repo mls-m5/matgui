@@ -90,6 +90,8 @@ BitmapFontData getFontDataVector(string text) {
     len = fontData.width * fontData.height;
     fontData.resize(len);
     fontData.fill(' ');
+    fontData.lineHeight = lineHeight;
+    fontData.lineDepth = fontData.height - lineHeight;
 
     int rasterX = 0;
     int offsetY = 0;

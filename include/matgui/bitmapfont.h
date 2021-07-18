@@ -35,13 +35,13 @@ struct BitmapFontData : public std::vector<char> {
 
     unsigned width = 0;
     unsigned height = 0;
-    unsigned lineHeight = 0;
-    int lineDepth = 0;
+    unsigned lineHeight = 0; // Line distance from top
+    int lineDepth = 0;       // Line distance from bottom
     int linePos = 0;
 };
 
 struct BitmapFont {
-    int w = 0, h = 0;
+    int w = 0, h = 0, lineHeight = 0;
 
     std::vector<unsigned char> pixels;
     ColorType *colors() {
@@ -49,17 +49,14 @@ struct BitmapFont {
     }
 
     BitmapFont(){};
-    BitmapFont(int width, int height, char *data) {
-        setContent(width, height, data);
-    }
 
     BitmapFont(BitmapFontData *data) {
-        setContent(data->width, data->height, &data->front());
+        setContent(*data);
     }
 
     BitmapFont(const std::string &text) {
         auto data = getFontDataVector(text);
-        setContent(data.width, data.height, &data.front());
+        setContent(data);
     }
 
     ~BitmapFont() {
@@ -77,7 +74,11 @@ struct BitmapFont {
         pixels.resize(width * height * 4);
     }
 
-    void setContent(int width, int height, char *data) {
+    void setContent(const BitmapFontData &fdata) {
+        auto width = fdata.width;
+        auto height = fdata.height;
+        auto data = fdata.data();
+        lineHeight = fdata.lineHeight;
         if (width != w or height != h) {
             create(width, height);
         }

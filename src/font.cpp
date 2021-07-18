@@ -6,20 +6,7 @@
  */
 
 #include "matgui/font.h"
-
-#ifdef USE_BITMAP_FONT
-#include "matgui/bitmapfont.h"
-
-typedef void FontType;
-
-#else
-
-#include <SDL2/SDL_ttf.h>
-
-typedef TTF_Font FontType;
-
-#endif
-
+#include "fontdata.h"
 #include "matgui/draw.h"
 #include "matgui/shaderprogram.h"
 #include <list>
@@ -30,11 +17,6 @@ struct FontDescriptionStruct {
     std::string filename;
     int size;
     FontType *font;
-};
-
-class FontData {
-public:
-    FontType *font = nullptr;
 };
 
 // Unoptimized function to draw text, consider to use fontview instead to buffer
@@ -78,10 +60,14 @@ void renderText(const FontType *font,
     (void)b;
     auto data = getFontDataVector(text);
     auto messageSurface = std::make_unique<BitmapFont>(text);
+    auto pixels = [&] { return messageSurface->pixels.data(); };
+
 #else
     SDL_Color color = {r, g, b};
     SDL_Surface *messageSurface = TTF_RenderUTF8_Blended(
         const_cast<TTF_Font *>(font), text.c_str(), color);
+
+    auto pixels = [&] { return messageSurface->pixels; };
 #endif
 
     unsigned Texture = 0;
@@ -108,7 +94,7 @@ void renderText(const FontType *font,
                  0,
                  GL_RGBA,
                  GL_UNSIGNED_BYTE,
-                 messageSurface->pixels.data());
+                 pixels());
 
     drawTextureRect({x + messageSurface->w * alignment / 2, y, z},
                     0,
@@ -165,8 +151,7 @@ Font::Font(const Font &font) : _data(std::make_unique<FontData>()) {
     _data->font = font._data->font;
 }
 
-Font::~Font() {
-}
+Font::~Font() = default;
 
 void Font::draw(double x, double y, const std::string &text, bool centered) {
     renderText(_data->font, 255, 255, 255, x, y, 0, text, centered);

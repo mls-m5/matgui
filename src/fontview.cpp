@@ -6,6 +6,7 @@
  */
 
 #include "matgui/fontview.h"
+#include "fontdata.h"
 #include "matgui/common-gl.h"
 #include "matgui/draw.h"
 
@@ -41,12 +42,17 @@ public:
             // Create some variables.
 #ifdef USE_BITMAP_FONT
             auto messageSurface = std::make_unique<BitmapFont>(view._text);
+            auto pixels = [&] { return messageSurface->pixels.data(); };
+
+            lineHeight = messageSurface->lineHeight;
+            //            lineHeight = 0;
 
 #else
             auto messageSurface = TTF_RenderUTF8_Blended(
                 const_cast<TTF_Font *>(view._font._data->font),
                 view._text.c_str(),
                 color);
+            auto pixels = [&] { return messageSurface->pixels; };
 #endif
 
             if (texture == 0) {
@@ -87,7 +93,7 @@ public:
                          0,
                          GL_RGBA,
                          GL_UNSIGNED_BYTE,
-                         messageSurface->pixels.data());
+                         pixels());
 
             view._width = messageSurface->w;
             view._height = messageSurface->h;
@@ -105,17 +111,20 @@ public:
             x += static_cast<double>(view.width() * alignment) / 2.;
         }
 
-        drawTextureRect({x, y},
+        double scale = 1;
+
+        drawTextureRect({x, y - lineHeight * scale},
                         0,
-                        view._width,
-                        view._height,
+                        view._width * scale,
+                        view._height * scale,
                         texture,
-                        DrawStyle::CenterOrigo);
+                        DrawStyle::OrigoTopLeft);
     }
 
     unsigned texture = 0;
     ColorType color = {255, 255, 255, 1};
     FontView::Alignment alignment = FontView::Center;
+    int lineHeight = 0;
 };
 
 FontView::FontView() : _data(std::make_unique<FontViewData>()) {
