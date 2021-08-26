@@ -6,8 +6,8 @@
  */
 
 #include "matgui/knobview.h"
-#include "matgui/constants.h"
 #include "matgui/draw.h"
+#include "matgui/matgui-constants.h"
 
 #include <cmath>
 

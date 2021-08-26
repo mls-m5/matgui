@@ -8,7 +8,7 @@
 #pragma once
 
 #include "matgui/common-gl.h"
-#include "matgui/constants.h"
+#include "matgui/matgui-constants.h"
 #include "matgui/shaderprogram.h"
 #include <memory>
 #include <vector>
