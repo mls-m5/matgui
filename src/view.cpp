@@ -165,8 +165,14 @@ bool View::onKeyUp(KeySym sym,
     }
 }
 
-bool View::onTextInput(const char * /*text*/) {
-    return false;
+bool View::onTextInput(const char *text) {
+    if (textInput) {
+        textInput.emit({text});
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 class Window *View::root() {

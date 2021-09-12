@@ -152,6 +152,7 @@ public:
 
     Signal<KeyArgument> keyDown;
     Signal<KeyArgument> keyUp;
+    Signal<std::string> textInput;
 
     member_property(double, x);
     member_property(double, y);
