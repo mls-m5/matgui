@@ -177,8 +177,8 @@ includes +=
    matgui/include
 
 main.src +=
-   src/*.cpp          # project source files
-   matgui/src/*.cpp   # matgui source files
+   src/*.cpp           # project source files
+   matgui/matgui.cpp   # matgui source files
 
 main.libs +=
    -lSDL2
