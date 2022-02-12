@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: init submodules
+      run: git submodule update --init
     - name: install deps
       run: sudo apt-get update && sudo apt-get install -y libgl-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
     - name: make
