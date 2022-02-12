@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: init submodules
+      run: git submodule update --init
+    - name: install deps
+      run: sudo apt-get update && sudo apt-get install -y libgl-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+    - name: make
+      run: make
