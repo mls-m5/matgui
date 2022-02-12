@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install deps
+      run: apt install libgl-dev libsdl2-dev libsdl2-image-dev 
     - name: make
       run: make
