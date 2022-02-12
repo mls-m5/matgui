@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include "matgui/common-gl.h"
+#include "matgui/shaderprogram.h"
+#include <memory>
+
 namespace TextureShader {
 
 namespace {
@@ -64,8 +68,7 @@ static struct {
     void init() {
         program = std::make_unique<ShaderProgram>(TextureShader::vertexCode,
                                                   TextureShader::fragmentCode);
-        debug_check_true(program->getProgram(),
-                         "could not create texture program");
+        debug_check_true(program->get(), "could not create texture program");
 
         vertices = program->getAttribute("vPosition");
         texcoords = program->getAttribute("vtex");

@@ -43,8 +43,7 @@ static struct {
     void init() {
         program = std::make_unique<ShaderProgram>(LineShader::vertexCode,
                                                   LineShader::fragmentCode);
-        debug_check_true(program->getProgram(),
-                         "could not create graph program");
+        debug_check_true(program->get(), "could not create graph program");
         v = program->getAttribute("v");
         color = program->getUniform("uColor");
         mvpMatrix = program->getUniform("mvp_matrix");

@@ -72,11 +72,6 @@ void modelTransform(
 
     glUniformMatrix4fv(pointer, 1, GL_FALSE, transformMatrix);
 }
-//
-// void resetTransform(unsigned int pointer) {
-//    identityMatrix(transformMatrix);
-//    glUniformMatrix4fv(pointer, 1, GL_FALSE, transformMatrix);
-//}
 
 } // namespace
 

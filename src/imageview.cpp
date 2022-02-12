@@ -10,11 +10,9 @@
 
 namespace matgui {
 
-ImageView::ImageView() {
-}
+ImageView::ImageView() = default;
 
-ImageView::~ImageView() {
-}
+ImageView::~ImageView() = default;
 
 void ImageView::draw() {
     drawTextureRect(

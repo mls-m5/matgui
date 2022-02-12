@@ -26,26 +26,28 @@ public:
     void initProgram(const std::string &vertexCode,
                      const std::string &fragmentCode,
                      const std::string &geometryCode = "");
+
     void loadShaderFromFile(const std::string &vertexFile,
                             const std::string &fragmentFile);
     void use() const;
     void unuse() const;
 
-    //! Delete the program from opengl context
-    void clear();
-
-    [[deprecated]] inline void useProgram() {
-        use();
-    }
-
-    GLuint getProgram() const {
-        return _program;
-    }
     GLint getUniform(char const *name) const;
     GLint getAttribute(char const *name) const;
 
+    //! Delete the program from opengl context
+    void clear();
+
+    GLuint get() const {
+        return _program;
+    }
+
     operator bool() {
         return _program;
+    }
+
+    [[deprecated("use get() instead")]] GLuint getProgram() const {
+        return get();
     }
 
     virtual ~ShaderProgram();

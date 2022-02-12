@@ -20,8 +20,7 @@ Button::Button(std::string label) {
     updateStyle();
 }
 
-Button::~Button() {
-}
+Button::~Button() = default;
 
 void Button::draw() {
     currentStyle.drawBasicView(this);

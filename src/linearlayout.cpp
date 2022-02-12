@@ -9,11 +9,9 @@
 
 namespace matgui {
 
-LinearLayout::LinearLayout() {
-}
+LinearLayout::LinearLayout() = default;
 
-LinearLayout::~LinearLayout() {
-}
+LinearLayout::~LinearLayout() = default;
 
 void LinearLayout::refresh() {
     Layout::refresh();

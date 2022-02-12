@@ -17,8 +17,7 @@ ProgressView::ProgressView() {
     updateStyle();
 }
 
-ProgressView::~ProgressView() {
-}
+ProgressView::~ProgressView() = default;
 
 void ProgressView::draw() {
     currentStyle.drawBasicView(this);

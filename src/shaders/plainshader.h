@@ -94,8 +94,7 @@ static struct {
 
         program = std::make_unique<ShaderProgram>(PlainShader::vertexCode,
                                                   PlainShader::fragmentCode);
-        debug_check_true(program->getProgram(),
-                         "could not create square program");
+        debug_check_true(program->get(), "could not create square program");
         program->use();
         checkGlError("glUseProgram");
 

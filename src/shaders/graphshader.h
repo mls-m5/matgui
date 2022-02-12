@@ -51,7 +51,6 @@ static struct {
         y = program->getAttribute("vY");
         mvpMatrix = program->getUniform("mvp_matrix");
 
-        debug_check_true(program->getProgram(),
-                         "could not create graph program");
+        debug_check_true(program->get(), "could not create graph program");
     }
 } graphProgram;

@@ -21,8 +21,7 @@ KnobView::KnobView() {
     updateStyle();
 }
 
-KnobView::~KnobView() {
-}
+KnobView::~KnobView() = default;
 
 bool KnobView::onPointerDown(pointerId id,
                              MouseButton button,

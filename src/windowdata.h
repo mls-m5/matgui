@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "matgui/window.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h> //For SDL_GLContext
 

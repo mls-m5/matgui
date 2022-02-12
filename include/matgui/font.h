@@ -28,11 +28,6 @@ public:
 
     void operator=(const Font &);
 
-    [[deprecated("use DefaultFontPath instead")]] static void
-    setDefaultFontPath(std::string path) {
-        DefaultFontPath(path);
-    }
-
     static void DefaultFontPath(std::string path);
 
     operator bool() const;

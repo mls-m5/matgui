@@ -14,8 +14,7 @@ Label::Label(std::string label) {
     this->label(label);
 }
 
-Label::~Label() {
-}
+Label::~Label() = default;
 
 void Label::draw() {
     currentStyle.drawBasicView(this);

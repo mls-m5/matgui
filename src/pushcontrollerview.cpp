@@ -11,11 +11,9 @@
 
 namespace matgui {
 
-PushControlerView::PushControlerView() {
-}
+PushControlerView::PushControlerView() = default;
 
-PushControlerView::~PushControlerView() {
-}
+PushControlerView::~PushControlerView() = default;
 
 bool PushControlerView::onPointerDown(pointerId id,
                                       MouseButton /*button*/,
