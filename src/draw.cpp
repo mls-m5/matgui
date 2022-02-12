@@ -19,14 +19,10 @@
     if (not(cond))                                                             \
         debug_print("%s: %s", #cond, text);
 
-namespace {
-
 #include "shaders/graphshader.h"
 #include "shaders/lineshader.h"
 #include "shaders/plainshader.h"
 #include "shaders/textureshader.h"
-
-} // namespace
 
 using std::unique_ptr;
 

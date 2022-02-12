@@ -16,6 +16,7 @@
 namespace PlainShader {
 
 namespace {
+
 const char *vertexCode = R"_(
 #version 330 core
 in vec4 vPosition;

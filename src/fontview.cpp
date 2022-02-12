@@ -20,8 +20,6 @@
 typedef SDL_Color ColorType;
 #endif
 
-using namespace matgui;
-
 namespace matgui {
 
 class FontView::FontViewData {

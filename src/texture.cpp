@@ -21,7 +21,7 @@ namespace {
 
 static std::map<std::string, Texture> loadedTextures;
 
-static bool isInitialized = false;
+static auto isTexturesInitialized = false;
 
 static unsigned int createTextureFromFile(const std::string filename) {
 #ifdef DISABLE_TEXTURES
@@ -30,9 +30,9 @@ static unsigned int createTextureFromFile(const std::string filename) {
 
     GLuint textureId = 0;
 
-    if (!isInitialized) {
+    if (!isTexturesInitialized) {
         IMG_Init(IMG_INIT_PNG);
-        isInitialized = true;
+        isTexturesInitialized = true;
     }
 
     std::unique_ptr<SDL_Surface, void (*)(SDL_Surface *)> surface(

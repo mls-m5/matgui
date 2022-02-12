@@ -13,6 +13,8 @@
 
 namespace LineShader {
 
+namespace {
+
 const char *vertexCode = R"V0G0N(
 #version 330 core
 in vec2 v;
@@ -31,6 +33,8 @@ void main() {
   fragColor = uColor;
 }
 )_";
+
+} // namespace
 
 } // namespace LineShader
 

@@ -21,7 +21,8 @@
 #endif
 
 using namespace std;
-using namespace matgui;
+
+namespace matgui {
 
 namespace {
 
@@ -37,8 +38,6 @@ bool running = false;
 uint32_t lastTick = 0; // used to keep track of framerate
 
 } // namespace
-
-namespace matgui {
 
 Application::Application(int argc, char **argv) {
     application = this;

@@ -8,10 +8,10 @@ debug: all
 lib:
 	make -C src/ ${target}
 
-demos:
+demos: lib
 	make -C demos/
 	
-tests:
+tests: lib
 	make -C tests/
 	
 clean:
