@@ -20,10 +20,7 @@ View::View() : _weight(1) {
 
 View::~View() {
     if (_parent) {
-        _parent->releaseChild(this);
-        //        throw std::runtime_error(
-        //            "View deleted with active parent, remove from layout
-        //            instead");
+        _parent->removeChild(this).release();
     }
 }
 

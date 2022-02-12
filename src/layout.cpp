@@ -52,20 +52,16 @@ View *Layout::addChild(std::unique_ptr<View> view) {
     return ret;
 }
 
-View *Layout::addChild(View *view) {
-    return addChild(std::unique_ptr<View>(view));
-}
-
-void Layout::addChildAfter(View *view, View *after) {
+void Layout::addChildAfter(std::unique_ptr<View> view, View *after) {
     view->parent(this);
     for (auto it = children.begin(); it != children.end(); ++it) {
         if (it->get() == after) {
             ++it;
-            children.insert(it, std::unique_ptr<View>(view));
+            children.insert(it, std::move(view));
             return;
         }
     }
-    children.push_back(std::unique_ptr<View>(view));
+    children.push_back(std::move(view));
 }
 
 void Layout::orientation(LayoutOrientation orientation) {
@@ -163,33 +159,7 @@ void Layout::location(double x, double y, double w, double h, double weight) {
     refreshChildren();
 }
 
-void Layout::removeChild(View *view) {
-    if (!view) {
-        return;
-    }
-
-    if (view == pointerFocusedChild) {
-        pointerFocusedChild = nullptr;
-    }
-
-    for (auto it = children.begin(); it != children.end(); ++it) {
-        if (it->get() == view) {
-            view->unfocus();
-            if (view->parent() == this) {
-                view->parent(nullptr);
-            }
-            children.erase(it);
-
-            refresh();
-
-            refreshChildren();
-
-            return;
-        }
-    }
-}
-
-std::unique_ptr<View> Layout::releaseChild(View *view) {
+std::unique_ptr<View> Layout::removeChild(View *view) {
     if (!view) {
         return nullptr;
     }
@@ -200,7 +170,6 @@ std::unique_ptr<View> Layout::releaseChild(View *view) {
 
     for (auto it = children.begin(); it != children.end(); ++it) {
         if (it->get() == view) {
-            it->release();
             view->unfocus();
             view->parent(nullptr);
             auto ret = std::move(*it);
@@ -212,12 +181,14 @@ std::unique_ptr<View> Layout::releaseChild(View *view) {
             return ret;
         }
     }
-    return nullptr;
+    return {};
 }
 
 void Layout::deleteAll() {
     for (auto &it : children) {
         if (it->parent() == this) {
+            // Prevents loops from when children tries to remove themselves
+            // later
             it->parent(nullptr);
         }
     }
