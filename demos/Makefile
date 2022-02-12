@@ -5,7 +5,7 @@ SRC_FILES=$(wildcard *-demo.cpp)
 ALL_FILES=${wildcard *.cpp *.h}
 OBJECTS=$(SRC_FILES:.cpp=.o);
 LIBS= -lpthread `sdl2-config --libs` -lGL -lSDL2_ttf -lSDL2_image
-CXXFLAGS=-g -std=c++14 -O0 `sdl2-config --cflags` -I"../include/" -I $(LIBS)
+CXXFLAGS=-g -std=c++17 -O0 `sdl2-config --cflags` -I"../include/" -I $(LIBS)
 CXXFLAGS+= -MMD -MF $*.d # For calculating dependencies
 
 DEMOS=$(SRC_FILES:.cpp= )

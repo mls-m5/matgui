@@ -97,8 +97,10 @@ int main(int argc, char *argv[]) {
     auto *knob = window.createChild<KnobView>(); // Create the child directly
 
     auto *progress = new ProgressView; // You can create objects as raw pointers
-                                       // but i don't using 'new' in new code
-    window.addChild(progress);         // Notice2 this is not recommended
+                                       // but using 'new' in new code is not recommended
+    window.addChild(
+        std::unique_ptr<View>{progress}); // Notice2 this is not recommended
+    
 
     auto leftLabel = make_unique<Label>("left aligned");
     leftLabel->alignment(FontView::Left);

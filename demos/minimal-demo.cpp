@@ -25,7 +25,5 @@ int main(int argc, char **argv) {
     textEntry->submit.connect(
         [textEntry]() { cout << textEntry->text() << endl; });
 
-    window.addChild(textEntry);
-
     app.mainLoop();
 }
