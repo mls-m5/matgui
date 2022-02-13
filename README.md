@@ -188,6 +188,12 @@ main.libs +=
 
 ```
 
+### Build demos with cmake
+
+```
+
+```
+
 For compilation with emscripten, to compile to javascript these flags are needed.
 
 ``` bash

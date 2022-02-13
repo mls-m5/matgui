@@ -117,7 +117,7 @@ TEST_CASE("lambda argument function") {
     signal.emit(3);
     flushSignals();
 
-    ASSERT(isCalled, "funktionen function not called")
+    ASSERT(isCalled, "funktionen function not called");
     ASSERT_EQ(y, 3);
 }
 
@@ -135,7 +135,7 @@ TEST_CASE("lambda void argument function") {
     signal.emit();
     flushSignals();
 
-    ASSERT(isCalled, "funktionen function not called")
+    ASSERT(isCalled, "the function not called");
     ASSERT_EQ(y, 5);
 
     isCalled = false;
@@ -203,7 +203,7 @@ TEST_CASE("standard function") {
     signal.emit();
     flushSignals();
     ASSERT(not functionIsCalled,
-           "function is called but should be disconnected")
+           "function is called but should be disconnected");
 }
 
 TEST_CASE("standard function with arguments") {
@@ -224,7 +224,7 @@ TEST_CASE("standard function with arguments") {
     signal.emit(1);
     flushSignals();
     ASSERT(not functionIsCalled,
-           "function is called but should be disconnected")
+           "function is called but should be disconnected");
 }
 
 TEST_CASE("void direct call") {

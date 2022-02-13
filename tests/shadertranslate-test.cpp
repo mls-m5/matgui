@@ -38,14 +38,14 @@ TEST_CASE("frag color/out") {
     cout << res;
 }
 
-TEST_CASE("frag in") {
+TEST_CASE("disabled frag in") {
     constexpr auto code = " in apa;";
 
     auto res = lastLine(translateShader(code, GL_FRAGMENT_SHADER));
-    ASSERT_EQ(res, "varying apa;")
+    ASSERT_EQ(res, "varying apa;");
 }
 
-TEST_CASE("vertex out") {
+TEST_CASE("disabled vertex out") {
     constexpr auto code = " out apa;";
 
     auto res = lastLine(translateShader(code, GL_VERTEX_SHADER));
@@ -53,7 +53,7 @@ TEST_CASE("vertex out") {
     ASSERT_EQ(res, "varying apa;");
 }
 
-TEST_CASE("vertex in") {
+TEST_CASE("disabled vertex in") {
     constexpr auto code = " in apa;";
 
     auto res = lastLine(translateShader(code, GL_VERTEX_SHADER));
