@@ -6,13 +6,12 @@
  */
 
 #include "matgui/window.h"
+#include "matgui/application.h"
 #include "matgui/common-gl.h"
 #include "matgui/draw.h"
+#include "windowdata.h"
 #include <iostream>
 
-#include "matgui/application.h"
-
-#include "windowdata.h"
 using std::cout;
 using std::endl;
 using std::string;
@@ -74,13 +73,13 @@ Window::Window(string title, int width, int height, bool resizable) {
     // Create our window centered
     auto scale = Application::Scale();
     _windowData->window =
-        SDL_CreateWindow(title.c_str(),
-                         SDL_WINDOWPOS_CENTERED,
-                         SDL_WINDOWPOS_CENTERED,
-                         width * scale,
-                         height * scale,
-                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |
-                             (resizable ? SDL_WINDOW_RESIZABLE : 0));
+        sdl::Window(title.c_str(),
+                    SDL_WINDOWPOS_CENTERED,
+                    SDL_WINDOWPOS_CENTERED,
+                    width * scale,
+                    height * scale,
+                    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |
+                        (resizable ? SDL_WINDOW_RESIZABLE : 0));
     if (!_windowData->window) {
         throw std::runtime_error("failed to create sdl window");
     }

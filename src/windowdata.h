@@ -7,14 +7,14 @@
 
 #pragma once
 
+#include "../lib/sdlpp/include/sdlpp/window.hpp"
 #include "matgui/window.h"
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h> //For SDL_GLContext
 
 namespace matgui {
 
 struct Window::WindowData {
-    SDL_Window *window = 0;    // Handle to sdl window
+    sdl::Window window;
     SDL_GLContext context = 0; // OpenGl context handle
     Uint32 windowId = 0;
     //! Invalid: The window needs redrawing (when continuous updates = false)

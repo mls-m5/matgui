@@ -13,6 +13,12 @@
 #include "signal.h"
 #include "windowdata.h"
 
+#include "../lib/sdlpp/include/sdlpp/events.hpp"
+#include "../lib/sdlpp/include/sdlpp/render.hpp"
+#include "../lib/sdlpp/include/sdlpp/sdl.hpp"
+#include "../lib/sdlpp/include/sdlpp/timer.hpp"
+#include "SDL2/SDL.h"
+
 #include <SDL2/SDL_events.h>
 #include <iostream>
 
@@ -55,8 +61,8 @@ Application::Application(int argc, char **argv) {
         }
     }
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        SDL_Quit();
+    if (sdl::init(SDL_INIT_VIDEO) < 0) {
+        sdl::quit();
         throw std::runtime_error("could not initialize sdl video");
     }
 }
@@ -111,7 +117,7 @@ inline void Application::innerLoop() {
 
 void Application::mainLoop() {
     running = true;
-    lastTick = SDL_GetTicks();
+    lastTick = sdl::getTicks();
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(innerLoop, 0, 1);
 #else
@@ -220,8 +226,8 @@ static void handleOtherEvents(Window *window,
 }
 
 bool Application::handleEvents() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while (auto optEvent = sdl::pollEvent()) {
+        auto event = *optEvent;
         if (event.type == SDL_QUIT) {
             return true;
         }
@@ -255,7 +261,7 @@ Application::~Application() {
     }
     windows.clear();
 
-    SDL_Quit();
+    sdl::quit();
 #endif
 }
 
