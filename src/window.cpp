@@ -12,6 +12,8 @@
 #include "windowdata.h"
 #include <iostream>
 
+#include "../lib/sdlpp/include/sdlpp/mouse.hpp"
+
 using std::cout;
 using std::endl;
 using std::string;
@@ -55,20 +57,20 @@ Window::Window(string title, int width, int height, bool resizable) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #else
     // Request opengl 3.2 context.
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-                        SDL_GL_CONTEXT_PROFILE_CORE);
+    sdl::gl::setAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    sdl::gl::setAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    sdl::gl::setAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+                          SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
 
     //    Turn on double buffering with a 24bit Z buffer.
     //    You may need to change this to 16 or 32 for your system
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    sdl::gl::setAttribute(SDL_GL_DOUBLEBUFFER, 1);
     //    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); //todo: consider using
     //    this when doing pure gui implementations to be able to update just
     //    parts of the screen
 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    sdl::gl::setAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     // Create our window centered
     auto scale = Application::Scale();
@@ -83,16 +85,18 @@ Window::Window(string title, int width, int height, bool resizable) {
     if (!_windowData->window) {
         throw std::runtime_error("failed to create sdl window");
     }
-    _windowData->windowId = SDL_GetWindowID(_windowData->window);
+    _windowData->windowId = _windowData->window.id();
 
     checkSDLError(__LINE__);
 
     // Create our opengl context and attach it to our window
+    //    _windowData->context = sdl::gl::Context{_windowData->window}; // why
+    //    no worki?
     _windowData->context = SDL_GL_CreateContext(_windowData->window);
     checkSDLError(__LINE__);
 
     // Windows needs to make the context current
-    if (SDL_GL_MakeCurrent(_windowData->window, _windowData->context)) {
+    if (_windowData->context.makeCurrent({_windowData->window})) {
         throw std::runtime_error("could not make SDL GL context active");
     }
 
@@ -112,19 +116,17 @@ Window::Window(string title, int width, int height, bool resizable) {
 
     // This makes our buffer swap synchronized with the monitor's vertical
     // refresh
-    SDL_GL_SetSwapInterval(1);
+    sdl::gl::setSwapInterval(1);
 
     Application::addWindow(this);
 }
 
 Window::~Window() {
-    SDL_GL_DeleteContext(_windowData->context);
-    SDL_DestroyWindow(_windowData->window);
     Application::removeWindow(this);
 }
 
 void Window::clear() {
-    SDL_GL_MakeCurrent(_windowData->window, _windowData->context);
+    _windowData->context.makeCurrent(sdl::WindowView{_windowData->window});
     auto &color = currentStyle.fill;
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -135,7 +137,7 @@ void Window::draw() {
 }
 
 void Window::swap() {
-    SDL_GL_SwapWindow(_windowData->window);
+    _windowData->window.swap();
 }
 
 bool Window::onRequestClose() {
@@ -143,24 +145,23 @@ bool Window::onRequestClose() {
 }
 
 void Window::show() {
-    SDL_ShowWindow(_windowData->window);
+    _windowData->window.show();
     Application::addWindow(this);
 }
 
 void Window::hide() {
-    SDL_HideWindow(_windowData->window);
+    _windowData->window.hide();
     Application::removeWindow(this);
 }
 
 bool Window::fullscreen(bool state, bool changeVideoMode) {
     if (state) {
         if (changeVideoMode) {
-            return SDL_SetWindowFullscreen(_windowData->window,
-                                           SDL_WINDOW_FULLSCREEN);
+            return _windowData->window.fullscreen(SDL_WINDOW_FULLSCREEN);
         }
         else {
-            return SDL_SetWindowFullscreen(_windowData->window,
-                                           SDL_WINDOW_FULLSCREEN_DESKTOP);
+            return _windowData->window.fullscreen(
+                SDL_WINDOW_FULLSCREEN_DESKTOP);
         }
     }
     else {
@@ -202,19 +203,18 @@ void Window::unfocus(const View *view) {
 }
 
 void Window::cursorVisibility(bool value) {
-    SDL_ShowCursor(value);
+    sdl::showCursor(value);
 }
 
 void Window::cursorPosition(int x, int y) {
     auto scale = Application::Scale();
-    SDL_WarpMouseInWindow(_windowData->window, x * scale, y * scale);
+    _windowData->window.warpMouse(x * scale, y * scale);
 }
 
 std::pair<int, int> Window::cursorPosition() {
-    int x, y;
-    SDL_GetMouseState(&x, &y);
+    auto state = sdl::getMouseState();
     auto scale = Application::Scale();
-    return std::pair<int, int>(x / scale, y / scale);
+    return std::pair<int, int>(state.x / scale, state.y / scale);
 }
 
 bool Window::onResize(int width, int height) {
