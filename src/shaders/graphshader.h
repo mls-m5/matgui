@@ -11,6 +11,8 @@
 #include <memory>
 #include <vector>
 
+namespace matgui {
+
 namespace GraphShader {
 
 namespace {
@@ -54,3 +56,5 @@ static struct {
         debug_check_true(program->get(), "could not create graph program");
     }
 } graphProgram;
+
+} // namespace matgui

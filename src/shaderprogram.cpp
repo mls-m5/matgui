@@ -175,6 +175,8 @@ GLuint createProgram(std::string pVertexSource,
     return program;
 }
 
+namespace matgui {
+
 ShaderProgram::ShaderProgram(ShaderProgram &&s) {
     clear();
     _program = s._program;
@@ -285,3 +287,5 @@ void ShaderProgram::loadShaderFromFile(const std::string &vertexFile,
                       std::istreambuf_iterator<char>());
     initProgram(code, fcode);
 }
+
+} // namespace matgui

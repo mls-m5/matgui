@@ -13,6 +13,8 @@
 #include <memory>
 #include <vector>
 
+namespace matgui {
+
 namespace PlainShader {
 
 namespace {
@@ -149,3 +151,5 @@ static struct {
         glBindVertexArray(0);
     }
 } squareProgram;
+
+} // namespace matgui

@@ -11,6 +11,8 @@
 #include "matgui/shaderprogram.h"
 #include <memory>
 
+namespace matgui {
+
 namespace LineShader {
 
 namespace {
@@ -53,3 +55,5 @@ static struct {
         mvpMatrix = program->getUniform("mvp_matrix");
     }
 } lineProgram;
+
+} // namespace matgui

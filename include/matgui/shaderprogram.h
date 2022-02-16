@@ -11,6 +11,8 @@
 
 #include <string>
 
+namespace matgui {
+
 class ShaderProgram {
 public:
     ShaderProgram(ShaderProgram &&s);
@@ -67,3 +69,5 @@ public:
                           const std::string &geometryCode = "");
     void disable();
 };
+
+} // namespace matgui

@@ -11,6 +11,8 @@
 #include "matgui/shaderprogram.h"
 #include <memory>
 
+namespace matgui {
+
 namespace TextureShader {
 
 namespace {
@@ -116,3 +118,5 @@ static struct {
         glBindVertexArray(0);
     }
 } textureProgram;
+
+} // namespace matgui
