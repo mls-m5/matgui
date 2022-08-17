@@ -20,7 +20,6 @@ class Texture;
 class ToggleView;
 class View;
 class Window;
+class ShaderProgram;
 
 } // namespace matgui
-
-class ShaderProgram;
