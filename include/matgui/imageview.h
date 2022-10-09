@@ -34,6 +34,7 @@ public:
         return _texture;
     };
 
+private:
     Texture _texture;
 };
 
