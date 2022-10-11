@@ -62,13 +62,11 @@ public:
         refresh();
     }
 
-#if __cplusplus >= 201402L
     //! Create and add a child to to the layout
     template <class T, class... Types>
     constexpr T *createChild(Types &&...args) {
         return dynamic_cast<T *>(addChild(std::make_unique<T>(args...)));
     }
-#endif
 
 protected:
     void calculateWeights();

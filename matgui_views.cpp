@@ -8,6 +8,7 @@
 #include "src/linearlayout.cpp"
 #include "src/matsig.cpp"
 #include "src/progressview.cpp"
+#include "src/scrollview.cpp"
 #include "src/sliderview.cpp"
 #include "src/textentry.cpp"
 #include "src/toggleview.cpp"

@@ -31,8 +31,24 @@ namespace matgui {
 namespace {
 
 GLfloat transformMatrix[16];
-double screenWidth, screenHeight;
 GLuint vertexArray = 0;
+
+struct ViewportData {
+    int x = 0;
+    int y = 0;
+    int width = 0;
+    int height = 0;
+};
+
+std::vector<ViewportData> viewportStack = {{0, 0, 0, 0}};
+
+double screenWidth() {
+    return viewportStack.back().width;
+}
+
+double screenHeight() {
+    return viewportStack.back().height;
+}
 
 struct colorDataStruct {
     GLfloat r, g, b, a;
@@ -56,6 +72,9 @@ void modelTransform(
         s = sin(a);
         c = cos(a);
     }
+
+    auto screenWidth = matgui::screenWidth();
+    auto screenHeight = matgui::screenHeight();
 
     transformMatrix[0] = c * scaleX / screenWidth * 2;
     transformMatrix[1] = s * scaleX / screenWidth * 2;
@@ -116,14 +135,14 @@ void drawTriangle(vec v1, vec v2, vec v3, const Paint *paint) {
     typedef float T;
     // clang-format off
     const T location[] = {
-        (T)((v2.x - v1.x) / screenWidth * 2.),
-        (T)(-(v2.y - v1.y) / screenHeight * 2.),
+        (T)((v2.x - v1.x) / screenWidth() * 2.),
+        (T)(-(v2.y - v1.y) / screenHeight() * 2.),
         (T)(v2.z - v1.z), 0,
 
-        (T)((v3.x - v1.x) / screenWidth * 2), (T)(-(v3.y - v1.y) / screenHeight * 2), 0, 0,
+        (T)((v3.x - v1.x) / screenWidth() * 2), (T)(-(v3.y - v1.y) / screenHeight() * 2), 0, 0,
         0, 0, 1, 0,
-        (T)(v1.x / screenWidth * 2. - 1.),
-        (T)(-v1.y / screenHeight * 2. + 1.), (T)v1.z, 1,
+        (T)(v1.x / screenWidth() * 2. - 1.),
+        (T)(-v1.y / screenHeight() * 2. + 1.), (T)v1.z, 1,
     };
     // clang-format on
 
@@ -266,14 +285,8 @@ void drawLine(T *location, const Paint *paint) {
     glBindVertexArray(squareProgram.vertexArray);
     squareProgram.program->use();
 
-    //    if (is_same<T, float>::value) {
     glUniformMatrix4fv(
         squareProgram.pMvpMatrix, 1, GL_FALSE, (float *)location);
-    //    }
-    //    else if(is_same<T, double>::value) {
-    //        glUniformMatrix4dv(squareProgram.pMvpMatrix, 1, GL_FALSE,
-    //        (double*)location);
-    //    }
 
     if (paint->line) {
         glLineWidth(paint->line.width());
@@ -290,10 +303,10 @@ void drawLine(
     typedef float T;
     // clang-format off
     const T location[] = {
-        (T)((x2 - x1) / screenWidth * 2.), (T)(-(y2 - y1) / screenHeight * 2.), 0, 0,
+        (T)((x2 - x1) / screenWidth() * 2.), (T)(-(y2 - y1) / screenHeight() * 2.), 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
-        (T)(x1 / screenWidth * 2. - 1.), (T)(-y1 / screenHeight * 2. + 1.), 0, 1,
+        (T)(x1 / screenWidth() * 2. - 1.), (T)(-y1 / screenHeight() * 2. + 1.), 0, 1,
     };
     // clang-format on
 
@@ -304,23 +317,36 @@ void drawLine(vec v1, vec v2, const class Paint *paint) {
     typedef float T;
     // clang-format off
     const T location[] = {
-        (T)((v2.x - v1.x) / screenWidth * 2.),
-        (T)(-(v2.y - v1.y) / screenHeight * 2.),
+        (T)((v2.x - v1.x) / screenWidth() * 2.),
+        (T)(-(v2.y - v1.y) / screenHeight() * 2.),
         (T)(v2.z - v1.z), 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
-        (T)(v1.x / screenWidth * 2. - 1.),
-        (T)(-v1.y / screenHeight * 2. + 1.), (T)v1.z, 1,
+        (T)(v1.x / screenWidth() * 2. - 1.),
+        (T)(-v1.y / screenHeight() * 2. + 1.), (T)v1.z, 1,
     };
     // clang-format on
 
     drawLine(location, paint);
 }
 
-void setDimensions(double width, double height) {
-    screenWidth = width;
-    screenHeight = height;
+void setDimensions(int width, int height) {
+    viewportStack.front() = {0, 0, width, height};
     glViewport(0, 0, width, height);
+}
+
+void pushViewport(int x, int y, int width, int height) {
+    viewportStack.push_back(
+        {x, -y + (viewportStack.front().height - height), width, height});
+    glViewport(x, viewportStack.back().y, width, height);
+}
+
+void popViewport() {
+    if (viewportStack.size() > 1) {
+        viewportStack.pop_back();
+    }
+    auto v = viewportStack.back();
+    glViewport(v.x, v.y, v.width, v.height);
 }
 
 bool initDrawModule(double width, double height) {

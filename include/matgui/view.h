@@ -35,6 +35,10 @@ public:
     typedef int pointerState;
 
     View();
+    View(const View &) = delete;
+    View(View &&) = delete;
+    View &operator=(const View &) = delete;
+    View &operator=(View &&) = delete;
     virtual ~View();
 
     virtual void draw() {
@@ -200,9 +204,9 @@ public:
     Paint style;
 
 private:
-    double _x, _y;
-    double _width, _height;
-    int _widthFlags, _heightFlags;
+    double _x = 0, _y = 0;
+    double _width = 0, _height = 0;
+    int _widthFlags = 0, _heightFlags = 0;
     double _weight = 0;
     bool _highlight = false;
     std::string _name;

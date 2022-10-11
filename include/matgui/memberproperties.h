@@ -10,6 +10,7 @@
 //! standard getters and setters
 //! returns reference to this
 #define member_set(type, m)                                                    \
+public:                                                                        \
     inline auto &m(type value) {                                               \
         _##m = value;                                                          \
         return *this;                                                          \
@@ -17,6 +18,7 @@
 
 //! get property _by value_
 #define member_get(type, m)                                                    \
+public:                                                                        \
     inline type m() const {                                                    \
         return _##m;                                                           \
     }

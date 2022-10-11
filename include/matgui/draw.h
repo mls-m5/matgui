@@ -103,7 +103,13 @@ inline void drawTextureRect(double x, double y, double a, double sx, double sy, 
 	drawTextureRect({x, y}, a, sx, sy, textureId, style);
 }
 
-void setDimensions(double width, double height);
+// Set root dimensions for window
+void setDimensions(int width, int height);
+
+// For drawing sub windows
+// y is from the top of the window (not as opengl)
+void pushViewport(int x, int y, int width, int height);
+void popViewport();
 
 // clang-format on
 

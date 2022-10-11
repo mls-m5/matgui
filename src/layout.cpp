@@ -200,14 +200,14 @@ void Layout::deleteAll() {
 View *Layout::getChild(size_t index) {
     size_t i = 0;
     if (index >= children.size()) {
-        return 0;
+        return nullptr;
     }
     for (auto &it : children) {
         if (i++ == index) {
             return it.get();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void Layout::replaceChild(size_t index, View *view) {
@@ -333,7 +333,7 @@ void Layout::onPointerLeave() {
 
 View *Layout::getChild(std::string name) {
     for (auto &it : children) {
-        if (not it->name().empty() and it->name() == name) {
+        if (!it->name().empty() && it->name() == name) {
             return it.get();
         }
     }
