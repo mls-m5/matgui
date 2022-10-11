@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
     window.addChild(
         std::unique_ptr<View>{progress}); // Notice2 this is not recommended
 
+    ::progressView = progress;
+
     auto leftLabel = make_unique<Label>("left aligned");
     leftLabel->alignment(FontView::Left);
     window.addChild(move(leftLabel));
