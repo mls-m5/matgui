@@ -35,6 +35,27 @@ public:
 
     void scrollY(double value);
 
+    void orientation(LayoutOrientation orientation) {
+        _layout.orientation(orientation);
+    }
+
+    bool onPointerDown(pointerId id,
+                       MouseButton button,
+                       double x,
+                       double y) override;
+    bool onPointerUp(pointerId id,
+                     MouseButton button,
+                     double x,
+                     double y) override;
+    bool onPointerMove(pointerId id,
+                       double x,
+                       double y,
+                       pointerState state) override;
+    void onPointerEnter(pointerId id,
+                        double x,
+                        double y,
+                        pointerState state) override;
+
     member_property_declaration_default(double, scrollWidth, 0);
     member_property_declaration_default(double, scrollHeight, 0);
     member_get(double, scrollY);
@@ -42,6 +63,7 @@ public:
 private:
     LinearLayout _layout;
 
+    double _scrollX = 0;
     double _scrollY = 0;
 
 public:
