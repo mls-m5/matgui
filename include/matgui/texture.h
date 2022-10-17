@@ -58,8 +58,9 @@ public:
                          int height = 1,
                          std::string name = "");
     void clear() {
-        _texturePtr = nullptr;
+        _texturePtr.reset();
     }
+
     void bind();
 
     unsigned int texture() const {
