@@ -92,9 +92,9 @@ void drawEllipse(const float *locationMatrix, const class Paint*);
 
 //A texture with origo in the top left corner
 void drawTextureRect(vec p, double a, double sx, double sy, int textureId, DrawStyle_t);
-void drawTextureRect(float *locationMatrix, int textureId, DrawStyle_t = 0);
+void drawTextureRect(const float *locationMatrix, int textureId, DrawStyle_t = 0);
 
-void drawGraph(double x, double y, double a, double sx, double sy, float *v, int size);
+void drawGraph(double x, double y, double a, double sx, double sy, const float *v, int size);
 
 void drawLine(double x1, double y1, double x2, double y2, const class Paint *paint);
 void drawLine(vec v1, vec v2, const class Paint *paint);

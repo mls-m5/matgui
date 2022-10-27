@@ -30,7 +30,7 @@ public:
         }
     }
 
-    void render(FontView &view, double x, double y) {
+    void prepareRender(FontView &view) {
         if (view._text.empty())
             return;
         if (!view._font)
@@ -104,6 +104,10 @@ public:
 
             view._needsUpdate = false;
         }
+    }
+
+    void render(FontView &view, double x, double y) {
+        prepareRender(view);
 
         if (alignment) {
             x += static_cast<double>(view.width() * alignment) / 2.;
@@ -117,6 +121,13 @@ public:
                         view._height * scale,
                         texture,
                         DrawStyle::OrigoTopLeft);
+    }
+
+    void render(FontView &view, const float *m) {
+        prepareRender(view);
+        if (texture) {
+            drawTextureRect(m, texture, DrawStyle::CenterOrigo);
+        }
     }
 
     unsigned texture = 0;
@@ -155,6 +166,10 @@ FontView::~FontView() {
 
 void FontView::draw(double x, double y) {
     _data->render(*this, x, y);
+}
+
+void FontView::draw(const float *m) {
+    _data->render(*this, m);
 }
 
 void FontView::alignment(Alignment value) {

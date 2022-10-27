@@ -169,7 +169,9 @@ void drawTriangle(const float *location, const class Paint *paint) {
     glBindVertexArray(0);
 }
 
-void drawTextureRect(float *locationMatrix, int textureId, DrawStyle_t style) {
+void drawTextureRect(const float *locationMatrix,
+                     int textureId,
+                     DrawStyle_t style) {
     int arrayIndex = (style & DrawStyle::CenterOrigo) ? 1 : 0;
     glBindVertexArray(textureProgram.vertexArrays[arrayIndex]);
 
@@ -249,7 +251,7 @@ void drawGraph(double /*x*/,
                double /*a*/,
                double /*sx*/,
                double /*sy*/,
-               float * /*v*/,
+               const float * /*v*/,
                int /*size*/) {
     //    glLineWidth(2);
     //    graphProgram.program->use();

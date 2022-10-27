@@ -65,6 +65,7 @@ public:
     Alignment alignment();
 
     void draw(double x, double y);
+    void draw(const float *m);
 
 protected:
     int _width = 0;
