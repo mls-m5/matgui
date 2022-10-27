@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include "matsig.h"
-
 namespace matgui {
 
 //! The application handles the startup and shutdown of the environment
