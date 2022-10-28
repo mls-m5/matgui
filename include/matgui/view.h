@@ -31,7 +31,7 @@ public:
         VIEW_FIXED = 1
     };
 
-    typedef int pointerId;
+    typedef int PointerId;
     typedef int pointerState;
 
     View();
@@ -67,24 +67,24 @@ public:
     virtual bool isPointerInsideLocal(double localx, double localy);
 
     // Callback functions return true to capture the mouse focus
-    virtual bool onPointerDown(pointerId id,
+    virtual bool onPointerDown(PointerId id,
                                MouseButton button,
                                double x,
                                double y);
-    virtual bool onPointerUp(pointerId id,
+    virtual bool onPointerUp(PointerId id,
                              MouseButton button,
                              double x,
                              double y);
-    virtual bool onPointerMove(pointerId id,
+    virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,
                                pointerState state);
-    virtual void onPointerEnter(pointerId id,
+    virtual void onPointerEnter(PointerId id,
                                 double x,
                                 double y,
                                 pointerState state);
     virtual void onPointerLeave();
-    virtual void onScroll(pointerId id, double x, double y);
+    virtual void onScroll(PointerId id, double x, double y);
 
     virtual void onFocus();
     virtual void onUnfocus();
@@ -118,7 +118,7 @@ public:
     virtual class Window *root();
 
     struct PointerArgument {
-        pointerId id; // Always 0 for mouse
+        PointerId id; // Always 0 for mouse
         double x, y;
         pointerState state; // A bit representing which buttons pressed 1 for
                             // left, 2 for middle 4 for right etc.
@@ -128,7 +128,7 @@ public:
     };
 
     struct ScrollArgument {
-        pointerId id;
+        PointerId id;
         double x, y;
         operator std::tuple<double &, double &>() {
             return {x, y};

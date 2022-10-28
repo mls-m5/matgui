@@ -15,7 +15,7 @@ PushControlerView::PushControlerView() = default;
 
 PushControlerView::~PushControlerView() = default;
 
-bool PushControlerView::onPointerDown(pointerId id,
+bool PushControlerView::onPointerDown(PointerId id,
                                       MouseButton /*button*/,
                                       double x,
                                       double y) {
@@ -25,7 +25,7 @@ bool PushControlerView::onPointerDown(pointerId id,
     return true;
 }
 
-bool PushControlerView::onPointerUp(pointerId id,
+bool PushControlerView::onPointerUp(PointerId id,
                                     MouseButton /*button*/,
                                     double x,
                                     double y) {

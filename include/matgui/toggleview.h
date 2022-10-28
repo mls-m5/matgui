@@ -16,11 +16,11 @@ public:
     ToggleView();
     virtual ~ToggleView();
 
-    virtual bool onPointerDown(pointerId id,
+    virtual bool onPointerDown(PointerId id,
                                MouseButton button,
                                double x,
                                double y) override;
-    virtual bool onPointerUp(pointerId id,
+    virtual bool onPointerUp(PointerId id,
                              MouseButton button,
                              double x,
                              double y) override;

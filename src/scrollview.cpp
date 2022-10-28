@@ -38,28 +38,28 @@ void matgui::ScrollView::scrollY(double value) {
     _layout.refresh();
 }
 
-bool matgui::ScrollView::onPointerDown(pointerId id,
+bool matgui::ScrollView::onPointerDown(PointerId id,
                                        MouseButton button,
                                        double x,
                                        double y) {
     return _layout.onPointerDown(id, button, x - _scrollX, y - _scrollY);
 }
 
-bool matgui::ScrollView::onPointerUp(pointerId id,
+bool matgui::ScrollView::onPointerUp(PointerId id,
                                      MouseButton button,
                                      double x,
                                      double y) {
     return _layout.onPointerUp(id, button, x - _scrollX, y - _scrollY);
 }
 
-bool matgui::ScrollView::onPointerMove(pointerId id,
+bool matgui::ScrollView::onPointerMove(PointerId id,
                                        double x,
                                        double y,
                                        pointerState state) {
     return _layout.onPointerMove(id, x - _scrollX, this->y() - _scrollY, state);
 }
 
-void matgui::ScrollView::onPointerEnter(pointerId id,
+void matgui::ScrollView::onPointerEnter(PointerId id,
                                         double x,
                                         double y,
                                         pointerState state) {

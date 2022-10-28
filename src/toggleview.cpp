@@ -23,7 +23,7 @@ ToggleView::ToggleView() {
 ToggleView::~ToggleView() {
 }
 
-bool ToggleView::onPointerDown(pointerId id,
+bool ToggleView::onPointerDown(PointerId id,
                                MouseButton button,
                                double x,
                                double y) {
@@ -33,7 +33,7 @@ bool ToggleView::onPointerDown(pointerId id,
     return true;
 }
 
-bool ToggleView::onPointerUp(pointerId id,
+bool ToggleView::onPointerUp(PointerId id,
                              MouseButton button,
                              double x,
                              double y) {

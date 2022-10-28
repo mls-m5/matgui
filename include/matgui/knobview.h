@@ -16,15 +16,15 @@ public:
     KnobView();
     virtual ~KnobView();
 
-    virtual bool onPointerDown(pointerId id,
+    virtual bool onPointerDown(PointerId id,
                                MouseButton button,
                                double x,
                                double y) override;
-    virtual bool onPointerUp(pointerId id,
+    virtual bool onPointerUp(PointerId id,
                              MouseButton button,
                              double x,
                              double y) override;
-    virtual bool onPointerMove(pointerId id,
+    virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,
                                pointerState state) override;

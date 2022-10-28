@@ -222,7 +222,7 @@ void Layout::replaceChild(size_t index, View *view) {
     }
 }
 
-bool Layout::onPointerDown(pointerId id,
+bool Layout::onPointerDown(PointerId id,
                            MouseButton button,
                            double x,
                            double y) {
@@ -239,7 +239,7 @@ bool Layout::onPointerDown(pointerId id,
     return View::onPointerDown(id, button, x, y);
 }
 
-bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
+bool Layout::onPointerUp(PointerId id, MouseButton button, double x, double y) {
     auto wx = x + this->x();
     auto wy = y + this->y();
 
@@ -261,7 +261,7 @@ bool Layout::onPointerUp(pointerId id, MouseButton button, double x, double y) {
     return View::onPointerUp(id, button, x, y);
 }
 
-bool Layout::onPointerMove(pointerId id,
+bool Layout::onPointerMove(PointerId id,
                            double x,
                            double y,
                            pointerState state) {
@@ -301,7 +301,7 @@ bool Layout::onPointerMove(pointerId id,
     return View::onPointerMove(id, x, y, state);
 }
 
-void Layout::onPointerEnter(pointerId id,
+void Layout::onPointerEnter(PointerId id,
                             double x,
                             double y,
                             pointerState state) {

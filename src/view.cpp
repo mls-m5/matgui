@@ -82,7 +82,7 @@ bool View::isPointerInsideLocal(double x, double y) {
     return false;
 }
 
-bool View::onPointerDown(pointerId id, MouseButton button, double x, double y) {
+bool View::onPointerDown(PointerId id, MouseButton button, double x, double y) {
     if (focusable()) {
         focus();
     }
@@ -90,7 +90,7 @@ bool View::onPointerDown(pointerId id, MouseButton button, double x, double y) {
     return true;
 }
 
-bool View::onPointerUp(pointerId id, MouseButton button, double x, double y) {
+bool View::onPointerUp(PointerId id, MouseButton button, double x, double y) {
     pointerUp.emit({id, x, y, button});
     if (isPointerInsideLocal(x, y)) {
         clicked.emit({id, x, y, button});
@@ -98,12 +98,12 @@ bool View::onPointerUp(pointerId id, MouseButton button, double x, double y) {
     return true;
 }
 
-bool View::onPointerMove(pointerId id, double x, double y, pointerState state) {
+bool View::onPointerMove(PointerId id, double x, double y, pointerState state) {
     pointerMoved.emit({id, x, y, state});
     return true;
 }
 
-void View::onPointerEnter(pointerId id,
+void View::onPointerEnter(PointerId id,
                           double x,
                           double y,
                           pointerState state) {
@@ -116,7 +116,7 @@ void View::onPointerLeave() {
     pointerLeave.emit();
 }
 
-void View::onScroll(pointerId id, double x, double y) {
+void View::onScroll(PointerId id, double x, double y) {
     scroll.emit({id, x, y});
 }
 

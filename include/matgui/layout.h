@@ -23,19 +23,19 @@ public:
 
     void draw() override;
 
-    bool onPointerDown(pointerId id,
+    bool onPointerDown(PointerId id,
                        MouseButton button,
                        double x,
                        double y) override;
-    bool onPointerUp(pointerId id,
+    bool onPointerUp(PointerId id,
                      MouseButton button,
                      double x,
                      double y) override;
-    bool onPointerMove(pointerId id,
+    bool onPointerMove(PointerId id,
                        double x,
                        double y,
                        pointerState state) override;
-    void onPointerEnter(pointerId id,
+    void onPointerEnter(PointerId id,
                         double x,
                         double y,
                         pointerState state) override;

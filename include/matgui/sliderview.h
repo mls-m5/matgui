@@ -16,15 +16,15 @@ public:
     SliderView();
     virtual ~SliderView();
 
-    virtual bool onPointerDown(pointerId id,
+    virtual bool onPointerDown(PointerId id,
                                MouseButton,
                                double x,
                                double y) override;
-    virtual bool onPointerUp(pointerId id,
+    virtual bool onPointerUp(PointerId id,
                              MouseButton,
                              double x,
                              double y) override;
-    virtual bool onPointerMove(pointerId id,
+    virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,
                                pointerState state) override;
