@@ -41,7 +41,7 @@ bool KnobView::onPointerUp(PointerId /*id*/,
 bool KnobView::onPointerMove(PointerId /*id*/,
                              double x,
                              double y,
-                             pointerState state) {
+                             PointerState state) {
     if (state) {
         // Todo: make this nicer, like that the control does not go all the way
         // round or something like that

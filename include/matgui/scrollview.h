@@ -50,11 +50,11 @@ public:
     bool onPointerMove(PointerId id,
                        double x,
                        double y,
-                       pointerState state) override;
+                       PointerState state) override;
     void onPointerEnter(PointerId id,
                         double x,
                         double y,
-                        pointerState state) override;
+                        PointerState state) override;
 
     member_property_declaration_default(double, scrollWidth, 0);
     member_property_declaration_default(double, scrollHeight, 0);

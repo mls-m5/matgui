@@ -98,7 +98,7 @@ bool View::onPointerUp(PointerId id, MouseButton button, double x, double y) {
     return true;
 }
 
-bool View::onPointerMove(PointerId id, double x, double y, pointerState state) {
+bool View::onPointerMove(PointerId id, double x, double y, PointerState state) {
     pointerMoved.emit({id, x, y, state});
     return true;
 }
@@ -106,7 +106,7 @@ bool View::onPointerMove(PointerId id, double x, double y, pointerState state) {
 void View::onPointerEnter(PointerId id,
                           double x,
                           double y,
-                          pointerState state) {
+                          PointerState state) {
     highlight(true);
     pointerEnter.emit({id, x, y, state});
 }

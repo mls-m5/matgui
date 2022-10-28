@@ -32,7 +32,7 @@ public:
     };
 
     typedef int PointerId;
-    typedef int pointerState;
+    typedef int PointerState;
 
     View();
     View(const View &) = delete;
@@ -78,11 +78,11 @@ public:
     virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,
-                               pointerState state);
+                               PointerState state);
     virtual void onPointerEnter(PointerId id,
                                 double x,
                                 double y,
-                                pointerState state);
+                                PointerState state);
     virtual void onPointerLeave();
     virtual void onScroll(PointerId id, double x, double y);
 
@@ -120,7 +120,7 @@ public:
     struct PointerArgument {
         PointerId id; // Always 0 for mouse
         double x, y;
-        pointerState state; // A bit representing which buttons pressed 1 for
+        PointerState state; // A bit representing which buttons pressed 1 for
                             // left, 2 for middle 4 for right etc.
         operator std::tuple<double &, double &>() {
             return {x, y};

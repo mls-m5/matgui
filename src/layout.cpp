@@ -264,7 +264,7 @@ bool Layout::onPointerUp(PointerId id, MouseButton button, double x, double y) {
 bool Layout::onPointerMove(PointerId id,
                            double x,
                            double y,
-                           pointerState state) {
+                           PointerState state) {
     auto wx = x + this->x();
     auto wy = y + this->y();
 
@@ -304,7 +304,7 @@ bool Layout::onPointerMove(PointerId id,
 void Layout::onPointerEnter(PointerId id,
                             double x,
                             double y,
-                            pointerState state) {
+                            PointerState state) {
     auto wx = x + this->x();
     auto wy = y + this->y();
 

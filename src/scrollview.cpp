@@ -55,13 +55,13 @@ bool matgui::ScrollView::onPointerUp(PointerId id,
 bool matgui::ScrollView::onPointerMove(PointerId id,
                                        double x,
                                        double y,
-                                       pointerState state) {
+                                       PointerState state) {
     return _layout.onPointerMove(id, x - _scrollX, this->y() - _scrollY, state);
 }
 
 void matgui::ScrollView::onPointerEnter(PointerId id,
                                         double x,
                                         double y,
-                                        pointerState state) {
+                                        PointerState state) {
     return _layout.onPointerEnter(id, x - _scrollX, y - _scrollY, state);
 }

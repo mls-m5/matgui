@@ -27,7 +27,7 @@ public:
     virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,
-                               pointerState state) override;
+                               PointerState state) override;
 
     void draw() override;
 

@@ -34,11 +34,11 @@ public:
     bool onPointerMove(PointerId id,
                        double x,
                        double y,
-                       pointerState state) override;
+                       PointerState state) override;
     void onPointerEnter(PointerId id,
                         double x,
                         double y,
-                        pointerState state) override;
+                        PointerState state) override;
     void onPointerLeave() override;
 
     void refresh() override;

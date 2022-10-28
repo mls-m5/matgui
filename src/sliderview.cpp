@@ -39,7 +39,7 @@ bool SliderView::onPointerUp(PointerId /*id*/,
 bool SliderView::onPointerMove(PointerId /*id*/,
                                double /*x*/,
                                double y,
-                               pointerState state) {
+                               PointerState state) {
     if (state) {
         double v = 1. - (y - height() * handleHeight / 2.) /
                             (height() * (1 - handleHeight));
