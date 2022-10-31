@@ -3,6 +3,8 @@
 #pragma once
 
 #include "common-gl.h"
+#include <iostream>
+#include <stdexcept>
 
 inline void printGLString(const char *name, GLenum s) {
 #ifndef NO_GRAPHICS
@@ -49,7 +51,7 @@ inline int checkGlError(const char *op, bool throwError = false) {
         printGLString(op, error);
         if (throwError) {
             printf("%s\n", c);
-            throw c;
+            throw std::runtime_error{c};
         }
     }
     return ret;
