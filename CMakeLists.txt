@@ -6,6 +6,7 @@ project(MatGui)
 add_library(MatGui SHARED matgui.cpp)
 
 add_subdirectory(lib/sdlpp)
+add_subdirectory(lib/glpp)
 
 target_include_directories(
     MatGui
@@ -20,6 +21,7 @@ target_include_directories(
 target_link_libraries(
     MatGui
     sdlpp
+    glpp
     )
 
 if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$")

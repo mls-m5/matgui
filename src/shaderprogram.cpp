@@ -84,33 +84,31 @@ static GLuint loadShader(GLenum shaderType, const std::string &sourceIn) {
     auto &source = sourceIn;
 #endif
 
-    if (shader) {
-        (void)translateShader;
-
-        const auto ptr = source.c_str();
-        glShaderSource(shader, 1, &ptr, nullptr);
-        glCompileShader(shader);
-        GLint compiled = 0;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-        if (!compiled) {
-            GLint infoLen = 0;
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
-            if (infoLen) {
-                std::vector<char> buffer(infoLen);
-                glGetShaderInfoLog(shader, infoLen, nullptr, &buffer[0]);
-
-                glDeleteShader(shader);
-                shader = 0;
-
-                printDebugInfo(buffer.data(), source);
-            }
-        }
-    }
-    else {
+    if (!shader) {
         throw runtime_error(std::string(__FILE__) + ":" +
                             std::to_string(__LINE__) +
                             ": cannot create shader, is the window and context "
                             "started properly?");
+    }
+    (void)translateShader;
+
+    const auto ptr = source.c_str();
+    glShaderSource(shader, 1, &ptr, nullptr);
+    glCompileShader(shader);
+    GLint compiled = 0;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+    if (!compiled) {
+        GLint infoLen = 0;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
+        if (infoLen) {
+            std::vector<char> buffer(infoLen);
+            glGetShaderInfoLog(shader, infoLen, nullptr, buffer.data());
+
+            glDeleteShader(shader);
+            shader = 0;
+
+            printDebugInfo(buffer.data(), source);
+        }
     }
     return shader;
 }
@@ -138,37 +136,35 @@ GLuint createProgram(std::string pVertexSource,
 #endif
 
     GLuint program = glCreateProgram();
-    if (program) {
-        glCall(glAttachShader(program, vertexShader));
-        glCall(glAttachShader(program, fragmentShader));
-        if (!geometryCode.empty()) {
-#ifndef USING_GL2
-            glCall(glAttachShader(program, geometryShader));
-#endif
-        }
-        glLinkProgram(program);
-        GLint linkStatus = GL_FALSE;
-        glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
-        if (linkStatus != GL_TRUE) {
-            GLint bufLength = 0;
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
-            if (bufLength) {
-                std::vector<char> buffer(static_cast<size_t>(bufLength));
-                glGetProgramInfoLog(program, bufLength, nullptr, &buffer[0]);
-                printDebugInfo(buffer.data(), "");
-                //                debug_print("Could not link program:\n%s\n",
-                //                &buffer[0]);
-            }
-            else {
-                debug_print(
-                    "Shader program linking failed, but with no error log");
-            }
-            glDeleteProgram(program);
-            program = 0;
-        }
-    }
-    else {
+    if (!program) {
         debug_print("glCreateProgram() failed");
+    }
+
+    glCall(glAttachShader(program, vertexShader));
+    glCall(glAttachShader(program, fragmentShader));
+    if (!geometryCode.empty()) {
+#ifndef USING_GL2
+        glCall(glAttachShader(program, geometryShader));
+#endif
+    }
+    glLinkProgram(program);
+    GLint linkStatus = GL_FALSE;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    if (linkStatus != GL_TRUE) {
+        GLint bufLength = 0;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
+        if (bufLength) {
+            std::vector<char> buffer(static_cast<size_t>(bufLength));
+            glGetProgramInfoLog(program, bufLength, nullptr, &buffer[0]);
+            printDebugInfo(buffer.data(), "");
+            //                debug_print("Could not link program:\n%s\n",
+            //                &buffer[0]);
+        }
+        else {
+            debug_print("Shader program linking failed, but with no error log");
+        }
+        glDeleteProgram(program);
+        program = 0;
     }
     checkGlError("before return");
 

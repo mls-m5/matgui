@@ -12,7 +12,7 @@ struct Main {
     Label &label = *window.createChild<Label>("main test");
     Button &button = *window.createChild<Button>("quit");
 
-    Main(Args args) {
+    Main(int argc, char **argv) {
         button.clicked.connect(Application::quit);
     }
 };

@@ -5,12 +5,18 @@
 #include <vector>
 
 namespace matgui {
-using Args = std::vector<std::string>;
 
 template <typename T>
 void matguiMain(int argc, char *argv[]) {
     auto app = matgui::Application{};
-    auto main = std::make_unique<T>(Args{argv, argv + argc});
+    auto main = std::make_unique<T>(argc, argv);
+    app.mainLoop();
+}
+
+template <typename T>
+void matguiMainWindow(int argc, char *argv[]) {
+    auto app = matgui::Application{};
+    auto mainWindow = std::make_unique<T>(argc, argv);
     app.mainLoop();
 }
 
@@ -26,3 +32,11 @@ void matguiMain(int argc, char *argv[]) {
     }
 
 // TODO: Add implementation for emscripten
+
+// The same as main above but the user provide a class that inherits from Window
+// This way the user can easier access input events and draw callbacks by
+// overriding functions on the window
+#define MATGUI_MAINWINDOW(mainwindow)                                          \
+    int main(int argc, char *argv[]) {                                         \
+        matguiMain<mainclass>(argc, argv);                                     \
+    }
