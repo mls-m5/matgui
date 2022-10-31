@@ -60,6 +60,7 @@ inline int checkGlError(const char *op, bool throwError = false) {
 #endif
 }
 
+#ifndef glCall
 #ifdef NDEBUG
 #define glCall(call) call;
 #else
@@ -68,4 +69,5 @@ inline int checkGlError(const char *op, bool throwError = false) {
     if (checkGlError(#call, true)) {                                           \
         std::cout << "at" << __FILE__ << ":" << __LINE__ << std::endl;         \
     };
+#endif
 #endif
