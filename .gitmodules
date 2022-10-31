@@ -4,3 +4,6 @@
 [submodule "lib/sdlpp"]
 	path = lib/sdlpp
 	url = https://github.com/mls-m5/sdlpp
+[submodule "lib/glpp"]
+	path = lib/glpp
+	url = https://github.com/mls-m5/glpp
