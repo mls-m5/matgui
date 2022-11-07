@@ -15,6 +15,10 @@ struct vec {
     vec(double x, double y) : x(x), y(y), z(0) {
     }
 
+    template <typename T>
+    vec(T p) : x{p.x}, y{p.y}, z{p.z} {
+    }
+
     double x, y, z;
 };
 
