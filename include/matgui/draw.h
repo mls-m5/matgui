@@ -7,27 +7,12 @@
 
 #pragma once
 
-template <class T>
-class VecT;
-using Vec = VecT<double>;
-
-template <class T>
-class Vec2T;
-using Vec2 = Vec2T<double>;
-
 namespace matgui {
 
 struct vec {
     vec(double x, double y, double z) : x(x), y(y), z(z) {
     }
     vec(double x, double y) : x(x), y(y), z(0) {
-    }
-    // This is to avoid declaring class Vec here:
-    vec(const Vec &v)
-        : x(((double *)&v)[0]), y(((double *)&v)[1]), z(((double *)&v)[2]) {
-    }
-    vec(const Vec2 &v, double z = 0)
-        : x(((double *)&v)[0]), y(((double *)&v)[1]), z(z) {
     }
 
     double x, y, z;
