@@ -9,7 +9,7 @@ namespace matgui {
 template <typename T>
 void matguiMain(int argc, char *argv[]) {
     auto app = matgui::Application{};
-    auto main = std::make_unique<T>(argc, argv);
+    auto main = T{argc, argv};
     app.mainLoop();
 }
 
@@ -26,6 +26,7 @@ void matguiMainWindow(int argc, char *argv[]) {
 // Use this macro if you want your main loop to work in environments where the
 // main function need to return before the main loop has stopped, like
 // emscripten
+// se main-demo.cpp for example
 #define MATGUI_MAIN(mainclass)                                                 \
     int main(int argc, char *argv[]) {                                         \
         matguiMain<mainclass>(argc, argv);                                     \
@@ -38,5 +39,5 @@ void matguiMainWindow(int argc, char *argv[]) {
 // overriding functions on the window
 #define MATGUI_MAINWINDOW(mainwindow)                                          \
     int main(int argc, char *argv[]) {                                         \
-        matguiMain<mainclass>(argc, argv);                                     \
+        matguiMainWindow<mainwindow>(argc, argv);                              \
     }
