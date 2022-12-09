@@ -8,7 +8,7 @@
 #include "matgui/texture.h"
 
 #include "matgui/common-gl.h"
-//#include "SDL2/SDL_opengl.h"
+// #include "SDL2/SDL_opengl.h"
 #ifndef DISABLE_TEXTURES
 #include "SDL2/SDL_image.h"
 #endif // DISABLE_TEXTURES
@@ -237,7 +237,11 @@ void Texture::load(const std::string filename, bool addToLibrary) {
     }
 }
 
-void Texture::bind() {
+void Texture::bind() const {
     glBindTexture(GL_TEXTURE_2D, *this);
+}
+
+void Texture::unbind() {
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 } /* namespace matgui */

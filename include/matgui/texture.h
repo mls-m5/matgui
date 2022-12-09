@@ -61,7 +61,8 @@ public:
         _texturePtr.reset();
     }
 
-    void bind();
+    void bind() const;
+    static void unbind();
 
     unsigned int texture() const {
         return (unsigned long)_texturePtr.get();
