@@ -20,17 +20,11 @@ public:
 
     void draw() override;
 
-    void label(const std::string text) {
-        _fontView.text(text);
-    }
+    void label(const std::string text);
 
-    const std::string &label() {
-        return _fontView.text();
-    }
+    const std::string &label();
 
-    void font(Font font) {
-        _fontView.font(font);
-    }
+    void font(Font font);
 
 private:
     FontView _fontView;

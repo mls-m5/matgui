@@ -29,4 +29,16 @@ void Button::draw() {
     }
 }
 
+void Button::label(const std::string text) {
+    _fontView.text(text);
+}
+
+const std::string &Button::label() {
+    return _fontView.text();
+}
+
+void Button::font(Font font) {
+    _fontView.font(font);
+}
+
 } // namespace matgui

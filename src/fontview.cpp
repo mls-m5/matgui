@@ -109,9 +109,9 @@ public:
     void render(FontView &view, double x, double y) {
         prepareRender(view);
 
-        if (alignment) {
-            x += static_cast<double>(view.width() * alignment) / 2.;
-        }
+        //        if (alignment) {
+        x += static_cast<double>(view.width() * (alignment - 1)) / 2.;
+        //        }
 
         double scale = 1;
 
