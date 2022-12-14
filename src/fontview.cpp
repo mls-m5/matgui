@@ -6,6 +6,7 @@
  */
 
 #include "matgui/fontview.h"
+#include "cmath"
 #include "fontdata.h"
 #include "matgui/common-gl.h"
 #include "matgui/draw.h"
@@ -115,7 +116,7 @@ public:
 
         double scale = 1;
 
-        drawTextureRect({x, y - lineHeight * scale},
+        drawTextureRect({std::round(x), std::round(y - lineHeight * scale)},
                         0,
                         view._width * scale,
                         view._height * scale,
