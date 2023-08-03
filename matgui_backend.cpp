@@ -8,6 +8,7 @@
 #include "src/fontview.cpp"
 #include "src/keyutils.cpp"
 #include "src/paint.cpp"
+#include "src/shaderobject.cpp"
 #include "src/shaderprogram.cpp"
 #include "src/texture.cpp"
 #include "src/translateshader.cpp"

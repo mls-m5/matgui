@@ -8,22 +8,22 @@
 #pragma once
 
 #include "common-gl.h"
-
+#include <memory>
 #include <string>
+#include <vector>
 
 namespace matgui {
 
 class ShaderProgram {
 public:
-    ShaderProgram(ShaderProgram &&s);
-    ShaderProgram(const ShaderProgram &s) = delete;
     ShaderProgram();
+    ShaderProgram(ShaderProgram &&s) = delete;
+    ShaderProgram(const ShaderProgram &s) = delete;
+    ShaderProgram &operator=(const ShaderProgram &) = delete;
+    ShaderProgram &operator=(ShaderProgram &&s) = delete;
     ShaderProgram(const std::string &vertexCode,
                   const std::string &fragmentCode,
                   const std::string &geometryCode = "");
-
-    ShaderProgram &operator=(const ShaderProgram &) = delete;
-    ShaderProgram &operator=(ShaderProgram &&s);
 
     void initProgram(const std::string &vertexCode,
                      const std::string &fragmentCode,
@@ -55,7 +55,12 @@ public:
     virtual ~ShaderProgram();
 
 private:
+    GLuint createProgram(std::string_view pVertexSource,
+                         std::string_view pFragmentSource,
+                         std::string_view geometryCode);
+
     GLuint _program = 0;
+    std::vector<std::unique_ptr<class ShaderObject>> _objects;
 };
 
 class StandardShaderProgram : public ShaderProgram {
