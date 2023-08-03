@@ -8,9 +8,9 @@ StandardShaderProgram::StandardShaderProgram(
     const std::string_view geometryCode)
     : ShaderProgram(vertexCode, fragmentCode, geometryCode) {
 
-    vertexPointer = getAttribute("vPosition");
-    colorPointer = getAttribute("vColor");
-    mvpMatrixPointer = getUniform("mvp_matrix");
+    vertexPointer = attribute("vPosition");
+    colorPointer = attribute("vColor");
+    mvpMatrixPointer = uniform("mvp_matrix");
 }
 
 void StandardShaderProgram::disable() {

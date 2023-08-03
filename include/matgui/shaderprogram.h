@@ -41,24 +41,16 @@ public:
     /// Used to call the above functions
     ShaderProgram(std::string_view vertexCode,
                   std::string_view fragmentCode,
-                  std::string_view geometryCode = "");
+                  std::string_view geometryCode = {});
 
-    /// Shorthand function for adding three different shaders
-    void addObjects(std::string_view vertexCode,
-                    std::string_view fragmentCode,
-                    std::string_view geometryCode = "");
-
-    void loadShaderFromFile(std::filesystem::path vertexFile,
-                            std::filesystem::path fragmentFile,
-                            std::filesystem::path geometryFile);
     /// Bind the program
     void use() const;
 
     /// Set the current bound program to 0
     static void unuse();
 
-    GLint getUniform(char const *name) const;
-    GLint getAttribute(char const *name) const;
+    GLint uniform(char const *name, bool soft = false) const;
+    GLint attribute(char const *name, bool soft = false) const;
 
     //! Delete the program from opengl context
     void clear();
@@ -79,10 +71,6 @@ public:
     virtual ~ShaderProgram();
 
 private:
-    GLuint createProgram(std::string_view pVertexSource,
-                         std::string_view pFragmentSource,
-                         std::string_view geometryCode);
-
     GLuint _program = 0;
     std::vector<std::shared_ptr<class ShaderObject>> _objects;
 };

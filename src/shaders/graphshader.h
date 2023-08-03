@@ -49,9 +49,9 @@ static struct {
     void init() {
         program = std::make_unique<ShaderProgram>(GraphShader::vertexCode,
                                                   GraphShader::fragmentCode);
-        x = program->getAttribute("vX");
-        y = program->getAttribute("vY");
-        mvpMatrix = program->getUniform("mvp_matrix");
+        x = program->attribute("vX");
+        y = program->attribute("vY");
+        mvpMatrix = program->uniform("mvp_matrix");
 
         debug_check_true(program->get(), "could not create graph program");
     }

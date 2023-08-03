@@ -101,9 +101,9 @@ static struct {
         program->use();
         checkGlError("glUseProgram");
 
-        pPertices = program->getAttribute("vPosition");
-        pColor = program->getUniform("uColor");
-        pMvpMatrix = program->getUniform("mvp_matrix");
+        pPertices = program->attribute("vPosition");
+        pColor = program->uniform("uColor");
+        pMvpMatrix = program->uniform("mvp_matrix");
 
         { // Initialize square program
 

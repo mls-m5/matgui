@@ -50,9 +50,9 @@ static struct {
         program = std::make_unique<ShaderProgram>(LineShader::vertexCode,
                                                   LineShader::fragmentCode);
         debug_check_true(program->get(), "could not create graph program");
-        v = program->getAttribute("v");
-        color = program->getUniform("uColor");
-        mvpMatrix = program->getUniform("mvp_matrix");
+        v = program->attribute("v");
+        color = program->uniform("uColor");
+        mvpMatrix = program->uniform("mvp_matrix");
     }
 } lineProgram;
 

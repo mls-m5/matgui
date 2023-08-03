@@ -32,36 +32,37 @@ namespace matgui {
         cout << code << endl;
     }
 
-    //    cout << info;
-    auto b = info.begin();
-    cout << "line: " << string(b + firstColon + 1, b + firstParen) << endl;
-    cout << "col: " << string(b + firstParen + 1, b + secondParen) << endl;
+    cout << info;
+    //    auto b = info.begin();
+    //    cout << "line: " << string(b + firstColon + 1, b + firstParen) <<
+    //    endl; cout << "col: " << string(b + firstParen + 1, b + secondParen)
+    //    << endl;
 
-    istringstream ss(std::string{code});
-    size_t lineNum = stoul(string(b + firstColon + 1, b + firstParen));
-    size_t colNum = stoul(string(b + firstParen + 1, b + secondParen));
-    string line;
-    bool isPrinted = false;
+    //    istringstream ss(std::string{code});
+    //    size_t lineNum = stoul(string(b + firstColon + 1, b + firstParen));
+    //    size_t colNum = stoul(string(b + firstParen + 1, b + secondParen));
+    //    string line;
+    //    bool isPrinted = false;
 
-    for (size_t i = 1; getline(ss, line); ++i) {
+    //    for (size_t i = 1; getline(ss, line); ++i) {
 
-        cout << line << endl;
-        if (isPrinted) {
-            continue;
-        }
+    //        cout << line << endl;
+    //        if (isPrinted) {
+    //            continue;
+    //        }
 
-        else if (i < lineNum) {
-            continue;
-        }
+    //        else if (i < lineNum) {
+    //            continue;
+    //        }
 
-        isPrinted = true;
-        for (size_t c = 0; c < colNum; ++c) {
-            cout << "-";
-        }
-        cout << "^ here\n\n";
-        break;
-    }
-    cout << info << endl;
+    //        isPrinted = true;
+    //        for (size_t c = 0; c < colNum; ++c) {
+    //            cout << "-";
+    //        }
+    //        cout << "^ here\n\n";
+    //        break;
+    //    }
+    //    cout << info << endl;
 
     throw std::runtime_error(std::string{info});
 }

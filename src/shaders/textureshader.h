@@ -72,11 +72,11 @@ static struct {
                                                   TextureShader::fragmentCode);
         debug_check_true(program->get(), "could not create texture program");
 
-        vertices = program->getAttribute("vPosition");
-        texcoords = program->getAttribute("vtex");
-        color = program->getUniform("uColor");
-        mvpMatrix = program->getUniform("mvp_matrix");
-        texture = program->getUniform("texture1");
+        vertices = program->attribute("vPosition");
+        texcoords = program->attribute("vtex");
+        color = program->uniform("uColor");
+        mvpMatrix = program->uniform("mvp_matrix");
+        texture = program->uniform("texture1");
 
         glGenVertexArrays(
             2, vertexArrays); // Generating both vertexArrays at thes ame time

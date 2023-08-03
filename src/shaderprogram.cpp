@@ -22,21 +22,21 @@ using namespace std;
 
 namespace matgui {
 
-GLint ShaderProgram::getUniform(char const *name) const {
-    GLint ret;
+GLint ShaderProgram::uniform(const char *name, bool soft) const {
+    GLint ret = 0;
     ret = glGetUniformLocation(_program, name);
 
-    if (ret < 0) {
+    if (ret < 0 && !soft) {
         debug_print("could not find uniform %s\n", name);
     }
     return ret;
 }
 
-GLint ShaderProgram::getAttribute(char const *name) const {
+GLint ShaderProgram::attribute(char const *name, bool soft) const {
     GLint ret;
     ret = glGetAttribLocation(_program, name);
 
-    if (ret < 0) {
+    if (ret < 0 && !soft) {
         debug_print("could not find attribute %s\n", name);
     }
 
@@ -46,7 +46,9 @@ GLint ShaderProgram::getAttribute(char const *name) const {
 ShaderProgram::ShaderProgram(std::string_view vertexCode,
                              std::string_view fragmentCode,
                              std::string_view geometryCode) {
-    addObjects(vertexCode, fragmentCode, geometryCode);
+    addObject(GL_VERTEX_SHADER, vertexCode);
+    addObject(GL_FRAGMENT_SHADER, fragmentCode);
+    addObject(GL_GEOMETRY_SHADER, geometryCode);
     link();
 }
 
@@ -63,14 +65,6 @@ void ShaderProgram::addObject(GLint type, std::string_view code) {
         return;
     }
     addObject(std::make_shared<ShaderObject>(type, code));
-}
-
-void ShaderProgram::addObjects(std::string_view vertexCode,
-                               std::string_view fragmentCode,
-                               std::string_view geometryCode) {
-    addObject(GL_VERTEX_SHADER, vertexCode);
-    addObject(GL_FRAGMENT_SHADER, fragmentCode);
-    addObject(GL_GEOMETRY_SHADER, geometryCode);
 }
 
 ShaderProgram::~ShaderProgram() {
@@ -129,7 +123,6 @@ void ShaderProgram::link() {
 }
 
 void ShaderProgram::unlink() {
-
     if (_program) {
         glDeleteProgram(_program);
     }
@@ -172,17 +165,6 @@ void ShaderProgram::loadObject(std::filesystem::path path) {
         {".geom", GL_GEOMETRY_SHADER},
     };
     loadObject(typeMap.at(ext.string()), path);
-}
-
-void ShaderProgram::loadShaderFromFile(std::filesystem::path vertexFile,
-                                       std::filesystem::path fragmentFile,
-                                       std::filesystem::path geometryFile) {
-
-    loadObject(GL_VERTEX_SHADER, vertexFile);
-    loadObject(GL_FRAGMENT_SHADER, fragmentFile);
-    loadObject(GL_GEOMETRY_SHADER, geometryFile);
-
-    link();
 }
 
 } // namespace matgui
