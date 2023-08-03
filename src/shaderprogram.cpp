@@ -13,6 +13,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string_view>
 #include <vector>
 
 using namespace std;
@@ -51,7 +52,7 @@ GLuint ShaderProgram::createProgram(std::string_view pVertexSource,
         if (bufLength) {
             std::vector<char> buffer(static_cast<size_t>(bufLength));
             glGetProgramInfoLog(program, bufLength, nullptr, &buffer[0]);
-            printDebugInfo(buffer.data(), "");
+            ShaderObject::printDebugInfo(buffer.data(), "");
         }
         else {
             debug_print("Shader program linking failed, but with no error log");
@@ -67,9 +68,9 @@ GLuint ShaderProgram::createProgram(std::string_view pVertexSource,
 ShaderProgram::ShaderProgram() {
 }
 
-void ShaderProgram::initProgram(const std::string &vertexCode,
-                                const std::string &fragmentCode,
-                                const std::string &geometryCode) {
+void ShaderProgram::initProgram(std::string_view vertexCode,
+                                std::string_view fragmentCode,
+                                std::string_view geometryCode) {
     if (_program) {
         glDeleteProgram(_program);
     }
@@ -97,33 +98,14 @@ GLint ShaderProgram::getAttribute(char const *name) const {
     return ret;
 }
 
-ShaderProgram::ShaderProgram(const std::string &vertexCode,
-                             const std::string &fragmentCode,
-                             const std::string &geometryCode) {
+ShaderProgram::ShaderProgram(std::string_view vertexCode,
+                             std::string_view fragmentCode,
+                             std::string_view geometryCode) {
     initProgram(vertexCode, fragmentCode, geometryCode);
 }
 
 ShaderProgram::~ShaderProgram() {
     clear();
-}
-
-StandardShaderProgram::StandardShaderProgram(const std::string &vertexCode,
-                                             const std::string &fragmentCode,
-                                             const std::string &geometryCode)
-    : ShaderProgram(vertexCode, fragmentCode, geometryCode) {
-
-    vertexPointer = getAttribute("vPosition");
-    colorPointer = getAttribute("vColor");
-    mvpMatrixPointer = getUniform("mvp_matrix");
-}
-
-void StandardShaderProgram::disable() {
-    if (vertexPointer != -1) {
-        glEnableVertexAttribArray(vertexPointer);
-    }
-    if (colorPointer != -1) {
-        glEnableVertexAttribArray(colorPointer);
-    }
 }
 
 void ShaderProgram::use() const {
@@ -142,21 +124,43 @@ void ShaderProgram::clear() {
     }
 }
 
-void ShaderProgram::loadShaderFromFile(const std::string &vertexFile,
-                                       const std::string &fragmentFile) {
-    std::ifstream vfile(vertexFile);
-    if (!vfile) {
+void ShaderProgram::loadShaderFromFile(std::filesystem::path vertexFile,
+                                       std::filesystem::path fragmentFile,
+                                       std::filesystem::path geometryFile) {
+
+    auto loadFile = [](const std::filesystem::path &path) {
+        std::ifstream file(path);
+        if (!file) {
+            return std::string{};
+        }
+        std::string code((std::istreambuf_iterator<char>(file)),
+                         std::istreambuf_iterator<char>());
+        return code;
+    };
+
+    auto code = loadFile(vertexFile);
+    if (code.empty()) {
         cout << "could not open vertex shader file " << vertexFile << endl;
     }
-    std::string code((std::istreambuf_iterator<char>(vfile)),
-                     std::istreambuf_iterator<char>());
-    std::ifstream ffile(fragmentFile);
-    if (!ffile) {
+
+    auto fcode = loadFile(fragmentFile);
+    if (fcode.empty()) {
         cout << "could not open fragment shader file " << fragmentFile << endl;
     }
-    std::string fcode((std::istreambuf_iterator<char>(ffile)),
-                      std::istreambuf_iterator<char>());
-    initProgram(code, fcode);
+
+    auto gcode = [&] {
+        if (geometryFile.empty()) {
+            return std::string{};
+        }
+        auto gcode = loadFile(geometryFile);
+        if (gcode.empty()) {
+            cout << "could not open geometry shader file " << fragmentFile
+                 << endl;
+        }
+        return gcode;
+    }();
+
+    initProgram(code, fcode, gcode);
 }
 
 } // namespace matgui

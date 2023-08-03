@@ -10,6 +10,7 @@
 #include "src/paint.cpp"
 #include "src/shaderobject.cpp"
 #include "src/shaderprogram.cpp"
+#include "src/standardshaderprogram.cpp"
 #include "src/texture.cpp"
 #include "src/translateshader.cpp"
 #include "src/window.cpp"

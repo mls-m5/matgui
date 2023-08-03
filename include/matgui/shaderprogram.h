@@ -8,6 +8,7 @@
 #pragma once
 
 #include "common-gl.h"
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
@@ -21,16 +22,18 @@ public:
     ShaderProgram(const ShaderProgram &s) = delete;
     ShaderProgram &operator=(const ShaderProgram &) = delete;
     ShaderProgram &operator=(ShaderProgram &&s) = delete;
-    ShaderProgram(const std::string &vertexCode,
-                  const std::string &fragmentCode,
-                  const std::string &geometryCode = "");
 
-    void initProgram(const std::string &vertexCode,
-                     const std::string &fragmentCode,
-                     const std::string &geometryCode = "");
+    ShaderProgram(std::string_view vertexCode,
+                  std::string_view fragmentCode,
+                  std::string_view geometryCode = "");
 
-    void loadShaderFromFile(const std::string &vertexFile,
-                            const std::string &fragmentFile);
+    void initProgram(std::string_view vertexCode,
+                     std::string_view fragmentCode,
+                     std::string_view geometryCode = "");
+
+    void loadShaderFromFile(std::filesystem::path vertexFile,
+                            std::filesystem::path fragmentFile,
+                            std::filesystem::path geometryFile);
     void use() const;
     void unuse() const;
 
@@ -48,10 +51,6 @@ public:
         return _program;
     }
 
-    [[deprecated("use get() instead")]] GLuint getProgram() const {
-        return get();
-    }
-
     virtual ~ShaderProgram();
 
 private:
@@ -61,18 +60,6 @@ private:
 
     GLuint _program = 0;
     std::vector<std::unique_ptr<class ShaderObject>> _objects;
-};
-
-class StandardShaderProgram : public ShaderProgram {
-public:
-    GLint vertexPointer;
-    GLint colorPointer;
-    GLint mvpMatrixPointer;
-
-    StandardShaderProgram(const std::string &vertexCode,
-                          const std::string &fragmentCode,
-                          const std::string &geometryCode = "");
-    void disable();
 };
 
 } // namespace matgui

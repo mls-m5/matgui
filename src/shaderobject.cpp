@@ -4,10 +4,11 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace {
+namespace matgui {
 
 //! Print info and indicate the right line
-[[noreturn]] void printDebugInfo(std::string_view info, std::string_view code) {
+[[noreturn]] void ShaderObject::printDebugInfo(std::string_view info,
+                                               std::string_view code) {
     using namespace std;
 
 #ifdef __EMSCRIPTEN__
@@ -62,9 +63,6 @@ namespace {
 
     throw std::runtime_error(std::string{info});
 }
-
-} // namespace
-namespace matgui {
 
 ShaderObject::ShaderObject(GLenum shaderType, const std::string_view sourceIn) {
     shader = glCreateShader(shaderType);

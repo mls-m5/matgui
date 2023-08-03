@@ -1,6 +1,7 @@
 #pragma once
 
 #include "matgui/common-gl.h"
+#include <string_view>
 
 namespace matgui {
 
@@ -15,6 +16,9 @@ struct ShaderObject {
     ~ShaderObject();
 
     operator bool() const;
+
+    [[noreturn]] static void printDebugInfo(std::string_view info,
+                                            std::string_view code);
 
     GLuint shader = 0;
 };
