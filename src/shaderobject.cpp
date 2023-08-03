@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 namespace matgui {
 
@@ -31,6 +32,7 @@ namespace matgui {
         cout << code << endl;
     }
 
+    //    cout << info;
     auto b = info.begin();
     cout << "line: " << string(b + firstColon + 1, b + firstParen) << endl;
     cout << "col: " << string(b + firstParen + 1, b + secondParen) << endl;
