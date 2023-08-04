@@ -1,6 +1,4 @@
 #include "matgui/files.h"
-//#include "engine/legacy/modelobjectshader.h"
-//#include "engine/legacy/modelobjectshader.h"
 #include <fstream>
 #include <memory>
 #include <sstream>
