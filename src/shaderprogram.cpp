@@ -6,6 +6,7 @@
  */
 
 #include "matgui/shaderprogram.h"
+#include "matgui/files.h"
 #include "matgui/gl-error-handling.h"
 #include "shaderobject.h"
 #include <GL/gl.h>
@@ -146,13 +147,15 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     if (path.empty()) {
         return;
     }
-    std::ifstream file(path);
-    if (!file) {
+
+    auto file = openFile(path);
+    //    std::ifstream file(path);
+    if (!file || !*file) {
         cout << "could not open " << typeMap.at(type) << " shader file " << path
              << endl;
         return;
     }
-    std::string code((std::istreambuf_iterator<char>(file)),
+    std::string code((std::istreambuf_iterator<char>(*file)),
                      std::istreambuf_iterator<char>());
     addObject(type, code);
 }

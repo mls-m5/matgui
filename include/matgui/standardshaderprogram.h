@@ -5,6 +5,8 @@
 
 namespace matgui {
 
+#warning "remove this file"
+
 class StandardShaderProgram : public ShaderProgram {
 public:
     GLint vertexPointer;

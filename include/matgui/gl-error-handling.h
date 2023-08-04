@@ -13,7 +13,7 @@ inline void printGLString(const char *name, GLenum s) {
 #endif
 }
 
-inline int checkGlError(const char *op, bool throwError = false) {
+inline int checkGlError(const char *op, bool throwError = true) {
 #ifndef NO_GRAPHICS
     bool ret = false;
     for (auto error = glGetError(); error; error = glGetError()) {

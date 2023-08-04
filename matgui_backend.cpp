@@ -4,6 +4,7 @@
 #include "src/bitmapfont.cpp"
 #include "src/bitmapfontcontent.cpp"
 #include "src/draw.cpp"
+#include "src/files.cpp"
 #include "src/font.cpp"
 #include "src/fontview.cpp"
 #include "src/keyutils.cpp"
