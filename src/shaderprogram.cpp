@@ -16,6 +16,7 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 
@@ -49,13 +50,15 @@ ShaderProgram::ShaderProgram(std::string_view vertexCode,
                              std::string_view geometryCode) {
     addObject(GL_VERTEX_SHADER, vertexCode);
     addObject(GL_FRAGMENT_SHADER, fragmentCode);
-    addObject(GL_GEOMETRY_SHADER, geometryCode);
+    if (!geometryCode.empty()) {
+        addObject(GL_GEOMETRY_SHADER, geometryCode);
+    }
     link();
 }
 
 void ShaderProgram::addObject(std::shared_ptr<ShaderObject> object) {
     if (!object) {
-        return;
+        throw std::runtime_error{"trying to add null shader"};
     }
     _objects.push_back(std::move(object));
     unlink();
@@ -63,7 +66,7 @@ void ShaderProgram::addObject(std::shared_ptr<ShaderObject> object) {
 
 void ShaderProgram::addObject(GLint type, std::string_view code) {
     if (code.empty()) {
-        return;
+        throw std::runtime_error{"trying to add shader object with no code"};
     }
     addObject(std::make_shared<ShaderObject>(type, code));
 }
@@ -145,7 +148,7 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     };
 
     if (path.empty()) {
-        return;
+        throw std::runtime_error{"trying to load shader with no path"};
     }
 
     auto file = openFile(path);
@@ -153,6 +156,7 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     if (!file || !*file) {
         cout << "could not open " << typeMap.at(type) << " shader file " << path
              << endl;
+        throw std::runtime_error{"could not open shader file"};
         return;
     }
     std::string code((std::istreambuf_iterator<char>(*file)),
