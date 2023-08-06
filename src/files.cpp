@@ -8,7 +8,13 @@ namespace matgui {
 
 namespace {
 
-std::unordered_map<std::filesystem::path, std::string> builtinFiles;
+struct PathHasher {
+    std::size_t operator()(const std::filesystem::path& path) const {
+        return std::hash<std::string>()(path.string());
+    }
+};
+
+std::unordered_map<std::filesystem::path, std::string, PathHasher> builtinFiles;
 
 }
 
