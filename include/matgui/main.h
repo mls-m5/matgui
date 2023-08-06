@@ -29,7 +29,7 @@ void matguiMainWindow(int argc, char *argv[]) {
 // se main-demo.cpp for example
 #define MATGUI_MAIN(mainclass)                                                 \
     int main(int argc, char *argv[]) {                                         \
-        matguiMain<mainclass>(argc, argv);                                     \
+        matgui::matguiMain<mainclass>(argc, argv);                             \
     }
 
 // TODO: Add implementation for emscripten
@@ -39,5 +39,5 @@ void matguiMainWindow(int argc, char *argv[]) {
 // overriding functions on the window
 #define MATGUI_MAINWINDOW(mainwindow)                                          \
     int main(int argc, char *argv[]) {                                         \
-        matguiMainWindow<mainwindow>(argc, argv);                              \
+        matgui::matguiMainWindow<mainwindow>(argc, argv);                      \
     }
