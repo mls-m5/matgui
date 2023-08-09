@@ -10,6 +10,9 @@ namespace matgui {
 /// The returned value could also return built in data
 std::unique_ptr<std::istream> openFile(std::filesystem::path);
 
+/// Loads a file into memory
+std::string loadFile(std::filesystem::path);
+
 /// Set up a file in memory
 void registerFile(std::filesystem::path path, std::string_view content);
 
