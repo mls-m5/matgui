@@ -6,8 +6,8 @@
  */
 
 #include "matgui/shaderprogram.h"
+#include "glpp/gl-backend.hpp"
 #include "matgui/files.h"
-#include "matgui/gl-error-handling.h"
 #include "shaderobject.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -123,7 +123,7 @@ void ShaderProgram::link() {
         _program = 0;
     }
 
-    checkGlError("before return");
+    glCall("after created program");
 }
 
 void ShaderProgram::unlink() {

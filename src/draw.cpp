@@ -12,7 +12,6 @@
 #include <memory>
 #include <vector>
 
-#include "matgui/gl-error-handling.h"
 #include "matgui/shaderprogram.h"
 
 #define debug_check_true(cond, text)                                           \

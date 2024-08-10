@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "matgui/common-gl.h"
+// #include "matgui/common-gl.h"
+#include "glpp/gl-backend.hpp"
 #include "matgui/matgui-constants.h"
 #include "matgui/shaderprogram.h"
 #include <memory>
@@ -97,9 +98,9 @@ static struct {
 
         program = std::make_unique<ShaderProgram>(PlainShader::vertexCode,
                                                   PlainShader::fragmentCode);
-        debug_check_true(program->get(), "could not create square program");
-        program->use();
-        checkGlError("glUseProgram");
+        // debug_check_true(program->get(), "could not create square program");
+        glCall(program->use());
+        // checkGlError("glUseProgram");
 
         pPertices = program->attribute("vPosition");
         pColor = program->uniform("uColor");
