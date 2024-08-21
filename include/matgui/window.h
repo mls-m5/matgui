@@ -104,7 +104,14 @@ public:
     // the argument is the time since the last time the signal was called
     // Note: the functions is called directly so it is okay to connect
     // render code to this signal
-    MatSig::Signal<double> frameUpdate;
+    Signal<double> frameUpdate;
+
+    struct WindowResizeArguments {
+        int width = 0;
+        int height = 0;
+    };
+
+    Signal<WindowResizeArguments> resized;
 
 private:
     struct WindowData;

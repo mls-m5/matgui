@@ -221,6 +221,7 @@ bool Window::onResize(int width, int height) {
     auto scale = Application::Scale();
     setDimensions(width / scale, height / scale);
     Layout::location(0, 0, width / scale, height / scale);
+    resized.emit({width, height});
     return true;
 }
 
