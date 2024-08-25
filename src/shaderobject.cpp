@@ -1,7 +1,7 @@
 #include "shaderobject.h"
 #include "translateshader.h"
 #include <iostream>
-#include <sstream>
+// #include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -13,8 +13,8 @@ namespace matgui {
     using namespace std;
 
 #ifdef __EMSCRIPTEN__
-    cout << info << endl;
-    cout << code << endl;
+    cerr << info << endl;
+    cerr << code << endl;
 
 #endif
 
@@ -28,11 +28,11 @@ namespace matgui {
 
     if (firstColon == string::npos && firstParen == string::npos &&
         secondParen == string::npos) {
-        cout << info << endl;
-        cout << code << endl;
+        cerr << info << endl;
+        cerr << code << endl;
     }
 
-    cout << info;
+    cerr << info;
     //    auto b = info.begin();
     //    cout << "line: " << string(b + firstColon + 1, b + firstParen) <<
     //    endl; cout << "col: " << string(b + firstParen + 1, b + secondParen)

@@ -156,7 +156,7 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     if (!file || !*file) {
         cout << "could not open " << typeMap.at(type) << " shader file " << path
              << endl;
-        throw std::runtime_error{"could not open shader file"};
+        throw std::runtime_error{"could not open shader file " + path.string()};
         return;
     }
     std::string code((std::istreambuf_iterator<char>(*file)),

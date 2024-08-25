@@ -379,4 +379,9 @@ void QuitDrawModule() {
     lineProgram.program.reset();
 }
 
+void clear(float r, float g, float b, float a, bool depth) {
+    glClearColor(r, g, b, a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT * depth);
+}
+
 } // namespace matgui

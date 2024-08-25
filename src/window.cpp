@@ -7,7 +7,7 @@
 
 #include "matgui/window.h"
 #include "matgui/application.h"
-#include "matgui/common-gl.h"
+// #include "matgui/common-gl.h"
 #include "matgui/draw.h"
 #include "windowdata.h"
 #include <iostream>
@@ -128,8 +128,7 @@ Window::~Window() {
 void Window::clear() {
     _windowData->context.makeCurrent(sdl::WindowView{_windowData->window});
     auto &color = currentStyle.fill;
-    glClearColor(color.r, color.g, color.b, color.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    matgui::clear(color.r, color.g, color.b, color.a);
 }
 
 void Window::draw() {

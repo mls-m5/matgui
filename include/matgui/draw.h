@@ -100,6 +100,9 @@ void setDimensions(int width, int height);
 void pushViewport(int x, int y, int width, int height);
 void popViewport();
 
+// Fill the current render buffer (often the screen) with a single color
+void clear(float r, float g, float b, float a, bool depth = true);
+
 // clang-format on
 
 } // namespace matgui
