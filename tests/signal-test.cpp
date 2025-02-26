@@ -5,11 +5,10 @@
  *      Author: Mattias Larsson Sköld
  */
 
-//#define DO_NOT_CATCH_ERRORS
+// #define DO_NOT_CATCH_ERRORS
 
 #include "matgui/matsig.h"
 #include "mls-unit-test/unittest.h"
-#include <thread>
 
 using namespace MatSig;
 using namespace std;
@@ -53,7 +52,7 @@ static void globalArgumentFunction(int i) {
     functionIsCalled = true;
 }
 
-TEST_SUIT_BEGIN
+TEST_SUIT_BEGIN(MatguiSignal)
 
 TEST_CASE("void signal callback") {
     Signal<void> signal;
@@ -136,6 +135,7 @@ TEST_CASE("lambda void argument function") {
     flushSignals();
 
     ASSERT(isCalled, "the function not called");
+
     ASSERT_EQ(y, 5);
 
     isCalled = false;

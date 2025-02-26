@@ -9,7 +9,8 @@
 
 #include "matsig.h"
 #include "memberproperties.h"
-#include "style.h"
+#include "paint.h"
+#include <string>
 
 namespace matgui {
 
@@ -47,7 +48,7 @@ public:
 
     //! Trigger a redraw
     virtual void invalidate();
-    virtual void refresh(){};
+    virtual void refresh() {};
     virtual void updateStyle() {
         currentStyle = style;
         currentStyle += hoverStyle;
