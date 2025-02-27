@@ -11,11 +11,9 @@
 #include "shaderobject.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
-#include <fstream>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <sstream>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -123,7 +121,7 @@ void ShaderProgram::link() {
         _program = 0;
     }
 
-    glCall("after created program");
+    glCall((void)"after created program");
 }
 
 void ShaderProgram::unlink() {

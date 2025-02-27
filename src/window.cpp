@@ -7,12 +7,13 @@
 
 #include "matgui/window.h"
 #include "matgui/application.h"
-// #include "matgui/common-gl.h"
 #include "matgui/draw.h"
 #include "windowdata.h"
+#include <SDL2/SDL_video.h>
 #include <iostream>
 
 #include "../lib/sdlpp/include/sdlpp/mouse.hpp"
+#include "../lib/sdlpp/include/sdlpp/opengl.hpp"
 
 using std::cout;
 using std::endl;
@@ -96,11 +97,13 @@ Window::Window(string title, int width, int height, bool resizable) {
     checkSDLError(__LINE__);
 
     // Windows needs to make the context current
-    if (_windowData->context.makeCurrent({_windowData->window})) {
+
+    if (SDL_GL_MakeCurrent(_windowData->window.get(), _windowData->context)) {
         throw std::runtime_error("could not make SDL GL context active");
     }
 
-    cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) << endl;
+    // cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) <<
+    // endl;
 
 #ifdef USING_GLEW
     GLenum err = glewInit();
@@ -126,7 +129,7 @@ Window::~Window() {
 }
 
 void Window::clear() {
-    _windowData->context.makeCurrent(sdl::WindowView{_windowData->window});
+    SDL_GL_MakeCurrent(_windowData->window, _windowData->context);
     auto &color = currentStyle.fill;
     matgui::clear(color.r, color.g, color.b, color.a);
 }

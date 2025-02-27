@@ -8,6 +8,7 @@
 #pragma once
 
 // #include "matgui/common-gl.h"
+#include "../lib/sdlpp/include/sdlpp/opengl.hpp"
 #include "glpp/gl-backend.hpp"
 #include "matgui/matgui-constants.h"
 #include "matgui/shaderprogram.h"
