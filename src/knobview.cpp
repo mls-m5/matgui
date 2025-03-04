@@ -60,7 +60,7 @@ void KnobView::draw() {
     auto middleX = width() / 2.;
     auto middleY = height() / 2.;
 
-    double radius;
+    double radius = 0;
     if (width() > height()) {
         radius = height();
     }

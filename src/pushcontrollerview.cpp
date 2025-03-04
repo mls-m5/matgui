@@ -11,7 +11,10 @@
 
 namespace matgui {
 
-PushControlerView::PushControlerView() = default;
+PushControlerView::PushControlerView() {
+    style.line.color(1, 1, 1, .3);
+    updateStyle();
+}
 
 PushControlerView::~PushControlerView() = default;
 
@@ -39,7 +42,7 @@ void PushControlerView::draw() {
     auto middleX = width() / 2.;
     auto middleY = height() / 2.;
 
-    double radius;
+    double radius = 0;
     if (width() > height()) {
         radius = height();
     }
@@ -48,13 +51,10 @@ void PushControlerView::draw() {
     }
     radius *= (.8 / 2);
 
-    currentStyle.drawBasicView(this);
+    // currentStyle.drawBasicView(this);
 
-    drawRect(x() + middleX - radius,
-             y() + middleY - radius,
-             radius * 2,
-             radius * 2,
-             &currentStyle);
+    currentStyle.drawRect(
+        x() + middleX - radius, y() + middleY - radius, radius * 2, radius * 2);
 
     if (value() > .5) {
         indicatorStyle.fill.color(1, 1, 1);
