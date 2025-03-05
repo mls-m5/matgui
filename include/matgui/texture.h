@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
@@ -47,7 +48,17 @@ public:
     // Load a texture by filename.
     // If addToLibrary is true the texture is buffered and only loaded
     // from disk once
-    void load(const std::string filename, bool addToLibrary = true);
+    void load(const std::string path, bool addToLibrary = true);
+    void load(const std::filesystem::path path, bool addToLibrary = true) {
+        load(path.string(), addToLibrary);
+    }
+    void load(const char *path, bool addToLibrary = true) {
+        load(std::string{path}, addToLibrary);
+    }
+    void load(std::string_view path, bool addToLibrary = true) {
+        load(std::string{path}, addToLibrary);
+    }
+
     void createBitmap(const std::vector<Pixel> &pixels,
                       int width = 1,
                       int height = 1,
@@ -85,7 +96,28 @@ public:
 
     void interpolation(Interpolation);
 
+    void name(std::string name) {
+        _name = std::move(name);
+    }
+
+    std::string_view name() const {
+        return _name;
+    }
+
+    template <typename Arch>
+    void save(Arch &arch) {
+        arch("name", _name);
+    }
+
+    template <typename Arch>
+    void load(Arch &arch) {
+        arch("name", _name);
+        load(_name);
+    }
+
+private:
     std::shared_ptr<void> _texturePtr;
+    std::string _name;
 };
 
 } /* namespace matgui */
