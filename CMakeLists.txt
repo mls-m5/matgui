@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.22)
 
 project(MatGui)
 
+enable_testing()
+
 add_library(MatGui SHARED matgui.cpp)
 
 add_subdirectory(lib/sdlpp)

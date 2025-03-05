@@ -25,7 +25,7 @@ string lastLine(string code) {
 }
 } // namespace
 
-TEST_SUIT_BEGIN
+TEST_SUIT_BEGIN(MatguiShaderTranslate)
 
 TEST_CASE("frag color/out") {
     constexpr auto code = //

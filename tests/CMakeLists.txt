@@ -3,21 +3,30 @@ cmake_minimum_required(VERSION 3.22)
 
 enable_testing()
 
-function(test testname)
-    add_executable(${testname}-test ${testname}-test.cpp)
 
-    target_include_directories(${testname}-test PRIVATE tests)
+add_executable(
+    matgui-tests
+    font-test.cpp
+    shadertranslate-test.cpp
+    signal-test.cpp
+    mls-unit-test/test_main.cpp
+)
 
-    target_link_libraries(${testname}-test
-        MatGui
-        SDL2_image
-        )
+target_include_directories(
+    matgui-tests
+    PRIVATE
+    tests
+)
 
-    add_test(NAME ${testname}-test
-        COMMAND ${testname}-test
-        )
-endfunction()
+add_test(
+    NAME matgui-tests
+    COMMAND matgui-tests
+)
 
-test(font)
-test(shadertranslate)
-test(signal)
+target_link_libraries(
+    matgui-tests
+    MatGui
+    SDL2_image
+)
+
+

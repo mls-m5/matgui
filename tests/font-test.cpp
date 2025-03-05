@@ -19,7 +19,7 @@ BitmapFontData bepData("xx\nxx\n");
 
 } // namespace
 
-TEST_SUIT_BEGIN
+TEST_SUIT_BEGIN(MatguiFont)
 
 TEST_CASE("concat chars") {
     auto a = getFontDataVector("a");
