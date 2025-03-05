@@ -11,8 +11,6 @@
 #include "matgui/texture.h"
 #include "matgui/window.h"
 
-#include <iostream>
-
 using namespace matgui;
 using namespace std;
 

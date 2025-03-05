@@ -38,10 +38,10 @@ endif()
 target_compile_features(MatGui PRIVATE cxx_std_17)
 
 
-if (BUILD_TESTING)
+if (NOT NO_BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-if (BUILD_DEMOS)
+if (NOT NO_BUILD_DEMOS)
     add_subdirectory(demos)
 endif()
