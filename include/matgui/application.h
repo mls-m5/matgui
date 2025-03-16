@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include "matguifwd.h"
+#include <memory>
+
 namespace matgui {
 
 //! The application handles the startup and shutdown of the environment
@@ -20,10 +23,10 @@ public:
     // Destructor tears down environment
     // Exception is for emscripten when the destructor does nothing
     virtual ~Application();
-    static void mainLoop();
-    static bool handleEvents();
+    void mainLoop();
+    bool handleEvents();
 
-    static class Window *getWindow(unsigned int w);
+    class Window *getWindow(unsigned int w);
 
     // Stops the main loop
     static void quit();
@@ -49,13 +52,23 @@ public:
     // if false window::invalidate needs to be called to redraw
     static void InvalidateOnEvent(bool state);
 
+    static Application *instance();
+
 private:
     // Functions used internally to handle windows
-    static void addWindow(class Window *);
-    static void removeWindow(class Window *);
-    static inline void innerLoop();
+    void addWindow(class Window *);
+    void removeWindow(class Window *);
+    void innerLoop();
 
     friend class Window;
+
+    static Application *_instance;
+
+    struct Impl;
+
+    static Impl *impl();
+
+    std::unique_ptr<Impl> _impl;
 };
 
 } // namespace matgui

@@ -5,15 +5,17 @@
  *      Author: Mattias Larsson Sköld
  */
 
+#include <memory>
+#include <stdexcept>
 #ifndef __ANDROID__
 
+#include "../lib/sdlpp/include/sdlpp/events.hpp"
+#include "../lib/sdlpp/include/sdlpp/sdl.hpp"
+#include "../lib/sdlpp/include/sdlpp/timer.hpp"
 #include "matgui/application.h"
 #include "matgui/draw.h"
 #include "matgui/window.h"
 #include "windowdata.h"
-#include "../lib/sdlpp/include/sdlpp/events.hpp"
-#include "../lib/sdlpp/include/sdlpp/sdl.hpp"
-#include "../lib/sdlpp/include/sdlpp/timer.hpp"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -23,26 +25,118 @@ using namespace std;
 
 namespace matgui {
 
-namespace {
+Application *Application::_instance = nullptr;
 
-// Some global variables
-std::list<Window *> windows;
-Window *activeWindow = nullptr;
-Application *application = nullptr;
-float scale = 1.f;
-bool continuousUpdates = false;
-bool invalidateOnEvent = true;
+struct Application::Impl {
+    // Some global variables
+    std::list<Window *> windows;
+    Window *activeWindow = nullptr;
+    float scale = 1.f;
+    bool continuousUpdates = false;
+    bool invalidateOnEvent = true;
+    bool running = false;
+    uint32_t lastTick = 0; // used to keep track of framerate
 
-bool running = false;
-uint32_t lastTick = 0; // used to keep track of framerate
+    void handleWindowEvents(Window *window,
+                            const SDL_Event &event,
+                            bool &redrawEvent) {
+        switch (event.window.event) {
+        case SDL_WINDOWEVENT_CLOSE:
+            if (not window->onRequestClose()) {
+                window->hide();
+            }
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            window->onPointerLeave();
+            break;
+        case SDL_WINDOWEVENT_RESIZED:
+            window->onResize(event.window.data1, event.window.data2);
+            break;
+        case SDL_WINDOWEVENT_FOCUS_GAINED:
+            activeWindow = window;
+            break;
+        case SDL_WINDOWEVENT_FOCUS_LOST:
+            if (activeWindow == window) {
+                activeWindow = nullptr;
+            }
+            break;
+        default:
+            redrawEvent = false;
+        }
+    }
 
-} // namespace
+    void handleOtherEvents(Window *window,
+                           SDL_Event &event,
+                           bool &redrawEvent) {
+        switch (event.type) {
+        case SDL_MOUSEMOTION: {
+            auto &e = event.motion;
+            window->onPointerMove(
+                0, (double)e.x / scale, (double)e.y / scale, e.state);
+            break;
+        }
 
-Application::Application(int argc, char **argv) {
-    application = this;
+        case SDL_MOUSEBUTTONDOWN: {
+            auto &e = event.button;
+            auto button = MouseButton(
+                1 << (e.button - 1)); // Make one bit for each button
+            window->onPointerDown(
+                0, button, (double)e.x / scale, (double)e.y / scale);
+            break;
+        }
+
+        case SDL_MOUSEBUTTONUP: {
+            auto &e = event.button;
+            auto button = MouseButton(
+                1 << (e.button - 1)); // Make one bit for each button
+            window->onPointerUp(
+                0, button, (double)e.x / scale, (double)e.y / scale);
+            break;
+        }
+
+        case SDL_MOUSEWHEEL: {
+            auto &e = event.wheel;
+            window->onScroll(0, (double)e.x / scale, (double)e.y / scale);
+            break;
+        }
+
+        case SDL_KEYDOWN: {
+            auto &key = event.key;
+            window->onKeyDown(key.keysym.sym,
+                              key.keysym.scancode,
+                              key.keysym.mod,
+                              key.repeat);
+            break;
+        }
+
+        case SDL_KEYUP: {
+            auto &key = event.key;
+            window->onKeyUp(key.keysym.sym,
+                            key.keysym.scancode,
+                            key.keysym.mod,
+                            key.repeat);
+            break;
+        }
+
+        case SDL_TEXTINPUT: {
+            auto &text = event.text;
+            window->onTextInput(text.text);
+            break;
+        }
+
+        default:
+            redrawEvent = false;
+            break;
+        }
+    }
+};
+
+Application::Application(int argc, char **argv)
+    : _impl{std::make_unique<Impl>()} {
+    _instance = this;
     MatSig::setMainThread();
 
-    if (running == true) {
+    if (_impl->running == true) {
         throw std::runtime_error(
             "Application already created in other part of program");
     }
@@ -50,7 +144,7 @@ Application::Application(int argc, char **argv) {
     for (int i = 0; i + 1 < argc; ++i) {
         if (argv[i] == string("--scale")) {
             ++i;
-            scale = atof(argv[i]);
+            _impl->scale = atof(argv[i]);
         }
     }
 
@@ -61,18 +155,18 @@ Application::Application(int argc, char **argv) {
 }
 
 void Application::quit() {
-    running = false;
+    impl()->running = false;
 }
 
 inline void Application::innerLoop() {
     auto newTime = SDL_GetTicks();
-    auto passedTime = (double)(newTime - lastTick) / 1000.;
-    lastTick = newTime;
+    auto passedTime = (double)(newTime - _impl->lastTick) / 1000.;
+    _impl->lastTick = newTime;
 
-    auto shouldRedraw = continuousUpdates;
+    auto shouldRedraw = _impl->continuousUpdates;
 
     if (!shouldRedraw) {
-        for (auto it : windows) {
+        for (auto it : _impl->windows) {
             if (it->invalid()) {
                 shouldRedraw = true;
             }
@@ -80,15 +174,15 @@ inline void Application::innerLoop() {
     }
 
 #ifndef __EMSCRIPTEN__
-    if (!shouldRedraw && !continuousUpdates) {
+    if (!shouldRedraw && !_impl->continuousUpdates) {
         if (!shouldRedraw) {
             SDL_Delay(10); // Limit cpu usage on idle
         }
     }
 #endif
 
-    for (auto it : windows) {
-        if (continuousUpdates || it->invalid()) {
+    for (auto it : _impl->windows) {
+        if (_impl->continuousUpdates || it->invalid()) {
             it->clear();
             it->frameUpdate.directCall(passedTime);
             it->draw();
@@ -98,7 +192,7 @@ inline void Application::innerLoop() {
     }
 
     if (handleEvents()) {
-        running = false;
+        _impl->running = false;
 #ifdef __EMSCRIPTEN__
         emscripten_cancel_main_loop();
 #endif
@@ -108,114 +202,29 @@ inline void Application::innerLoop() {
     MatSig::flushSignals();
 }
 
+Application::Impl *Application::impl() {
+    return instance()->_impl.get();
+}
+
 void Application::mainLoop() {
-    running = true;
-    lastTick = sdl::getTicks();
+    _impl->running = true;
+    _impl->lastTick = sdl::getTicks();
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(innerLoop, 0, 1);
 #else
-    while (running) {
+    while (_impl->running) {
         innerLoop();
     }
 #endif
 }
 
 Window *Application::getWindow(unsigned int w) {
-    for (auto it : windows) {
+    for (auto it : _impl->windows) {
         if (w == it->_windowData->windowId) {
             return it;
         }
     }
     return nullptr;
-}
-
-static void handleWindowEvents(Window *window,
-                               const SDL_Event &event,
-                               bool &redrawEvent) {
-    switch (event.window.event) {
-    case SDL_WINDOWEVENT_CLOSE:
-        if (not window->onRequestClose()) {
-            window->hide();
-        }
-        break;
-    case SDL_WINDOWEVENT_LEAVE:
-        window->onPointerLeave();
-        break;
-    case SDL_WINDOWEVENT_RESIZED:
-        window->onResize(event.window.data1, event.window.data2);
-        break;
-    case SDL_WINDOWEVENT_FOCUS_GAINED:
-        activeWindow = window;
-        break;
-    case SDL_WINDOWEVENT_FOCUS_LOST:
-        if (activeWindow == window) {
-            activeWindow = nullptr;
-        }
-        break;
-    default:
-        redrawEvent = false;
-    }
-}
-
-static void handleOtherEvents(Window *window,
-                              SDL_Event &event,
-                              bool &redrawEvent) {
-    switch (event.type) {
-    case SDL_MOUSEMOTION: {
-        auto &e = event.motion;
-        window->onPointerMove(
-            0, (double)e.x / scale, (double)e.y / scale, e.state);
-        break;
-    }
-
-    case SDL_MOUSEBUTTONDOWN: {
-        auto &e = event.button;
-        auto button =
-            MouseButton(1 << (e.button - 1)); // Make one bit for each button
-        window->onPointerDown(
-            0, button, (double)e.x / scale, (double)e.y / scale);
-        break;
-    }
-
-    case SDL_MOUSEBUTTONUP: {
-        auto &e = event.button;
-        auto button =
-            MouseButton(1 << (e.button - 1)); // Make one bit for each button
-        window->onPointerUp(
-            0, button, (double)e.x / scale, (double)e.y / scale);
-        break;
-    }
-
-    case SDL_MOUSEWHEEL: {
-        auto &e = event.wheel;
-        window->onScroll(0, (double)e.x / scale, (double)e.y / scale);
-        break;
-    }
-
-    case SDL_KEYDOWN: {
-        auto &key = event.key;
-        window->onKeyDown(
-            key.keysym.sym, key.keysym.scancode, key.keysym.mod, key.repeat);
-        break;
-    }
-
-    case SDL_KEYUP: {
-        auto &key = event.key;
-        window->onKeyUp(
-            key.keysym.sym, key.keysym.scancode, key.keysym.mod, key.repeat);
-        break;
-    }
-
-    case SDL_TEXTINPUT: {
-        auto &text = event.text;
-        window->onTextInput(text.text);
-        break;
-    }
-
-    default:
-        redrawEvent = false;
-        break;
-    }
 }
 
 bool Application::handleEvents() {
@@ -228,12 +237,13 @@ bool Application::handleEvents() {
         auto window = getWindow(event.window.windowID);
         if (window) {
             bool redrawEvent =
-                invalidateOnEvent; // If the event should trigger a redraw
+                _impl
+                    ->invalidateOnEvent; // If the event should trigger a redraw
             if (event.type == SDL_WINDOWEVENT) {
-                handleWindowEvents(window, event, redrawEvent);
+                _impl->handleWindowEvents(window, event, redrawEvent);
             }
             else {
-                handleOtherEvents(window, event, redrawEvent);
+                _impl->handleOtherEvents(window, event, redrawEvent);
             }
             if (redrawEvent) {
                 window->invalidate();
@@ -248,41 +258,50 @@ Application::~Application() {
     QuitDrawModule();
 
     auto tmpWindowList =
-        windows; // windows will start removing themselves from list
+        _impl->windows; // windows will start removing themselves from list
     for (auto it : tmpWindowList) {
         delete it;
     }
-    windows.clear();
+    _impl->windows.clear();
 
     sdl::quit();
 #endif
 }
 
 void Application::addWindow(class Window *window) {
-    windows.push_back(window);
+    _impl->windows.push_back(window);
 }
 
 void Application::removeWindow(class Window *window) {
-    windows.remove(window);
-    if (windows.empty()) {
-        application->quit();
+    _impl->windows.remove(window);
+    if (_impl->windows.empty()) {
+        _instance->quit();
     }
 }
 
 float Application::Scale() {
-    return scale;
+    return impl()->scale;
 }
 
 void Application::Scale(float s) {
-    scale = s;
+    impl()->scale = s;
 }
 
 void Application::ContinuousUpdates(bool state) {
-    continuousUpdates = state;
+    impl()->continuousUpdates = state;
 }
 
 void Application::InvalidateOnEvent(bool state) {
-    invalidateOnEvent = state;
+    impl()->invalidateOnEvent = state;
+}
+
+Application *Application::instance() {
+    [[unlikely]]
+    if (!_instance) {
+        throw std::runtime_error{
+            "Trying to access Application instance that is null"};
+    }
+    return _instance;
 }
 
 } // namespace matgui

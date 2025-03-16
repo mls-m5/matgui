@@ -121,11 +121,11 @@ Window::Window(string title, int width, int height, bool resizable) {
     // refresh
     sdl::gl::setSwapInterval(1);
 
-    Application::addWindow(this);
+    Application::instance()->addWindow(this);
 }
 
 Window::~Window() {
-    Application::removeWindow(this);
+    Application::instance()->removeWindow(this);
 }
 
 void Window::clear() {
@@ -148,12 +148,12 @@ bool Window::onRequestClose() {
 
 void Window::show() {
     _windowData->window.show();
-    Application::addWindow(this);
+    Application::instance()->addWindow(this);
 }
 
 void Window::hide() {
     _windowData->window.hide();
-    Application::removeWindow(this);
+    Application::instance()->removeWindow(this);
 }
 
 bool Window::fullscreen(bool state, bool changeVideoMode) {
