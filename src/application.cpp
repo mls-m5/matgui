@@ -10,17 +10,10 @@
 #include "matgui/application.h"
 #include "matgui/draw.h"
 #include "matgui/window.h"
-#include "signal.h"
 #include "windowdata.h"
-
 #include "../lib/sdlpp/include/sdlpp/events.hpp"
-#include "../lib/sdlpp/include/sdlpp/render.hpp"
 #include "../lib/sdlpp/include/sdlpp/sdl.hpp"
 #include "../lib/sdlpp/include/sdlpp/timer.hpp"
-#include "SDL2/SDL.h"
-
-#include <SDL2/SDL_events.h>
-#include <iostream>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
