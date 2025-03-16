@@ -6,18 +6,13 @@
  */
 
 #include "matgui/window.h"
+#include "../lib/sdlpp/include/sdlpp/mouse.hpp"
+#include "../lib/sdlpp/include/sdlpp/opengl.hpp"
 #include "matgui/application.h"
 #include "matgui/draw.h"
 #include "windowdata.h"
 #include <SDL2/SDL_video.h>
 #include <iostream>
-
-#include "../lib/sdlpp/include/sdlpp/mouse.hpp"
-#include "../lib/sdlpp/include/sdlpp/opengl.hpp"
-
-using std::cout;
-using std::endl;
-using std::string;
 
 namespace {
 
@@ -26,9 +21,9 @@ void checkSDLError(int line = -1) {
 #ifndef NDEBUG
     const char *error = SDL_GetError();
     if (*error != '\0') {
-        cout << "SDL Error: " << error << endl;
+        std::cout << "SDL Error: " << error << "\n";
         if (line != -1)
-            cout << " + line: " << line << endl;
+            std::cerr << " + line: " << line << "\n";
         SDL_ClearError();
     }
 #endif
@@ -38,7 +33,7 @@ void checkSDLError(int line = -1) {
 
 namespace matgui {
 
-void Window::title(string title) {
+void Window::title(std::string title) {
     SDL_SetWindowTitle(_windowData->window, title.c_str());
 }
 
@@ -50,9 +45,6 @@ Window::Window(string title, int width, int height, bool resizable) {
     _windowData = std::make_unique<WindowData>();
 
 #ifdef USING_GL2
-
-    //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
@@ -63,14 +55,7 @@ Window::Window(string title, int width, int height, bool resizable) {
     sdl::gl::setAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                           SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
-
-    //    Turn on double buffering with a 24bit Z buffer.
-    //    You may need to change this to 16 or 32 for your system
     sdl::gl::setAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    //    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); //todo: consider using
-    //    this when doing pure gui implementations to be able to update just
-    //    parts of the screen
-
     sdl::gl::setAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     // Create our window centered
@@ -90,9 +75,6 @@ Window::Window(string title, int width, int height, bool resizable) {
 
     checkSDLError(__LINE__);
 
-    // Create our opengl context and attach it to our window
-    //    _windowData->context = sdl::gl::Context{_windowData->window}; // why
-    //    no worki?
     _windowData->context = SDL_GL_CreateContext(_windowData->window);
     checkSDLError(__LINE__);
 
@@ -101,9 +83,6 @@ Window::Window(string title, int width, int height, bool resizable) {
     if (SDL_GL_MakeCurrent(_windowData->window.get(), _windowData->context)) {
         throw std::runtime_error("could not make SDL GL context active");
     }
-
-    // cout << "Supported version of OpenGl: " << glGetString(GL_VERSION) <<
-    // endl;
 
 #ifdef USING_GLEW
     GLenum err = glewInit();
