@@ -14,3 +14,11 @@ demo(multiple-window)
 demo(simple)
 demo(scroll)
 demo(main)
+
+file(
+    COPY
+    font
+    gfx
+    DESTINATION
+    .
+)
