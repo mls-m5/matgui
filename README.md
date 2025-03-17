@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
 
 ### A example with callbacks
 ``` c++
+
 #include "matgui/application.h"
 #include "matgui/button.h"
 #include "matgui/imageview.h"
@@ -66,14 +67,14 @@ int main(int argc, char **argv) {
 #include "matgui/window.h"
 
 #include <iostream>
+#include <memory>
 
-using namespace MatGui;
-using namespace std;
+using namespace matgui;
 
 // Example callback function
-ProgressView *progressView;
+ProgressView *progressView = nullptr;
 void callback(View::PointerArgument arg) {
-    cout << "callback... x = " << arg.x << endl;
+    std::cout << "callback... x = " << arg.x << std::endl;
 }
 
 // Another callback example
@@ -82,7 +83,7 @@ void knobCallback(double value) {
 }
 
 void keyDownCallback(View::KeyArgument arg) {
-    cout << "keypress " << (char)arg.symbol << endl;
+    std::cout << "keypress " << (char)arg.symbol << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -90,38 +91,39 @@ int main(int argc, char *argv[]) {
 
     Window window("matgui-demo");
 
-    auto *button = window.addChild(make_unique<Button>("button 1"));
-    auto *button2 = window.addChild(make_unique<Button>("close"));
+    auto *button = window.addChild(std::make_unique<Button>("button 1"));
+    auto *button2 = window.addChild(std::make_unique<Button>("close"));
     auto *knob = window.createChild<KnobView>(); // Create the child directly
 
-    auto *progress = new ProgressView; // You can create objects as raw pointers
-                                       // but using 'new' in new code is not recommended
-    window.addChild(
-        std::unique_ptr<View>{progress}); // Notice2 this is not recommended
-    
+    auto progress = std::make_unique<ProgressView>();
 
-    auto leftLabel = make_unique<Label>("left aligned");
+    ::progressView = progress.get();
+
+    window.addChild(std::move(progress));
+
+    auto leftLabel = std::make_unique<Label>("left aligned");
     leftLabel->alignment(FontView::Left);
-    window.addChild(move(leftLabel));
+    window.addChild(std::move(leftLabel));
 
-    auto rightLabel = make_unique<Label>("right aligned");
+    auto rightLabel = std::make_unique<Label>("right aligned");
     rightLabel->alignment(FontView::Right);
-    window.addChild(move(rightLabel));
+    window.addChild(std::move(rightLabel));
 
     auto *textEntry = window.createChild<TextEntry>();
     textEntry->text("hej");
 
-    textEntry->submit.connect(
-        [textEntry]() { cout << "got text: " << textEntry->text() << endl; });
+    textEntry->submit.connect([textEntry]() {
+        std::cout << "got text: " << textEntry->text() << std::endl;
+    });
 
-    auto layout2 = make_unique<LinearLayout>();
+    auto layout2 = std::make_unique<LinearLayout>();
     layout2->orientation(LAYOUT_HORIZONTAL);
     layout2->createChild<Label>("standard label");
     layout2->createChild<ImageView>("gfx/test.png");
     layout2->createChild<ToggleView>();
     layout2->createChild<SliderView>();
 
-    window.addChild(move(layout2));
+    window.addChild(std::move(layout2));
 
     button->clicked.connect(callback); // callback to a function
     button2->clicked.connect(
@@ -131,12 +133,13 @@ int main(int argc, char *argv[]) {
     // To specify argument is optional
     // as can be seen from these two examples
     knob->changed.connect([](double value) {
-        cout << "lambda function called from signal with value " << value
-             << endl;
+        std::cout << "lambda function called from signal with value " << value
+                  << std::endl;
     });
     knob->changed.connect([]() {
-        cout << "lambda function called to function without specified arguments"
-             << endl;
+        std::cout
+            << "lambda function called to function without specified arguments"
+            << std::endl;
     });
 
     window.keyDown.connect(keyDownCallback);
@@ -150,7 +153,6 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
 ```
 
 Buildflags

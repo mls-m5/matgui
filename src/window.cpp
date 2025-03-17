@@ -13,6 +13,7 @@
 #include "windowdata.h"
 #include <SDL2/SDL_video.h>
 #include <iostream>
+#include <string>
 
 namespace {
 
@@ -41,7 +42,7 @@ void Window::bordered(bool state) {
     SDL_SetWindowBordered(_windowData->window, static_cast<SDL_bool>(state));
 }
 
-Window::Window(string title, int width, int height, bool resizable) {
+Window::Window(std::string title, int width, int height, bool resizable) {
     _windowData = std::make_unique<WindowData>();
 
 #ifdef USING_GL2

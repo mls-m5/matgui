@@ -22,7 +22,11 @@ public:
         rectStyle.fill.color(1, 1, 1);
     }
 
-    ~Game() {
+    Game(const Game &) = delete;
+    Game(Game &&) = delete;
+    Game &operator=(const Game &) = delete;
+    Game &operator=(Game &&) = delete;
+    ~Game() override {
         clicked.disconnect(this);
     }
 
