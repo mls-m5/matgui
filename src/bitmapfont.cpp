@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-//#define NDEBUG //Uncomment for production version
+// #define NDEBUG //Uncomment for production version
 #include <assert.h>
 
 using std::list;
@@ -33,7 +33,7 @@ extern std::map<std::string, BitmapFontData> multiCharacterFontBitmap;
 BitmapFontData getFontDataVector(string text) {
     int width = 0;
     int len = 0;
-    int textSize = text.size();
+    auto textSize = text.size();
     string letter;
     letter.reserve(6);
     std::list<BitmapFontData *> letterList;

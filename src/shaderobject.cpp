@@ -65,8 +65,8 @@ namespace matgui {
     throw std::runtime_error(std::string{info});
 }
 
-ShaderObject::ShaderObject(GLenum shaderType, const std::string_view sourceIn) {
-    shader = glCreateShader(shaderType);
+ShaderObject::ShaderObject(GLenum shaderType, const std::string_view sourceIn)
+    : shader{glCreateShader(shaderType)} {
 #ifdef USING_GL2
     auto source = translateShader(sourceIn, shaderType);
 #else

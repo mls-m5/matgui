@@ -161,8 +161,9 @@ void Font::DefaultFontPath(std::string path) {
     defaultFontPath = path;
 }
 
-void Font::operator=(const Font &font) {
+Font &Font::operator=(const Font &font) {
     _data->font = font._data->font;
+    return *this;
 }
 
 Font::operator bool() const {

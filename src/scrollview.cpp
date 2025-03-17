@@ -7,7 +7,7 @@ matgui::ScrollView::ScrollView() {
 
     double standardHeight = 50;
 
-    for (View *child; (child = _layout.getChild(i)); ++i) {
+    for (View *child = nullptr; (child = _layout.getChild(i)); ++i) {
         auto height = child->height();
         height = height ? height : standardHeight;
 

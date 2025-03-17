@@ -26,7 +26,7 @@ public:
 
     void draw(double x, double y, const std::string &text, bool centered);
 
-    void operator=(const Font &);
+    Font &operator=(const Font &);
 
     static void DefaultFontPath(std::string path);
 

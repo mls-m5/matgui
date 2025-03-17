@@ -45,7 +45,7 @@ void ToggleView::draw() {
     auto middleX = width() / 2.;
     auto middleY = height() / 2.;
 
-    double radius;
+    auto radius = 0.;
     if (width() > height()) {
         radius = height();
     }
