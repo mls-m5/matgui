@@ -2,12 +2,11 @@
 
 #include "translateshader.h"
 #include <sstream>
-
-using namespace std;
+#include <string>
 
 namespace {
 
-bool startsWith(const string &str, const string &substr) {
+bool startsWith(const std::string &str, const std::string &substr) {
     return str.substr(0, substr.size()) == substr;
 }
 
@@ -37,10 +36,12 @@ bool startsWith(const string &str, const string &substr) {
 //    return line;
 //}
 
-string replaceAll(string line, string find, string replaceStr) {
+std::string replaceAll(std::string line,
+                       std::string find,
+                       std::string replaceStr) {
     size_t start = 0u;
     size_t f = 0;
-    while ((f = line.find(find, start)) != string::npos) {
+    while ((f = line.find(find, start)) != std::string::npos) {
         line.replace(f, find.size(), replaceStr);
         start = f + replaceStr.size();
     }
@@ -51,7 +52,7 @@ string replaceAll(string line, string find, string replaceStr) {
 //! Assumes that layout is already found on the line
 //! "layout (location = 0) in vec4 vPosition;" is converted to
 //! in vec4 vPosition;"
-string removeLayout(string line) {
+std::string removeLayout(std::string line) {
     if (auto f = line.find("in")) {
         line.erase(line.begin(), line.begin() + f);
     }
@@ -64,11 +65,11 @@ string removeLayout(string line) {
 //! For example for webgl
 std::string translateShader(const std::string &fromSource,
                             GLenum /*shaderType*/) {
-    string ret = "#version 300 es\n\nprecision mediump float;\n";
+    std::string ret = "#version 300 es\n\nprecision mediump float;\n";
 
-    istringstream ss(fromSource);
+    std::istringstream ss(fromSource);
 
-    string line;
+    std::string line;
     //    string fragmentOutName; // Because gl_FragColor is deprecated
 
     while (getline(ss, line)) {

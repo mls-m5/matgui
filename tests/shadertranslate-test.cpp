@@ -1,19 +1,16 @@
 // Copyright © Mattias Larsson Sköld 2020
 
 #include "../src/translateshader.cpp"
-
 #include "mls-unit-test/unittest.h"
-
 #include <sstream>
-
-using namespace std;
+#include <string>
 
 namespace {
-string lastLine(string code) {
-    stringstream ss(code);
+std::string lastLine(std::string code) {
+    std::stringstream ss(code);
 
-    string line;
-    string ret;
+    std::string line;
+    std::string ret;
 
     while (getline(ss, line)) {
         if (!line.empty()) {
@@ -35,7 +32,7 @@ TEST_CASE("frag color/out") {
         "   fragColor = vec4(1, 1, 1);\n"
         "}";
     auto res = translateShader(code, GL_FRAGMENT_SHADER);
-    cout << res;
+    std::cout << res;
 }
 
 TEST_CASE("disabled frag in") {
@@ -74,7 +71,7 @@ TEST_CASE("remove layout") {
 
     const auto res = lastLine(translateShader(code, GL_VERTEX_SHADER));
 
-    cout << res << endl;
+    std::cout << res << std::endl;
 
     ASSERT_NE(res, code);
 }

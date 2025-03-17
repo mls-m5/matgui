@@ -9,7 +9,6 @@
 #include "mls-unit-test/unittest.h"
 #include <iostream>
 
-using namespace std;
 using namespace matgui;
 
 namespace {

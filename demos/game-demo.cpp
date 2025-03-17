@@ -12,7 +12,6 @@
 #include "matgui/window.h"
 
 using namespace matgui;
-using namespace std;
 
 class Game : public View {
 public:

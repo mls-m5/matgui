@@ -18,8 +18,6 @@
 #include <string_view>
 #include <vector>
 
-using namespace std;
-
 namespace matgui {
 
 GLint ShaderProgram::uniform(const char *name, bool soft) const {
@@ -152,8 +150,8 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     auto file = openFile(path);
     //    std::ifstream file(path);
     if (!file || !*file) {
-        cout << "could not open " << typeMap.at(type) << " shader file " << path
-             << endl;
+        std::cout << "could not open " << typeMap.at(type) << " shader file "
+                  << path << std::endl;
         throw std::runtime_error{"could not open shader file " + path.string()};
         return;
     }

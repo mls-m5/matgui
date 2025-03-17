@@ -9,11 +9,9 @@
 #include "matgui/label.h"
 #include "matgui/textentry.h"
 #include "matgui/window.h"
-
 #include <iostream>
 
 using namespace matgui;
-using namespace std;
 
 int main(int argc, char **argv) {
     Application app(argc, argv);
@@ -23,7 +21,7 @@ int main(int argc, char **argv) {
     auto *textEntry = window.createChild<TextEntry>();
 
     textEntry->submit.connect(
-        [textEntry]() { cout << textEntry->text() << endl; });
+        [textEntry]() { std::cout << textEntry->text() << std::endl; });
 
     app.mainLoop();
 }

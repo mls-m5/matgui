@@ -21,8 +21,6 @@
 #include <emscripten.h>
 #endif
 
-using namespace std;
-
 namespace matgui {
 
 Application *Application::_instance = nullptr;
@@ -142,7 +140,7 @@ Application::Application(int argc, char **argv)
     }
 
     for (int i = 0; i + 1 < argc; ++i) {
-        if (argv[i] == string("--scale")) {
+        if (argv[i] == std::string("--scale")) {
             ++i;
             _impl->scale = atof(argv[i]);
         }

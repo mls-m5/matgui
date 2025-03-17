@@ -11,7 +11,6 @@
 #include "mls-unit-test/unittest.h"
 
 using namespace MatSig;
-using namespace std;
 
 class VoidCallbackClass {
 public:

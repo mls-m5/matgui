@@ -10,8 +10,6 @@ namespace matgui {
 //! Print info and indicate the right line
 [[noreturn]] void ShaderObject::printDebugInfo(std::string_view info,
                                                std::string_view code) {
-    using namespace std;
-
 #ifdef __EMSCRIPTEN__
     cerr << info << endl;
     cerr << code << endl;
@@ -26,13 +24,13 @@ namespace matgui {
     auto firstParen = info.find('(');
     auto secondParen = info.find(')');
 
-    if (firstColon == string::npos && firstParen == string::npos &&
-        secondParen == string::npos) {
-        cerr << info << endl;
-        cerr << code << endl;
+    if (firstColon == std::string::npos && firstParen == std::string::npos &&
+        secondParen == std::string::npos) {
+        std::cerr << info << std::endl;
+        std::cerr << code << std::endl;
     }
 
-    cerr << info;
+    std::cerr << info;
     //    auto b = info.begin();
     //    cout << "line: " << string(b + firstColon + 1, b + firstParen) <<
     //    endl; cout << "col: " << string(b + firstParen + 1, b + secondParen)
