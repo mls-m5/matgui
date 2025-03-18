@@ -12,10 +12,10 @@
 namespace matgui {
 
 View::View() : _weight(1) {
-    location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
+    View::location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
     hoverStyle.enabled = false;
     focusStyle.enabled = false;
-    updateStyle();
+    View::updateStyle();
 }
 
 View::~View() {

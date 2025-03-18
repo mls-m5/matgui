@@ -5,9 +5,7 @@
  *      Author: Mattias Larsson Sköld
  */
 
-//#include "paint.h"
 #include "matgui/draw.h"
-#include "matgui/memberproperties.h"
 #include "matgui/view.h"
 
 void matgui::Paint::drawRect(double x,

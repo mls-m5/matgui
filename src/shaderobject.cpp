@@ -1,7 +1,6 @@
 #include "shaderobject.h"
 #include "translateshader.h"
 #include <iostream>
-// #include <sstream>
 #include <stdexcept>
 #include <vector>
 

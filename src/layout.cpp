@@ -6,10 +6,6 @@
  */
 
 #include "matgui/layout.h"
-#include "matgui/window.h"
-
-#include <algorithm>
-#include <iostream>
 
 namespace matgui {
 

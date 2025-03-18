@@ -7,8 +7,10 @@
 
 #include "matgui/font.h"
 #include "fontdata.h"
+#include "matgui/application.h"
+#include "matgui/common-gl.h"
 #include "matgui/draw.h"
-#include "matgui/shaderprogram.h"
+#include <GL/gl.h>
 #include <list>
 
 namespace matgui {
@@ -33,9 +35,11 @@ void renderText(const FontType *font,
 
 namespace {
 
-std::list<FontDescriptionStruct> loadedFonts;
-bool isInitialized = false;
-std::string defaultFontPath = "font/Ubuntu-R.ttf";
+struct FontState {
+    std::list<FontDescriptionStruct> loadedFonts;
+    bool isInitialized = false;
+    std::string defaultFontPath = "font/Ubuntu-R.ttf";
+};
 
 } // namespace
 
@@ -136,15 +140,17 @@ Font::Font(const std::string filename, int size) : Font() {
 }
 
 Font::Font() : _data(std::make_unique<FontData>()) {
-    if (!isInitialized) {
+    auto &state = Application::state<FontState>();
+    if (!state.isInitialized) {
 #ifndef USE_BITMAP_FONT
         TTF_Init();
 #endif
-        isInitialized = true;
+        state.isInitialized = true;
     }
 }
 
-Font::Font(int size) : Font(defaultFontPath, size) {
+Font::Font(int size)
+    : Font(Application::state<FontState>().defaultFontPath, size) {
 }
 
 Font::Font(const Font &font) : _data(std::make_unique<FontData>()) {
@@ -158,7 +164,7 @@ void Font::draw(double x, double y, const std::string &text, bool centered) {
 }
 
 void Font::DefaultFontPath(std::string path) {
-    defaultFontPath = path;
+    Application::state<FontState>().defaultFontPath = path;
 }
 
 Font &Font::operator=(const Font &font) {
