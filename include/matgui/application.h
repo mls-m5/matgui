@@ -38,6 +38,13 @@ public:
     // Change by sending for example "--scale 2" as arguments on construction
     static float Scale();
 
+    // Multi sample anti aliasing
+    // Must be set before window is createde to have effect
+    // Values must also be something valid for the current GPU
+    // Recommended values is 0 4 16 32 etc
+    static void MSAA(int numSamples);
+    static int MSAA();
+
     // Used to set scale
     // If used after crating any window the result is undefined
     static void Scale(float scale);
@@ -54,6 +61,21 @@ public:
 
     static Application *instance();
 
+    // Store application state in a managed fashion
+    // Each type has only one instance
+    // Each is also destroyed when the application instance is destroyed
+    template <typename T>
+    static T &state() {
+        auto ptr = stateImpl(typeid(T).hash_code());
+        if (!ptr) {
+            auto state = std::make_unique<State<T>>();
+            ptr = state.get();
+            saveState(typeid(T).hash_code(), std::move(state));
+        }
+
+        return static_cast<State<T> &>(*ptr).value;
+    }
+
 private:
     // Functions used internally to handle windows
     void addWindow(class Window *);
@@ -63,6 +85,20 @@ private:
     friend class Window;
 
     static Application *_instance;
+
+    struct StateBase {
+        virtual ~StateBase() = default;
+    };
+
+    template <typename T>
+    struct State : public StateBase {
+        ~State() override = default;
+        T value;
+    };
+
+    static StateBase *stateImpl(size_t);
+
+    static void saveState(size_t, std::unique_ptr<StateBase>);
 
     struct Impl;
 

@@ -59,6 +59,11 @@ Window::Window(std::string title, int width, int height, bool resizable) {
     sdl::gl::setAttribute(SDL_GL_DOUBLEBUFFER, 1);
     sdl::gl::setAttribute(SDL_GL_DEPTH_SIZE, 24);
 
+    if (Application::MSAA()) {
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, Application::MSAA());
+    }
+
     // Create our window centered
     auto scale = Application::Scale();
     _windowData->window =

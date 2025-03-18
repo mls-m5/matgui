@@ -34,6 +34,9 @@ struct Application::Impl {
     bool invalidateOnEvent = true;
     bool running = false;
     uint32_t lastTick = 0; // used to keep track of framerate
+    int msaa = 0;
+
+    std::unordered_map<size_t, std::unique_ptr<StateBase>> applicationState;
 
     void handleWindowEvents(Window *window,
                             const SDL_Event &event,
@@ -139,10 +142,13 @@ Application::Application(int argc, char **argv)
             "Application already created in other part of program");
     }
 
-    for (int i = 0; i + 1 < argc; ++i) {
-        if (argv[i] == std::string("--scale")) {
-            ++i;
-            _impl->scale = atof(argv[i]);
+    auto args = std::vector<std::string>{argv + 1, argv + argc};
+
+    for (int i = 0; args.size(); ++i) {
+        auto arg = args.at(i);
+        if (arg == std::string("--scale")) {
+            arg = args.at(++i);
+            _impl->scale = stof(arg);
         }
     }
 
@@ -198,6 +204,15 @@ inline void Application::innerLoop() {
     }
 
     MatSig::flushSignals();
+}
+
+void Application::saveState(size_t t, std::unique_ptr<StateBase> ptr) {
+    impl()->applicationState[t] = std::move(ptr);
+}
+
+Application::StateBase *Application::stateImpl(size_t t) {
+    auto &s = impl()->applicationState[t];
+    return s.get();
 }
 
 Application::Impl *Application::impl() {
@@ -279,6 +294,14 @@ void Application::removeWindow(class Window *window) {
 
 float Application::Scale() {
     return impl()->scale;
+}
+
+int Application::MSAA() {
+    return impl()->msaa;
+}
+
+void Application::MSAA(int numSamples) {
+    impl()->msaa = numSamples;
 }
 
 void Application::Scale(float s) {
