@@ -20,10 +20,6 @@ public:
                                MouseButton,
                                double x,
                                double y) override;
-    virtual bool onPointerUp(PointerId id,
-                             MouseButton,
-                             double x,
-                             double y) override;
     virtual bool onPointerMove(PointerId id,
                                double x,
                                double y,

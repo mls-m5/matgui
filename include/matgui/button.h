@@ -8,7 +8,6 @@
 #pragma once
 #include "fontview.h"
 #include "view.h"
-#include <memory>
 #include <string>
 
 namespace matgui {

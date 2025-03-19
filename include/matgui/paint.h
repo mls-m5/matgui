@@ -148,6 +148,10 @@ public:
     void drawEllipse(const float *location) const;
 
     void drawBasicView(View *) const;
+
+    void clear() {
+        *this = {};
+    }
 };
 
 } /* namespace matgui */

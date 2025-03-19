@@ -15,6 +15,11 @@ View::View() : _weight(1) {
     View::location(0, 0, VIEW_WEIGHTED, VIEW_WEIGHTED);
     hoverStyle.enabled = false;
     focusStyle.enabled = false;
+
+    hoverStyle.fill.color(1, 1, 1, .2);
+    style.line.color(.3, .3, .3, 1);
+    focusStyle.line.color(1, 1, 1, .8);
+
     View::updateStyle();
 }
 

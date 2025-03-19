@@ -15,7 +15,9 @@ static constexpr double middleWidth = .1;
 static constexpr double handleHeight = .1;
 
 SliderView::SliderView() {
-    indicatorStyle.fill.color(1, 1, 1, .5);
+    style.clear();
+    indicatorStyle.fill.color(.5, .5, .5, 1);
+    updateStyle();
 }
 
 SliderView::~SliderView() {
@@ -25,21 +27,16 @@ bool SliderView::onPointerDown(PointerId id,
                                MouseButton button,
                                double x,
                                double y) {
+    // Note: It should be onPointer_Move_ not View::onpPointerDown
     onPointerMove(id, x, y, button);
     return true;
 }
 
-bool SliderView::onPointerUp(PointerId /*id*/,
-                             MouseButton /*button*/,
-                             double /*x*/,
-                             double /*y*/) {
-    return true;
-}
-
-bool SliderView::onPointerMove(PointerId /*id*/,
-                               double /*x*/,
+bool SliderView::onPointerMove(PointerId id,
+                               double x,
                                double y,
                                PointerState state) {
+    View::onPointerMove(id, x, y, state);
     if (state) {
         double v = 1. - (y - height() * handleHeight / 2.) /
                             (height() * (1 - handleHeight));

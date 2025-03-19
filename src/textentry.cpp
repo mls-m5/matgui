@@ -14,8 +14,6 @@ namespace matgui {
 TextEntry::TextEntry() {
     _fontView.alignment(FontView::Left);
     _fontView.font(Font(30));
-    style.line.color(1, 1, 1, .3);
-    focusStyle.line.color(1, 1, 1, .8);
     updateStyle();
 }
 

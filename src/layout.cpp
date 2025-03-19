@@ -10,6 +10,7 @@
 namespace matgui {
 
 Layout::Layout() : _orientation(LAYOUT_VERTICAL), _padding(4) {
+    style.clear();
     focusable(false);
 }
 
@@ -18,6 +19,7 @@ Layout::~Layout() {
 }
 
 void Layout::draw() {
+    style.drawBasicView(this);
     for (auto &it : children) {
         it->draw();
     }

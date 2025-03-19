@@ -12,8 +12,6 @@ namespace matgui {
 
 ProgressView::ProgressView() {
     indicatorStyle.fill.color(1, 1, 1, .5);
-
-    style.line.color(1, 1, 1, .3);
     updateStyle();
 }
 

@@ -12,7 +12,6 @@
 namespace matgui {
 
 PushControlerView::PushControlerView() {
-    style.line.color(1, 1, 1, .3);
     updateStyle();
 }
 

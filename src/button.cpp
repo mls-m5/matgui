@@ -7,17 +7,13 @@
 
 #include "matgui/button.h"
 #include "matgui/draw.h"
+#include "matgui/view.h"
 
 namespace matgui {
 
-Button::Button(std::string label) {
+Button::Button(std::string label) : View{} {
     _fontView.font(Font(30));
     this->label(label);
-
-    hoverStyle.fill.color(1, 1, 1, .1);
-    style.line.color(1, 1, 1, .3);
-    focusStyle.line.color(1, 1, 1, .8);
-    updateStyle();
 }
 
 Button::~Button() = default;
