@@ -16,9 +16,11 @@ std::string loadFile(std::filesystem::path);
 /// Set up a file in memory
 void registerFile(std::filesystem::path path, std::string_view content);
 
+// Check if a cached or regular file exists
+bool doesFileExist(std::filesystem::path path);
+
 struct FileRegister {
     FileRegister(std::filesystem::path, std::string_view content);
 };
 
-
-} // namespace engine
+} // namespace matgui

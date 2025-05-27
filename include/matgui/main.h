@@ -2,7 +2,6 @@
 
 #include "application.h"
 #include <memory>
-#include <vector>
 
 namespace matgui {
 

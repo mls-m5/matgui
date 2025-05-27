@@ -1,4 +1,5 @@
 #include "matgui/files.h"
+#include <filesystem>
 #include <fstream>
 #include <memory>
 #include <sstream>
@@ -56,6 +57,14 @@ std::string loadFile(std::filesystem::path path) {
 
     file.read(&content[0], size);
     return content;
+}
+
+bool doesFileExist(std::filesystem::path path) {
+    if (auto f = builtinFiles.find(path); f != builtinFiles.end()) {
+        return true;
+    }
+
+    return std::filesystem::exists(path);
 }
 
 } // namespace matgui
