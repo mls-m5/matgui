@@ -164,8 +164,11 @@ void ShaderProgram::loadObject(std::filesystem::path path) {
     auto ext = path.extension();
     const static std::map<std::string_view, int> typeMap = {
         {".vert", GL_VERTEX_SHADER},
+        {".vs", GL_VERTEX_SHADER},
         {".frag", GL_FRAGMENT_SHADER},
+        {".fs", GL_FRAGMENT_SHADER},
         {".geom", GL_GEOMETRY_SHADER},
+        {".gs", GL_GEOMETRY_SHADER},
     };
     loadObject(typeMap.at(ext.string()), path);
 }

@@ -16,7 +16,11 @@ struct PathHasher {
     }
 };
 
-std::unordered_map<std::filesystem::path, std::string, PathHasher> builtinFiles;
+auto &builtinFiles() {
+    static std::unordered_map<std::filesystem::path, std::string, PathHasher>
+        builtinFiles;
+    return builtinFiles;
+}
 
 } // namespace
 
@@ -25,7 +29,9 @@ std::unique_ptr<std::istream> openFile(std::filesystem::path path) {
         return std::make_unique<std::istringstream>(str);
     };
 
-    if (auto f = builtinFiles.find(path); f != builtinFiles.end()) {
+    auto &files = builtinFiles();
+
+    if (auto f = files.find(path); f != files.end()) {
         return createStream(f->second);
     }
 
@@ -33,7 +39,7 @@ std::unique_ptr<std::istream> openFile(std::filesystem::path path) {
 }
 
 void registerFile(std::filesystem::path path, std::string_view content) {
-    builtinFiles[path] = std::string(content);
+    builtinFiles()[path] = std::string(content);
 }
 
 FileRegister::FileRegister(std::filesystem::path path,
@@ -42,7 +48,8 @@ FileRegister::FileRegister(std::filesystem::path path,
 }
 
 std::string loadFile(std::filesystem::path path) {
-    if (auto f = builtinFiles.find(path); f != builtinFiles.end()) {
+    auto &files = builtinFiles();
+    if (auto f = files.find(path); f != files.end()) {
         return std::string{f->second};
     }
 
@@ -60,7 +67,8 @@ std::string loadFile(std::filesystem::path path) {
 }
 
 bool doesFileExist(std::filesystem::path path) {
-    if (auto f = builtinFiles.find(path); f != builtinFiles.end()) {
+    auto &files = builtinFiles();
+    if (auto f = files.find(path); f != files.end()) {
         return true;
     }
 

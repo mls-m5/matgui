@@ -14,7 +14,7 @@ void matguiMain(int argc, char *argv[]) {
 
 template <typename T>
 void matguiMainWindow(int argc, char *argv[]) {
-    auto app = matgui::Application{};
+    auto app = matgui::Application{argc, argv};
     auto mainWindow = std::make_unique<T>(argc, argv);
     app.mainLoop();
 }

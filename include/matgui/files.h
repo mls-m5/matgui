@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <istream>
 #include <memory>
+#include <string_view>
 
 namespace matgui {
 
@@ -19,6 +20,7 @@ void registerFile(std::filesystem::path path, std::string_view content);
 // Check if a cached or regular file exists
 bool doesFileExist(std::filesystem::path path);
 
+// Statically register files
 struct FileRegister {
     FileRegister(std::filesystem::path, std::string_view content);
 };

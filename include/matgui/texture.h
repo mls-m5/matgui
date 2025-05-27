@@ -19,7 +19,10 @@ namespace matgui {
 // when needed
 class Texture {
 public:
-    enum Interpolation { Linear = 0, Nearest = 1 };
+    enum Interpolation {
+        Linear = 0,
+        Nearest = 1,
+    };
 
     struct Pixel {
         unsigned char r = 0, g = 0, b = 0, a = 255;
