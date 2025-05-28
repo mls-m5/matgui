@@ -144,7 +144,7 @@ Application::Application(int argc, char **argv)
 
     auto args = std::vector<std::string>{argv + 1, argv + argc};
 
-    for (int i = 0; args.size(); ++i) {
+    for (int i = 0; i < args.size(); ++i) {
         auto arg = args.at(i);
         if (arg == std::string("--scale")) {
             arg = args.at(++i);
@@ -317,8 +317,7 @@ void Application::InvalidateOnEvent(bool state) {
 }
 
 Application *Application::instance() {
-    [[unlikely]]
-    if (!_instance) {
+    [[unlikely]] if (!_instance) {
         throw std::runtime_error{
             "Trying to access Application instance that is null"};
     }

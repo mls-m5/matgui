@@ -49,7 +49,10 @@ public:
     /// Set the current bound program to 0
     static void unuse();
 
+    /// @returns -1 if not found
     GLint uniform(char const *name, bool soft = false) const;
+
+    /// @returns -1 if not found
     GLint attribute(char const *name, bool soft = false) const;
 
     //! Delete the program from opengl context
