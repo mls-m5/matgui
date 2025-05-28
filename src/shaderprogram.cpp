@@ -26,6 +26,8 @@ GLint ShaderProgram::uniform(const char *name, bool soft) const {
 
     if (ret < 0 && !soft) {
         debug_print("could not find uniform %s\n", name);
+        throw std::runtime_error{"could not find " + std::string{name} +
+                                 " shader " + name};
     }
     return ret;
 }

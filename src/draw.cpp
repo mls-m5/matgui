@@ -23,8 +23,6 @@
 #include "shaders/plainshader.h"
 #include "shaders/textureshader.h"
 
-using std::unique_ptr;
-
 namespace matgui {
 
 namespace {

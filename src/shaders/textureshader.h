@@ -28,7 +28,7 @@ out vec4 fTex;
 void main() {
 	gl_Position = mvp_matrix * vPosition;
 	//fColor = uColor;
-	fTex = vec4(vtex.xy, 0,0);//vec4(vPosition.x, vPosition.y, 0, 0);
+	fTex = vec4(vtex.xy, 0,0);
 }
 )_";
 
@@ -49,7 +49,7 @@ void main() {
 } // namespace TextureShader
 
 static struct {
-    GLint color;
+    // GLint color;
     GLint vertices;
     GLint texcoords;
     GLint mvpMatrix;
@@ -74,7 +74,7 @@ static struct {
 
         vertices = program->attribute("vPosition");
         texcoords = program->attribute("vtex");
-        color = program->uniform("uColor");
+        // color = program->uniform("uColor");
         mvpMatrix = program->uniform("mvp_matrix");
         texture = program->uniform("texture1");
 
@@ -113,7 +113,7 @@ static struct {
                                   0); // Set the texture coordinates
             glEnableVertexAttribArray(textureProgram.texcoords);
 
-            glUniform4fv(textureProgram.color, 1, textureProgram.colors);
+            // glUniform4fv(textureProgram.color, 1, textureProgram.colors);
         }
         glBindVertexArray(0);
     }
