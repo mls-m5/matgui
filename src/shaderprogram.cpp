@@ -99,6 +99,11 @@ void ShaderProgram::link() {
         debug_print("glCreateProgram() failed");
     }
 
+    if (_objects.empty()) {
+        throw std::runtime_error{
+            "no objects added to shader program when trying to link"};
+    }
+
     for (auto &o : _objects) {
         glCall(glAttachShader(_program, o->shader));
     }
@@ -119,6 +124,20 @@ void ShaderProgram::link() {
         }
         glDeleteProgram(_program);
         _program = 0;
+    }
+
+    glValidateProgram(_program);
+    GLint validated = GL_FALSE;
+    glGetProgramiv(_program, GL_VALIDATE_STATUS, &validated);
+    if (validated != GL_TRUE) {
+        GLint bufLength = 0;
+        glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &bufLength);
+        if (bufLength) {
+            std::vector<char> buffer(static_cast<size_t>(bufLength));
+            glGetProgramInfoLog(_program, bufLength, nullptr, &buffer[0]);
+            debug_print("Program validation failed:");
+            ShaderObject::printDebugInfo(buffer.data(), "");
+        }
     }
 
     glCall((void)"after created program");

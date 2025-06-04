@@ -35,7 +35,12 @@ std::unique_ptr<std::istream> openFile(std::filesystem::path path) {
         return createStream(f->second);
     }
 
-    return std::make_unique<std::ifstream>(path);
+    auto file = std::make_unique<std::ifstream>(path);
+    if (!file->is_open()) {
+        return nullptr;
+    }
+
+    return file;
 }
 
 void registerFile(std::filesystem::path path, std::string_view content) {
