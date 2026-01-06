@@ -241,42 +241,6 @@ void drawEllipse(const float *location, const class Paint *paint) {
     glBindVertexArray(0);
 }
 
-void drawGraph(double /*x*/,
-               double /*y*/,
-               double /*a*/,
-               double /*sx*/,
-               double /*sy*/,
-               const float * /*v*/,
-               int /*size*/) {
-    //    glLineWidth(2);
-    //    graphProgram.program->use();
-    //
-    //    if (graphProgram.tmpFloat.size() < size){
-    //        graphProgram.tmpFloat.resize(size);
-    //        for (int i = 0; i < size; ++i){
-    //            graphProgram.tmpFloat[i] = i;
-    //        }
-    //    }
-    //
-    //    modelTransform(graphProgram.mvpMatrix, {x, y}, a, sx, sy);
-    //
-    //    glEnableVertexAttribArray(graphProgram.x);
-    //    glVertexAttribPointer(graphProgram.x, 1, GL_FLOAT, GL_FALSE, 0,
-    //    &graphProgram.tmpFloat[0]); glEnableVertexAttribArray(graphProgram.y);
-    //    glVertexAttribPointer(graphProgram.y, 1, GL_FLOAT, GL_FALSE, 0, v);
-    //
-    //    glDrawArrays(GL_LINE_STRIP, 0, size);
-    //
-    //    glDisableVertexAttribArray(graphProgram.x);
-    //    glDisableVertexAttribArray(graphProgram.y);
-    //
-    //    glLineWidth(1);
-}
-
-// template <typename, typename> struct is_same { static const bool value =
-// false;}; template <typename T> struct is_same<T,T> { static const bool value
-// = true;};
-
 template <class T>
 void drawLine(T *location, const Paint *paint) {
     glBindVertexArray(squareProgram.vertexArray);
@@ -349,8 +313,6 @@ void popViewport() {
 bool initDrawModule(double width, double height) {
     squareProgram.init();
     textureProgram.init();
-    // graphProgra m.init();
-    // lineProgram.init();
 
     glGenVertexArrays(1, &vertexArray);
 
@@ -370,9 +332,7 @@ void setDepthEnabled(bool enabled) {
 
 void QuitDrawModule() {
     squareProgram.program.reset();
-    // graphProgram.program.reset();
     textureProgram.program.reset();
-    // lineProgram.program.reset();
 }
 
 void clear(float r, float g, float b, float a, bool depth) {
