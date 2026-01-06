@@ -23,11 +23,11 @@ namespace {
 
 const char *vertexCode = R"_(
 #version 330 core
-in vec4 vPosition;
+in vec4 aPosition;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
 
 void main() {
-	gl_Position = mvp_matrix * vPosition;
+        gl_Position = mvp_matrix * aPosition;
 }
 )_";
 
@@ -103,7 +103,7 @@ static struct {
         glCall(program->use());
         // checkGlError("glUseProgram");
 
-        pPertices = program->attribute("vPosition");
+        pPertices = program->attribute("aPosition");
         pColor = program->uniform("uColor");
         pMvpMatrix = program->uniform("mvp_matrix");
 

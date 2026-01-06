@@ -67,7 +67,7 @@ TEST_CASE("version") {
 }
 
 TEST_CASE("remove layout") {
-    constexpr auto code = "layout (location = 0) in vec4 vPosition;";
+    constexpr auto code = "layout (location = 0) in vec4 aPosition;";
 
     const auto res = lastLine(translateShader(code, GL_VERTEX_SHADER));
 

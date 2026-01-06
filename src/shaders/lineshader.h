@@ -1,59 +1,60 @@
-/*
- * lineshader.h
- *
- *  Created on: 24 jun 2015
- *      Author: Mattias Larsson Sköld
- */
+// /*
+//  * lineshader.h
+//  *
+//  *  Created on: 24 jun 2015
+//  *      Author: Mattias Larsson Sköld
+//  */
 
-#pragma once
+// #pragma once
 
-#include "matgui/common-gl.h"
-#include "matgui/shaderprogram.h"
-#include <memory>
+// #include "matgui/common-gl.h"
+// #include "matgui/shaderprogram.h"
+// #include <memory>
 
-namespace matgui {
+// namespace matgui {
 
-namespace LineShader {
+// namespace LineShader {
 
-namespace {
+// namespace {
 
-const char *vertexCode = R"V0G0N(
-#version 330 core
-in vec2 v;
-uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
-void main() {
-  gl_Position = mvp_matrix * vec4(v.x, v.y, 1, 1);
-}
-)V0G0N";
+// const char *vertexCode = R"V0G0N(
+// #version 330 core
+// in vec2 v;
+// uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
+// void main() {
+//   gl_Position = mvp_matrix * vec4(v.x, v.y, 1, 1);
+// }
+// )V0G0N";
 
-const char *fragmentCode = R"_(
-#version 330 core
-uniform  vec4 uColor;
-out vec4 fragColor;
+// const char *fragmentCode = R"_(
+// #version 330 core
+// uniform  vec4 uColor;
+// out vec4 fragColor;
 
-void main() {
-  fragColor = uColor;
-}
-)_";
+// void main() {
+//   fragColor = uColor;
+// }
+// )_";
 
-} // namespace
+// } // namespace
 
-} // namespace LineShader
+// } // namespace LineShader
 
-static struct {
-    GLuint v;
-    GLuint mvpMatrix;
-    GLuint color;
-    std::unique_ptr<ShaderProgram> program;
+// // static struct {
+// //     GLuint v;
+// //     GLuint mvpMatrix;
+// //     GLuint color;
+// //     std::unique_ptr<ShaderProgram> program;
 
-    void init() {
-        program = std::make_unique<ShaderProgram>(LineShader::vertexCode,
-                                                  LineShader::fragmentCode);
-        debug_check_true(program->get(), "could not create graph program");
-        v = program->attribute("v");
-        color = program->uniform("uColor");
-        mvpMatrix = program->uniform("mvp_matrix");
-    }
-} lineProgram;
+// //     void init() {
+// //         program = std::make_unique<ShaderProgram>(LineShader::vertexCode,
+// // LineShader::fragmentCode);
+// //         debug_check_true(program->get(), "could not create graph
+// program");
+// //         v = program->attribute("v");
+// //         color = program->uniform("uColor");
+// //         mvpMatrix = program->uniform("mvp_matrix");
+// //     }
+// // } lineProgram;
 
-} // namespace matgui
+// } // namespace matgui

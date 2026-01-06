@@ -51,7 +51,15 @@ ShaderProgram::ShaderProgram(std::string_view vertexCode,
     if (!geometryCode.empty()) {
         addObject(GL_GEOMETRY_SHADER, geometryCode);
     }
-    link();
+    try {
+        link();
+    }
+    catch (std::runtime_error e) {
+        throw std::runtime_error{"in vertex shader: \n" +
+                                 std::string{vertexCode} +
+                                 "\n\n or in fragment code:\n" +
+                                 std::string{fragmentCode} + e.what()};
+    }
 }
 
 void ShaderProgram::addObject(std::shared_ptr<ShaderObject> object) {
@@ -108,7 +116,30 @@ void ShaderProgram::link() {
         glCall(glAttachShader(_program, o->shader));
     }
 
+    struct ExpectedAttrib {
+        const char *name;
+        GLint expectedLoc;
+        const char *gltfSemantic;
+        bool required;
+    };
+
+    static constexpr ExpectedAttrib expectedAttribs[] = {
+        {"aPosition", 0, "POSITION", true},
+        {"aNormal", 1, "NORMAL", false},
+        {"aTexCoord", 2, "TEXCOORD_0", false},
+        {"aTangent", 3, "TANGENT", false},
+        {"aTexCoord1", 4, "TEXCOORD_1", false},
+        {"aColor", 5, "COLOR_0", false},
+        {"aJoints", 6, "JOINTS_0", false},
+        {"aWeights", 7, "WEIGHTS_0", false},
+    };
+
+    for (auto &a : expectedAttribs) {
+        glBindAttribLocation(_program, a.expectedLoc, a.name);
+    }
+
     glLinkProgram(_program);
+
     GLint linkStatus = GL_FALSE;
     glGetProgramiv(_program, GL_LINK_STATUS, &linkStatus);
     if (linkStatus != GL_TRUE) {
@@ -141,6 +172,26 @@ void ShaderProgram::link() {
     }
 
     glCall((void)"after created program");
+
+    // Validate so the positions is correct
+    for (auto &a : expectedAttribs) {
+        auto loc = glGetAttribLocation(_program, a.name);
+        if (loc == -1 && a.required) {
+            throw std::runtime_error{
+                "Attribute " + std::string{a.name} +
+                " was not set, but is required by the shader program"};
+        }
+        else if (loc == -1) {
+            continue;
+        }
+        if (loc != a.expectedLoc) {
+            throw std::runtime_error{
+                "Attribute " + std::string{a.name} +
+                " was not in the expected location: was on " +
+                std::to_string(loc) + " but should be on " +
+                std::to_string(a.expectedLoc)};
+        }
+    }
 }
 
 void ShaderProgram::unlink() {

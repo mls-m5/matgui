@@ -18,7 +18,7 @@
     if (not(cond))                                                             \
         debug_print("%s: %s", #cond, text);
 
-#include "shaders/graphshader.h"
+// #include "shaders/graphshader.h"
 #include "shaders/lineshader.h"
 #include "shaders/plainshader.h"
 #include "shaders/textureshader.h"
@@ -351,8 +351,8 @@ void popViewport() {
 bool initDrawModule(double width, double height) {
     squareProgram.init();
     textureProgram.init();
-    graphProgram.init();
-    lineProgram.init();
+    // graphProgra m.init();
+    // lineProgram.init();
 
     glGenVertexArrays(1, &vertexArray);
 
@@ -372,9 +372,9 @@ void setDepthEnabled(bool enabled) {
 
 void QuitDrawModule() {
     squareProgram.program.reset();
-    graphProgram.program.reset();
+    // graphProgram.program.reset();
     textureProgram.program.reset();
-    lineProgram.program.reset();
+    // lineProgram.program.reset();
 }
 
 void clear(float r, float g, float b, float a, bool depth) {

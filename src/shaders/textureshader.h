@@ -19,14 +19,14 @@ namespace {
 
 const char *vertexCode = R"_(
 #version 330 core
-in vec4 vPosition;
+in vec4 aPosition;
 in vec4 vtex;
 uniform vec4 uColor;
 uniform	 mat4	 mvp_matrix;	 // model-view-projection matrix
 out vec4 fTex;
 
 void main() {
-	gl_Position = mvp_matrix * vPosition;
+        gl_Position = mvp_matrix * aPosition;
 	//fColor = uColor;
 	fTex = vec4(vtex.xy, 0,0);
 }
@@ -72,7 +72,7 @@ static struct {
                                                   TextureShader::fragmentCode);
         debug_check_true(program->get(), "could not create texture program");
 
-        vertices = program->attribute("vPosition");
+        vertices = program->attribute("aPosition");
         texcoords = program->attribute("vtex");
         // color = program->uniform("uColor");
         mvpMatrix = program->uniform("mvp_matrix");
