@@ -8,11 +8,9 @@
 #include "matgui/texture.h"
 
 #include "matgui/common-gl.h"
-// #include "SDL2/SDL_opengl.h"
 #ifndef DISABLE_TEXTURES
 #include "SDL2/SDL_image.h"
 #endif // DISABLE_TEXTURES
-#include "matgui/draw.h"
 #include <map>
 
 namespace matgui {
