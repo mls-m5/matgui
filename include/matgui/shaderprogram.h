@@ -30,7 +30,10 @@ public:
 
     /// Load object from a string
     /// type: GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER
-    void addObject(GLint type, std::string_view code);
+    /// Path is only used to print error messages right
+    void addObject(GLint type,
+                   std::string_view code,
+                   std::filesystem::path path = {});
 
     /// Load file, specify type
     void loadObject(GLint, std::filesystem::path);

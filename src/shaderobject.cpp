@@ -7,8 +7,10 @@
 namespace matgui {
 
 //! Print info and indicate the right line
-[[noreturn]] void ShaderObject::printDebugInfo(std::string_view info,
-                                               std::string_view code) {
+[[noreturn]] void ShaderObject::printDebugInfo(
+    std::string_view info,
+    std::string_view code,
+    std::filesystem::path sourcePath) {
 #ifdef __EMSCRIPTEN__
     cerr << info << endl;
     cerr << code << endl;
@@ -29,6 +31,9 @@ namespace matgui {
         std::cerr << code << std::endl;
     }
 
+    if (!sourcePath.empty()) {
+        std::cerr << "in shader: " << sourcePath << "\n";
+    }
     std::cerr << info;
     //    auto b = info.begin();
     //    cout << "line: " << string(b + firstColon + 1, b + firstParen) <<
@@ -64,7 +69,9 @@ namespace matgui {
     throw std::runtime_error(std::string{info});
 }
 
-ShaderObject::ShaderObject(GLenum shaderType, const std::string_view sourceIn)
+ShaderObject::ShaderObject(GLenum shaderType,
+                           const std::string_view sourceIn,
+                           std::filesystem::path path)
     : shader{glCreateShader(shaderType)} {
 #ifdef USING_GL2
     auto source = translateShader(sourceIn, shaderType);
@@ -96,7 +103,9 @@ ShaderObject::ShaderObject(GLenum shaderType, const std::string_view sourceIn)
             glDeleteShader(shader);
             shader = 0;
 
-            printDebugInfo(buffer.data(), source);
+            // printDebugInfo(buffer.data(), source, path);
+            throw std::runtime_error{
+                std::string{buffer.data(), (size_t)infoLen}};
         }
     }
 }

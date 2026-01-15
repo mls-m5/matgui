@@ -70,11 +70,13 @@ void ShaderProgram::addObject(std::shared_ptr<ShaderObject> object) {
     unlink();
 }
 
-void ShaderProgram::addObject(GLint type, std::string_view code) {
+void ShaderProgram::addObject(GLint type,
+                              std::string_view code,
+                              std::filesystem::path path) {
     if (code.empty()) {
         throw std::runtime_error{"trying to add shader object with no code"};
     }
-    addObject(std::make_shared<ShaderObject>(type, code));
+    addObject(std::make_shared<ShaderObject>(type, code, path));
 }
 
 ShaderProgram::~ShaderProgram() {
@@ -148,7 +150,7 @@ void ShaderProgram::link() {
         if (bufLength) {
             std::vector<char> buffer(static_cast<size_t>(bufLength));
             glGetProgramInfoLog(_program, bufLength, nullptr, &buffer[0]);
-            ShaderObject::printDebugInfo(buffer.data(), "");
+            ShaderObject::printDebugInfo(buffer.data(), "", "");
         }
         else {
             debug_print("Shader program linking failed, but with no error log");
@@ -167,7 +169,7 @@ void ShaderProgram::link() {
             std::vector<char> buffer(static_cast<size_t>(bufLength));
             glGetProgramInfoLog(_program, bufLength, nullptr, &buffer[0]);
             debug_print("Program validation failed:");
-            ShaderObject::printDebugInfo(buffer.data(), "");
+            ShaderObject::printDebugInfo(buffer.data(), "", "");
         }
     }
 
@@ -229,7 +231,7 @@ void ShaderProgram::loadObject(GLint type, std::filesystem::path path) {
     }
     std::string code((std::istreambuf_iterator<char>(*file)),
                      std::istreambuf_iterator<char>());
-    addObject(type, code);
+    addObject(type, code, path);
 }
 
 void ShaderProgram::loadObject(std::filesystem::path path) {
